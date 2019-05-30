@@ -1,0 +1,59 @@
+From Emery & Meincke, 1986 - Global water masses: summary and review
+
+Broadly:
+  Upper waters 0-500m
+  Intermediate waters 500-1500m
+  Deep/abyssal waters 1500m-bottom
+
+Med (from Rixen et al. 2005):
+  Surface 0-150m
+  Intermediate 150-600m
+  Deep 600m-bottom
+
+Categorisations:
+
+Upper (0-500m):
+  North Atlantic (NAT)
+  Tropical Atlantic
+  South Atlantic
+  Med
+  North Pacific
+  Tropical Pacific
+  South Pacific (SP)
+  Indian
+  Southern
+
+Intermediate (500-1500m):
+  Int North Pacific (to 2500m)
+  Deep Mediterranean sea
+
+Deep (1500-bottom):
+  NADW
+  AABW
+  Deep Pacific/Indian (below 2500m) (DP)
+  Deep Mediterranean (DM)
+  CDW
+
+Assignment:
+
+FAO Area 27
+  0-500m = North Atlantic
+  500-bottom = NADW
+
+FAO Area 34
+  0-500 = Tropical Atlantic
+  500-bottom = NADW
+
+FAO Area 37
+  0-500 = Med
+  500-bottom = Deep Med
+
+FAO Area 71
+  0-500 = Tropical Pacific
+  500-bottom = CDW
+
+FAO Area 47
+  0-500 = South Pacific
+  500-bottom = CDW
+
+If depth not available assume based on species
