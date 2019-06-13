@@ -1,10 +1,9 @@
 #### Summary Code ####
 
 library(dplyr)
+library(readr)
 
-Myctophids <- read.csv("Data/Myctophids.csv")
-Milled_Myctophids <- filter(Myctophids, Milled == "Y")
-Count_Myctophids <- count(Milled_Myctophids, sciname)
-
-Study_Myctophids  <- filter(Myctophids, Milled != "N")
+Myctophids <- read_csv("Data/Myctophids.csv")
+Study_Myctophids  <- filter(Myctophids, Otolith != "NA")
+Count_Myctophids <- count(Study_Myctophids, sciname)
 KRA <- filter(Study_Myctophids, Label == "KRA")
