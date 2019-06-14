@@ -16,11 +16,17 @@ Myctophids <- read_csv("Data/Myctophids.csv",
                        col_types = cols(Lat_dec = col_number(), 
                                         Long_dec = col_number()))
 
-list <- filter(Myctophids, Milled == "Y")
+list <- filter(Myctophids, Otolith != "NA")
 list <- select(list, Lat_dec, Long_dec)
 list <- unique(list)
 
-data <- list[1,] # Change number for each data point
+write.csv(list, "Data/Metadata/Water_Data/Water_Data.csv", row.names = F)
+
+##### Read in Data ######
+
+list <- read.csv("Data/Metadata/Water_Data/Water_Data.csv")
+
+data <- list[20,] # Change number for each data point
 
 # Load DIC map
 
