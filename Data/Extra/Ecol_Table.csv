@@ -1,0 +1,7 @@
+sciname,Genus,Species,FamCode,BodyShapeI,Compressed,AspectRatio,DepthOverTL,DemersPelag,AnaCat,DepthRangeShallow,DepthRangeDeep,LongevityWild,Length,LTypeMaxM,Weight,Family,Order,Neritic,Oceanic,Estuaries,DietTroph,DietSeTroph,FoodTroph,FoodSeTroph,UseTroph,UseTrophSe,Schooling,Shoaling,Temperature
+Electrona antarctica,Electrona,antarctica,167,fusiform / normal,No,1.48,21.2,pelagic,migratory,10,2000,3,10.3,SL,NA,Myctophidae,Myctophiformes,No,Yes,No,3.21,0.35,3.14,0.39,3.21,0.35,Yes,Yes,Polar
+Electrona carlsbergi,Electrona,carlsbergi,167,fusiform / normal,No,1.14,21.2,pelagic,migratory,20,1000,NA,9.6,SL,14.6,Myctophidae,Myctophiformes,No,Yes,No,3.22,NA,3.24,0.41,3.22,0,Yes,Yes,Polar
+Gymnoscopelus braueri,Gymnoscopelus,braueri,167,elongated,No,1.08,13.3,pelagic,migratory,10,1000,NA,13.2,SL,NA,Myctophidae,Myctophiformes,No,Yes,No,3.22,0.32,3.29,0.42,3.22,0.32,Yes,Yes,Polar
+Gymnoscopelus nicholsi,Gymnoscopelus,nicholsi,167,elongated,No,1.33,14.6,pelagic,migratory,20,1000,NA,16.1,SL,NA,Myctophidae,Myctophiformes,No,Yes,No,3.39,0.33,3.14,0.32,3.39,0.33,Yes,Yes,Polar
+Krefftichthys andersoni,Krefftichthys,andersoni,167,elongated,No,1.41,18.1,pelagic,migratory,10,1000,NA,7.1,SL,NA,Myctophidae,Myctophiformes,No,Yes,No,NA,NA,3.06,0.19,3.06,0.19,Yes,Yes,Polar
+Protomyctophum bolini,Protomyctophum,bolini,167,fusiform / normal,No,0.91,21.4,pelagic,migratory,10,1000,NA,6.7,SL,NA,Myctophidae,Myctophiformes,No,Yes,No,3.04,0,3.09,0.26,3.04,0,Yes,Yes,Polar
