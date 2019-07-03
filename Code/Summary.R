@@ -3,7 +3,7 @@
 library(dplyr)
 library(readr)
 
-Myctophids <- read_csv("Data/Myctophids.csv")
+Myctophids <- read_csv("Data/Extra/Myctophids.csv")
 Study_Myctophids  <- filter(Myctophids, Otolith != "NA")
 Count_Myctophids <- count(Study_Myctophids, sciname)
 
