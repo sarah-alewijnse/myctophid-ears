@@ -1,6 +1,7 @@
 #### K_caud vs. d13C ####
 
 library(tidyverse)
+library(rethinking)
 
 d <- read.csv("Data/Sherwood_Rose_Myct.csv")
 d <- select(d, -Troph)
@@ -52,3 +53,40 @@ cor.test(~ d13C + K_caud,
          cof.level = 0.95)
 
 # Significant negative correlation
+
+## Bayesian analysis - without n
+
+model <- map(
+  alist(
+    d13C ~ dnorm(mu, sigma),
+    mu <- a + b * K_caud,
+    a ~ dnorm(-0.5, 10),
+    b ~ dnorm(-1.2, 1),
+    sigma ~ dunif(0, 10)
+  ),
+  data = d)
+
+# Precis output with correlation matrix
+
+precis(model, corr = TRUE)
+
+plot(d13C ~ K_caud, data = d)
+
+# Repeat for every mu value
+
+K_caud.seq <- seq(from = min(d$K_caud), to = max(d$K_caud), by = 0.1) # Horizontal axis
+mu <- link(model, data = data.frame(K_caud = K_caud.seq)) # Link model to mu
+
+# Summarise the distribution of mu
+
+mu.mean <- apply(mu, 2, mean)
+mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
+
+# Plot with model and raw data
+
+plot(d13C ~ K_caud, data = d_other, pch = 16, fill = col.alpha("cornflowerblue", 0.5), col = col.alpha("cornflowerblue", 0.5))
+points(d13C ~ K_caud, data = d_myct, pch = 16, col = "firebrick1")
+lines(K_caud.seq, mu.mean)
+shade(mu.HPDI, K_caud.seq)
+
+
