@@ -84,9 +84,9 @@ mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
 # Plot with model and raw data
 
-plot(d13C ~ K_caud, data = d_other, pch = 16, fill = col.alpha("cornflowerblue", 0.5), col = col.alpha("cornflowerblue", 0.5))
-points(d13C ~ K_caud, data = d_myct, pch = 16, col = "firebrick1")
+plot(d13C ~ K_caud, data = d_other, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5)
+points(d13C ~ K_caud, data = d_myct, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
 lines(K_caud.seq, mu.mean)
 shade(mu.HPDI, K_caud.seq)
-
+text(d_myct$d13C ~ d_myct$K_caud, labels = d_myct$sciname, pos = 4)
 
