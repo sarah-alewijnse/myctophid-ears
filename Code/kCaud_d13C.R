@@ -8,6 +8,8 @@ d <- select(d, -Troph)
 d <- na.omit(d)
 d_other <- filter(d, Family != "Myctophidae")
 d_myct <- filter(d, Family == "Myctophidae")
+d_sr <- filter(d, Paper == "Sherwood_Rose_2003")
+d_ours <- filter(d, Paper == "My_data")
 
 ## Intial plot
 
@@ -84,9 +86,9 @@ mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
 # Plot with model and raw data
 
-plot(d13C ~ K_caud, data = d_other, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5)
-points(d13C ~ K_caud, data = d_myct, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
+plot(d13C ~ K_caud, data = d_sr, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5)
+points(d13C ~ K_caud, data = d_ours, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
 lines(K_caud.seq, mu.mean)
 shade(mu.HPDI, K_caud.seq)
-text(d_myct$d13C ~ d_myct$K_caud, labels = d_myct$sciname, pos = 4)
+text(d_ours$d13C ~ d_ours$K_caud, labels = d_ours$sciname, pos = 4)
 
