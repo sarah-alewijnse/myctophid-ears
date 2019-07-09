@@ -78,6 +78,9 @@ D18O_vals <- D18O_vector
 whole <- cbind(D18O_vals, Depth, Latitude, Longitude)
 whole <- as.data.frame(whole)
 
+d18O <- na.omit(whole$D18O_vals)
+sd(d18O)
+
 ### Tidy station data
 
 Station_Data <- read_csv("Data/Metadata/Station_Data.csv")
@@ -125,3 +128,14 @@ Station_Data_Oxy_Tidy <- dplyr::select(Station_Data_Oxy,
                                 -Longitude)
 
 write.csv(Station_Data_Oxy_Tidy, "Data/Metadata/Station_Data.csv")
+
+### Add to master file
+
+stn <- read.csv("Data/Metadata/Station_Data.csv")
+stn_min <- dplyr::select(stn, Station, D18O_vals)
+
+myct <- read.csv("Data/Myctophids_Master.csv")
+
+myct_d18O <- left_join(myct, stn_min, by = "Station")
+
+write.csv(myct_d18O, "Data/Myctophids_Master.csv", row.names = F)
