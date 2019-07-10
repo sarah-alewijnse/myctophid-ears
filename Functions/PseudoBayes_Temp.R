@@ -1,0 +1,51 @@
+#### Pseudo Bayesian Calculation of Temperature ####
+
+library(tidyverse)
+
+# Load data
+
+myct <- read.csv("Data/Myctophids_Master.csv")
+myct <- filter(myct, d13C != "NA")
+
+#### Create function for temperature ####
+
+PseudoBayes_Temp <- function(d18O, d18O_sd,
+                              d18O_water, d18O_water_sd,
+                              reps){
+  
+  # Calculate distributions
+  set.seed(d18O)
+  dist_d18O <- rnorm(reps, d18O, d18O_sd)
+  set.seed(d18O_water)
+  dist_d18O_water <- rnorm(reps, d18O_water, d18O_water_sd)
+  # From Hoie et al. 2004
+  set.seed(3.9)
+  dist_param_1 <- rnorm(reps, 3.90, 0.24)
+  set.seed(-0.20)
+  dist_param_2 <- rnorm(reps, -0.20, 0.019)
+  
+  # Calculate temperature
+  dist_d18 <- dist_d18O - dist_d18O_water
+  dist_temp <- (dist_d18 - dist_param_1)/dist_param_2 # From Shephard et al. 2007
+  max <- which.max(density(dist_temp)$y)
+  temp <- density(dist_temp)$x[max]
+  temp_HDI <- hdi(dist_temp, credMass = 0.68) # Set so it matches stan devs
+  temp_HDI_min <- unname(temp_HDI[1])
+  temp_HDI_max <- unname(temp_HDI[2])
+  temp_HDI_range_min <- temp_HDI - temp_HDI_min
+  temp_HDI_range_max <- temp_HDI_max - temp_HDI
+  temp_HDI_range <- mean(c(temp_HDI_range_min, temp_HDI_range_max))
+  result <- data.frame(temp, temp_HDI_min, temp_HDI_max, temp_HDI_range)
+  return(result)
+}
+
+save("PseudoBayes_Temp", file = "Functions/PseudoBayes_Temp.Rdata")
+
+# Run for one
+
+d18O_sd <- sd(myct$D18O_vals)
+
+with(myct[10,],
+     PseudoBayes_Temp(d18O, 0.02, # Based on NOCS values
+                       D18O_vals, d18O_sd, # SD of values (as they span Scotia Sea depth and lat-long)
+                       10000))
