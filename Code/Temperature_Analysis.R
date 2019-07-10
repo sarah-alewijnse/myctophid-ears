@@ -3,6 +3,7 @@
 library(tidyverse)
 library(car)
 library(FSA)
+library(HDInterval)
 
 myct <- read.csv("Outputs/Combined.csv")
 
@@ -45,7 +46,7 @@ leveneTest(mean_temp ~ sciname, data = myct)
 
 mod <- kruskal.test(mean_temp ~ sciname, data = myct)
 
-results <- replicate(10, {
+results <- replicate(1000, {
   values_T <- data.frame()
   values_S <- data.frame()
   
@@ -74,6 +75,21 @@ results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
 
+## Get densities of results
+
+# Highest density for chi
+
+max <- which.max(density(results_t$chi)$y)
+density(results_t$chi)$x[max]
+
+hdi(results_t$chi, credMass = 0.95)
+
+# Highest density for p
+
+max <- which.max(density(results_t$p_value)$y)
+density(results_t$p_value)$x[max]
+
+hdi(results_t$p_value, credMass = 0.95)
 
 #### Analysis with M ####
 

@@ -32,9 +32,9 @@ for(i in 1:nrow(myct)){
 
 metabol_M <- cbind(myct, M_values) # Join metabol with M values
 
-hist(metabol_M$mean_M) # Do a test plot of M to check nothing cray is happening
+hist(metabol_M$M) # Do a test plot of M to check nothing cray is happening
 
-plot(metabol_M$mean_M, metabol_M$sd_M)
+plot(metabol_M$M, metabol_M$HDI_range_M)
 
 # Write into file
 
