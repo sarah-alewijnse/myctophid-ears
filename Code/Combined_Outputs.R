@@ -6,9 +6,11 @@ m <- read.csv("Outputs/M_Values.csv")
 temp <- read.csv("Outputs/Temperature.csv")
 
 temp <- select(temp,
+               temp,
                MyNumber,
                temp_HDI_min,
-               temp_HDI_max)
+               temp_HDI_max,
+               temp_HDI_range)
 
 ## Combine
 
