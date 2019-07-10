@@ -21,8 +21,8 @@ for(i in 1:nrow(myct)){
                            Year, 10000, # Add number of reps next to year
                            DIC, 0.202, # Sd from PISCES-A - 0-5500m - Tagliabue & Bopp 2008
                            Suess, 0.202, # Use 0.202 based on DIC (best I could find) - Tagliabue & Bopp 2008
-                           -0.07, 0.202, # From Clive - per comms.
-                           -29, -26, # Based on Scotia Sea values for Magozzi et al. 2017
+                           -0.07, 0.202, # From Clive - per comms. with 0.202 based on DIC
+                           -29, -26, # Based on Scotia Sea values from Magozzi et al. 2017
                            -0.17, 0.202, # From Clive - per comms.
                            UseTroph, UseTrophSe, # Se isn't great, but again, best we have - from FishBase
                            0.8, 1.1, # From De Niro & Epstein 1978
