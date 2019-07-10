@@ -65,10 +65,12 @@ PseudoBayes_M <- function(d13C, d13C_sd,
   
   # Calculate M
   dist_M <- (d13C - dist_DIC) / (dist_diet - dist_DIC)
-  mean_M <- mean(dist_M)
-  mean_log_M <- mean(log10(dist_M))
-  sd_M <- sd(dist_M)
-  result <- data.frame(mean_M, mean_log_M, sd_M)
+  max <- which.max(density(dist_M)$y)
+  M <- density(dist_M)$x[max]
+  M_HDI <- hdi(dist_M, credMass = 0.68) # Set so it matches stan devs
+  M_HDI_min <- unname(M_HDI[1])
+  M_HDI_max <- unname(M_HDI[2])
+  result <- data.frame(M, M_HDI_min, M_HDI_max)
   return(result)
 }
 
