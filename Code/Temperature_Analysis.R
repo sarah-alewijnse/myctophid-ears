@@ -99,6 +99,12 @@ hdi(results_t$p_value, credMass = 0.95)
 
 #### Analysis with M ####
 
+## Check for homogeneity of variances with F-test
+
+var <- read.csv("Outputs/M_Temp_var.csv")
+
+var.test(Value ~ Variable, data = var)
+
 ## Repeat 1000 Times
 
 results <- replicate(1000, {
@@ -108,9 +114,9 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, mean_M, sd_M))
+    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
     values_M <- rbind(values_M, val_M)
-    val_T <- with(myct[i,], rnorm(1, mean_temp, sd_temp))
+    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
     values_T <- rbind(values_T, val_T)
     values <- cbind(values_M, values_T)
     colnames(values) <- c("M", "Temp")
@@ -133,3 +139,34 @@ results <- replicate(1000, {
 results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
+
+write.csv(results_t, "Outputs/Regression_M_Temp.csv")
+
+# Highest density for intercept
+
+max <- which.max(density(results_t$intercept_mod)$y)
+density(results_t$intercept_mod)$x[max]
+
+hdi(results_t$intercept_mod, credMass = 0.95)
+
+# Highest density for slope
+
+max <- which.max(density(results_t$scal_mod)$y)
+density(results_t$scal_mod)$x[max]
+
+hdi(results_t$scal_mod, credMass = 0.95)
+
+# Highest density for r-squared
+
+max <- which.max(density(results_t$rsq_mod)$y)
+density(results_t$rsq_mod)$x[max]
+
+hdi(results_t$rsq_mod, credMass = 0.95)
+
+# Highest density for p-value
+
+max <- which.max(density(results_t$p_mod)$y)
+density(results_t$p_mod)$x[max]
+
+hdi(results_t$p_mod, credMass = 0.95)
+
