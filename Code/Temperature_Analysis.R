@@ -11,28 +11,28 @@ myct <- read.csv("Outputs/Combined.csv")
 
 ## Get min-max
 
-min(myct$mean_temp)
-max(myct$mean_temp)
+min(myct$temp)
+max(myct$temp)
 
-min(myct$sd_temp)
-max(myct$sd_temp)
+min(myct$temp_HDI_range)
+max(myct$temp_HDI_range)
 
 ## Plot 
 
 with(myct,
-     boxplot(mean_temp ~ sciname))
+     boxplot(temp ~ sciname))
 
 with(myct,
-     plot(mean_M ~ mean_temp))
+     plot(M ~ temp))
 
 #### Check normality with K-S test ####
 
-hist(myct$mean_temp)
+hist(myct$temp)
 
-avg <- mean(myct$mean_temp, na.rm = TRUE)
-sd <- sd(myct$mean_temp, na.rm = TRUE)
+avg <- mean(myct$temp, na.rm = TRUE)
+sd <- sd(myct$temp, na.rm = TRUE)
 
-ks.test(myct$mean_temp, "pnorm", avg, sd)
+ks.test(myct$temp, "pnorm", avg, sd)
 
 #### Analysis by Species ####
 
@@ -44,7 +44,7 @@ leveneTest(mean_temp ~ sciname, data = myct)
 
 ## Proceed with Kruska-Wallis Test
 
-mod <- kruskal.test(mean_temp ~ sciname, data = myct)
+mod <- kruskal.test(temp ~ sciname, data = myct)
 
 results <- replicate(1000, {
   values_T <- data.frame()
@@ -53,7 +53,7 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_T <- with(myct[i,], rnorm(1, mean_temp, sd_temp))
+    val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
     sci <- dplyr::select(myct, sciname)
     sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)
@@ -75,7 +75,13 @@ results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
 
+## Save outputs
+
+write.csv(results_t, "Outputs/KW_Temp_Species.csv", row.names = F)
+
 ## Get densities of results
+
+results_t <- read.csv("Outputs/KW_Temp_Species.csv")
 
 # Highest density for chi
 
