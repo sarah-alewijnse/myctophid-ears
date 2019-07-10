@@ -10,7 +10,7 @@ myct <- read.csv("Outputs/Combined.csv")
 PseudoBayes_KW <- function(reps, n_row,
                            cat_var, cat_var_label,
                            cont_var, cont_var_HDI, cont_var_label){
-  
+  set.seed(Sys.time())
   results <- replicate(reps, {
     values_T <- data.frame()
     values_S <- data.frame()
@@ -45,7 +45,6 @@ save("PseudoBayes_KW", file = "Functions/PseudoBayes_KW.Rdata")
 
 ## Test
 
-set.seed(Sys.time())
 with(myct,
      PseudoBayes_KW(1000, nrow(myct),
                     sciname, "sciname",
