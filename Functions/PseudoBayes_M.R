@@ -70,7 +70,10 @@ PseudoBayes_M <- function(d13C, d13C_sd,
   M_HDI <- hdi(dist_M, credMass = 0.68) # Set so it matches stan devs
   M_HDI_min <- unname(M_HDI[1])
   M_HDI_max <- unname(M_HDI[2])
-  result <- data.frame(M, M_HDI_min, M_HDI_max)
+  M_HDI_range_min <- M_HDI - M_HDI_min
+  M_HDI_range_max <- M_HDI_max - M_HDI
+  M_HDI_range <- mean(c(M_HDI_range_min, M_HDI_range_max))
+  result <- data.frame(M, M_HDI_min, M_HDI_max, M_HDI_range)
   return(result)
 }
 
