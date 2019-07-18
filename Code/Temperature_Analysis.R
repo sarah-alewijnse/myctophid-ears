@@ -38,7 +38,7 @@ ks.test(myct$temp, "pnorm", avg, sd)
 
 ## Check for homogeneity of variances with Levene's test
 
-leveneTest(mean_temp ~ sciname, data = myct)
+leveneTest(temp ~ sciname, data = myct)
 
 # Not homogenous
 
