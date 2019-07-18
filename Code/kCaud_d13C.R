@@ -3,7 +3,7 @@
 library(tidyverse)
 library(rethinking)
 
-d <- read.csv("Data/Sherwood_Rose_Myct.csv")
+d <- read.csv("Data/My_Data_and_SR.csv")
 d <- select(d, -Troph)
 d <- na.omit(d)
 d_other <- filter(d, Family != "Myctophidae")
@@ -47,6 +47,9 @@ var.test(Value ~ Factor, data = var)
 
 # Variances not equal
 
+mod <- lm(d13C ~ K_caud, data = d)
+plot(mod)
+
 ## Proceed with Spearman's Rank test
 
 cor.test(~ d13C + K_caud,
@@ -87,8 +90,11 @@ mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 # Plot with model and raw data
 
 plot(d13C ~ K_caud, data = d_sr, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5)
-points(d13C ~ K_caud, data = d_ours, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
+points(d13C ~ K_caud, data = d_myct, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
 lines(K_caud.seq, mu.mean)
 shade(mu.HPDI, K_caud.seq)
-text(d_ours$d13C ~ d_ours$K_caud, labels = d_ours$sciname, pos = 4)
+d_myct_lab <- d_myct
+d_myct_lab[1, 4] <- d_myct_lab[1, 4] - 0.14
+d_myct_lab[6, 4] <- d_myct_lab[6, 4] + 0.14
+text(d_myct_lab$d13C ~ d_myct_lab$K_caud, labels = d_myct_lab$sciname, pos = 4)
 

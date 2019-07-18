@@ -3,7 +3,7 @@
 library(tidyverse)
 library(rethinking)
 
-d <- read.csv("Data/Sherwood_Rose_Myct.csv")
+d <- read.csv("Data/My_Data_and_SR.csv")
 d <- select(d, -Troph)
 d <- na.omit(d)
 d_other <- filter(d, Family != "Myctophidae")
@@ -81,7 +81,7 @@ mu.mean <- apply(mu, 2, mean)
 mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
 plot(d13C ~ d18O, data = d_sr, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5, xlim = c(min(d$d18O), max(d$d18O)))
-points(d13C ~ d18O, data = d_ours, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
+points(d13C ~ d18O, data = d_myct, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
 lines(d18O.seq, mu.mean)
 shade(mu.HPDI, d18O.seq)
-text(d_ours$d13C ~ d_ours$d18O, labels = d_ours$sciname, pos = 2)
+text(d_myct$d13C ~ d_myct$d18O, labels = d_myct$sciname, pos = 2)
