@@ -40,4 +40,4 @@ plot(metabol_M$M, metabol_M$HDI_range_M)
 
 # Write into file
 
-write.csv(metabol_M, "Outputs/M_Values.csv")
+write.csv(metabol_M, "Outputs/M_Values.csv", row.names = F)

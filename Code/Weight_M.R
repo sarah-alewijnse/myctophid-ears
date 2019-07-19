@@ -45,6 +45,7 @@ ks.test(myct_tidy$log10_Weight, "pnorm", avg, sd)
 
 plot(myct_tidy$M ~ myct_tidy$log10_Weight)
 
+set.seed(1)
 mod <- cor.test(~ M + log10_Weight,
          data = myct_tidy,
          method = "spearman",

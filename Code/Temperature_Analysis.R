@@ -22,8 +22,20 @@ max(myct$temp_HDI_range)
 with(myct,
      boxplot(temp ~ sciname))
 
-with(myct,
-     plot(M ~ temp))
+# E carlsbergi temps
+
+ELC <- filter(myct, Label == "ELC")
+mean(ELC$temp)
+
+# G nicholsi temps
+
+GYN <- filter(myct, Label == "GYN")
+mean(GYN$temp)
+
+# G braueri temps
+
+GYR <- filter(myct, Label == "GYR")
+mean(GYR$temp)
 
 #### Check normality with K-S test ####
 
@@ -46,6 +58,7 @@ leveneTest(temp ~ sciname, data = myct)
 
 mod <- kruskal.test(temp ~ sciname, data = myct)
 
+set.seed(1)
 results <- replicate(1000, {
   values_T <- data.frame()
   values_S <- data.frame()
@@ -53,7 +66,7 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
+    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
     sci <- dplyr::select(myct, sciname)
     sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)
@@ -99,6 +112,9 @@ hdi(results_t$p_value, credMass = 0.95)
 
 #### Analysis with M ####
 
+with(myct,
+     plot(M ~ temp))
+
 ## Check for homogeneity of variances with F-test
 
 var <- read.csv("Outputs/M_Temp_var.csv")
@@ -107,33 +123,37 @@ var.test(Value ~ Variable, data = var)
 
 ## Repeat 1000 Times
 
-results <- replicate(1000, {
-  values_M <- data.frame()
+mod <- cor.test(~ M + temp,
+                data = myct,
+                method = "spearman",
+                cof.level = 0.95)
+
+set.seed(1)
+  results <- replicate(1000, {
   values_T <- data.frame()
+  values_S <- data.frame()
   
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    values_M <- rbind(values_M, val_M)
-    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
+    sci <- dplyr::select(myct, temp)
+    sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)
-    values <- cbind(values_M, values_T)
-    colnames(values) <- c("M", "Temp")
+    values_S <- rbind(values_S, sci)
+    values <- cbind(values_S, values_T)
+    colnames(values) <- c("Temperature", "M")
   }
   
-  # Do regression
+  # Do test
   
-  mod <- lm(M ~ Temp, data = values)
-  sum_mod <- summary(mod)
-  coef_mod <- sum_mod[["coefficients"]]
-  intercept_mod <- coef_mod[1,1]
-  scal_mod <- coef_mod[2,1]
-  p_mod <- coef_mod[2,4]
-  rsq_mod <- sum_mod$r.squared
-  adj_rsq_mod <- sum_mod$adj.r.squared
-  aic_mod <- AIC(mod)
-  return(rbind(intercept_mod, scal_mod, p_mod, rsq_mod, adj_rsq_mod, aic_mod))
+  mod <- cor.test(~ values$M + values$Temperature,
+                  data = myct_tidy,
+                  method = "spearman",
+                  cof.level = 0.95)
+  rho <- mod[["estimate"]]
+  p_value <- mod[["p.value"]]
+  return(rbind(rho, p_value))
 })
 
 results <- as.data.frame(results)
@@ -142,31 +162,16 @@ results_t <- as.data.frame(results_t)
 
 write.csv(results_t, "Outputs/Regression_M_Temp.csv")
 
-# Highest density for intercept
+# Highest density for rho
 
-max <- which.max(density(results_t$intercept_mod)$y)
-density(results_t$intercept_mod)$x[max]
+max <- which.max(density(results_t$rho)$y)
+density(results_t$rho)$x[max]
 
-hdi(results_t$intercept_mod, credMass = 0.95)
-
-# Highest density for slope
-
-max <- which.max(density(results_t$scal_mod)$y)
-density(results_t$scal_mod)$x[max]
-
-hdi(results_t$scal_mod, credMass = 0.95)
-
-# Highest density for r-squared
-
-max <- which.max(density(results_t$rsq_mod)$y)
-density(results_t$rsq_mod)$x[max]
-
-hdi(results_t$rsq_mod, credMass = 0.95)
+hdi(results_t$rho, credMass = 0.95)
 
 # Highest density for p-value
 
-max <- which.max(density(results_t$p_mod)$y)
-density(results_t$p_mod)$x[max]
+max <- which.max(density(results_t$p_value)$y)
+density(results_t$p_value)$x[max]
 
-hdi(results_t$p_mod, credMass = 0.95)
-
+hdi(results_t$p_value, credMass = 0.95)
