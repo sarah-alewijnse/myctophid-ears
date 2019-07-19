@@ -84,7 +84,7 @@ density(results_t$WAIC)$x[max]
 
 hdi(results_t$WAIC, credMass = 0.95)
 
-## Model 1: M ~ Temperature
+## Model 2: M ~ log10 Body Mass
 
 set.seed(1)
 results <- replicate(1000, {
@@ -95,24 +95,32 @@ results <- replicate(1000, {
     
     # Get values
     val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    sci <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    sci <- with(myct[i,], rnorm(1, Weight.x, Weight_SD))
+    sci < log10(sci)
     values_T <- rbind(values_T, val_T)
     values_S <- rbind(values_S, sci)
     values <- cbind(values_S, values_T)
-    colnames(values) <- c("temp", "M")
+    colnames(values) <- c("log10_Weight", "M")
   }
+  # Get start list
+  
+  start_list <- list(
+    a = mean(values$M),
+    b = 0,
+    sigma = sd(values$M)
+  )
   
   # Do test
   
   model_1 <- map(
     alist(
       M ~ dnorm(mu, sigma),
-      mu <- a + b * temp,
-      a ~ dnorm(-0.5, 10),
-      b ~ dnorm(0.75, 1),
+      mu <- a + b * log10_Weight,
+      a ~ dnorm(-23, 10),
+      b ~ dnorm(0, 1),
       sigma ~ dunif(0, 10)
     ),
-    data = values)
+    data = values, start = start_list)
   
   coefs <- as.data.frame(model_1@coef)
   colnames(coefs) <- "Number"
@@ -129,7 +137,7 @@ results_t <- t(results)
 results_t <- as.data.frame(results_t)
 colnames(results_t) <- c("a", "b", "sigma", "WAIC")
 
-write.csv(results_t, "Outputs/Bayesian_M_Temp.csv")
+write.csv(results_t, "Outputs/Bayesian_M_Weight.csv")
 
 # Highest density for a
 
@@ -158,3 +166,4 @@ max <- which.max(density(results_t$WAIC)$y)
 density(results_t$WAIC)$x[max]
 
 hdi(results_t$WAIC, credMass = 0.95)
+
