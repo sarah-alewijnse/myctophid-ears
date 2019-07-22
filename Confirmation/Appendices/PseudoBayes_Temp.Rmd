@@ -1,0 +1,104 @@
+---
+title: "PseudoBayes_M"
+author: "Sarah R. Alewijnse"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Function
+
+The PseudoBayes_Temp function generates a value for temperature experienced by a fish, derived from d18O_otolith values. The equation for this is:
+
+$Temperature = \frac{(\delta^{18}O_{oto}-\delta^{18}O_{SW})-a}{b}$
+
+Where $\delta^{18}O_{oto}$ is the $\delta^{18}O$ value of the fish's otolith, $\delta^{18}O_{SW}$ is the $\delta^{18}O$ value of the seawater, and $a$ and $b$ are set parameters.
+
+Equation from Høie *et al.* 2004.
+
+## Required Packages
+
+```{r message = FALSE}
+
+library(tidyverse)
+library(HDInterval)
+library(truncnorm)
+
+```
+
+## Code
+
+```{r eval = FALSE}
+
+PseudoBayes_Temp <- function(d18O, d18O_sd, # d18O_otolith values and SD
+                             d18O_water, d18O_water_sd, # d18O_SW values and SD
+                             d18O_water_min, d18O_water_max, # Global min and max for d18O_SW
+                             reps){ # Number of repetitions when sampling from distributions
+  
+  # Calculate distributions of component values with set.seeds to ensure reproducibility
+  set.seed(d18O)
+  dist_d18O <- rnorm(reps, d18O, d18O_sd)
+  set.seed(d18O_water)
+  dist_d18O_water <- rtruncnorm(reps, d18O_water_min, d18O_water_max, d18O_water, d18O_water_sd)
+  # Set parameter values from Hoie et al. 2004
+  set.seed(3.9)
+  dist_param_1 <- rnorm(reps, 3.90, 0.24)
+  set.seed(-0.20)
+  dist_param_2 <- rnorm(reps, -0.20, 0.019)
+  
+  # Calculate temperature
+  dist_d18 <- dist_d18O - dist_d18O_water
+  dist_temp <- (dist_d18 - dist_param_1)/dist_param_2
+  
+  # Get maximum density of M
+  max <- which.max(density(dist_temp)$y)
+  temp <- density(dist_temp)$x[max]
+  
+  # Get highest density intervals of M
+  temp_HDI <- hdi(dist_temp, credMass = 0.68) # credMass set so it matches standard deviation
+  temp_HDI_min <- unname(temp_HDI[1])
+  temp_HDI_max <- unname(temp_HDI[2])
+  temp_HDI_range_min <- temp_HDI - temp_HDI_min
+  temp_HDI_range_max <- temp_HDI_max - temp_HDI
+  temp_HDI_range <- mean(c(temp_HDI_range_min, temp_HDI_range_max))
+  
+  # Combine results
+  result <- data.frame(temp, temp_HDI_min, temp_HDI_max, temp_HDI_range)
+  return(result)
+}
+```
+
+## Example
+
+```{r}
+
+# Read in and tidy data
+setwd("~/PhD/GitHub/mytophid-ears")
+myct <- read.csv("Data/Myctophids_Master.csv")
+myct <- filter(myct, d13C != "NA")
+d18O_sd <- sd(myct$D18O_vals)
+d18O_min <- min(myct$D18O_vals)
+d18O_max <- max(myct$D18O_vals)
+
+# Load in function
+load("Functions/PseudoBayes_Temp.Rdata")
+
+
+with(myct[3,], # Fish number three in master data set
+     PseudoBayes_Temp(d18O, 0.02, # SD from isotope data
+                      D18O_vals, d18O_sd, # SD from data
+                      d18O_min, d18O_max, # Min-max from data
+                      10000))
+
+```
+
+## Outputs
+
+* M = value at maximum density of distribution of M values.
+* M_HDI_min = minimum value at 68% HDI.
+* M_HDI_max = maximum value at 68% HDI.
+* M_HDI_range = difference between M_HDI_min and M_HDI_max.
