@@ -4,6 +4,7 @@ library(tidyverse)
 library(lme4)
 library(lmerTest)
 library(MuMIn)
+library(HDInterval)
 
 myct <- read.csv("Outputs/Combined.csv")
 
@@ -47,6 +48,10 @@ results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
 
+write.csv(results_t, "Outputs/M_Temp.csv")
+
+results_t <- read.csv("Outputs/M_Temp.csv")
+
 # Highest density for intercept
 
 max <- which.max(density(results_t$intercept_mod)$y)
@@ -82,12 +87,11 @@ density(results_t$aic_mod)$x[max]
 
 hdi(results_t$aic_mod, credMass = 0.95)
 
-write.csv(results_t, "Outputs/M_Temp.csv")
-
 #### Model 2 - M ~ Temperature + (1|Species) ####
 
 mod_test <- lmer(M ~ temp + (1|sciname), data = myct)
-summary(mod_test)
+mod_sum <- summary(mod_test)
+coef_mod <- mod_sum[["coefficients"]]
 
 set.seed(1)
 results <- replicate(1000, {
@@ -115,7 +119,7 @@ results <- replicate(1000, {
   coef_mod <- sum_mod[["coefficients"]]
   intercept_mod <- coef_mod[1,1]
   scal_mod <- coef_mod[2,1]
-  p_mod <- coef_mod[2,4]
+  p_mod <- coef_mod[2,5]
   r_sq_mod <- r.squaredGLMM(mod)
   r_sq_con <- r_sq_mod[1,2] # Conditional r-squared (whole model)
   adj_rsq_mod <- sum_mod$adj.r.squared
@@ -126,6 +130,10 @@ results <- replicate(1000, {
 results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
+
+write.csv(results_t, "Outputs/M_Temp_Rand.csv")
+
+results_t <- read.csv("Outputs/M_Temp_Rand.csv")
 
 # Highest density for intercept
 
@@ -161,8 +169,6 @@ max <- which.max(density(results_t$aic_mod)$y)
 density(results_t$aic_mod)$x[max]
 
 hdi(results_t$aic_mod, credMass = 0.95)
-
-write.csv(results_t, "Outputs/M_Temp_Rand.csv")
 
 #### Model 3 - M ~ Weight ####
 
@@ -204,6 +210,10 @@ results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
 
+write.csv(results_t, "Outputs/M_Weight.csv")
+
+results_t <- read.csv("Outputs/M_Weight.csv")
+
 # Highest density for intercept
 
 max <- which.max(density(results_t$intercept_mod)$y)
@@ -239,9 +249,7 @@ density(results_t$aic_mod)$x[max]
 
 hdi(results_t$aic_mod, credMass = 0.95)
 
-write.csv(results_t, "Outputs/M_Weight.csv")
-
-#### Model 2 - M ~ Weight + (1|Species) ####
+#### Model 4 - M ~ Weight + (1|Species) ####
 
 mod_test <- lmer(M ~ log10(Weight.x) + (1|sciname), data = myct)
 summary(mod_test)
@@ -272,7 +280,7 @@ results <- replicate(1000, {
   coef_mod <- sum_mod[["coefficients"]]
   intercept_mod <- coef_mod[1,1]
   scal_mod <- coef_mod[2,1]
-  p_mod <- coef_mod[2,4]
+  p_mod <- coef_mod[2,5]
   r_sq_mod <- r.squaredGLMM(mod)
   r_sq_con <- r_sq_mod[1,2] # Conditional r-squared (whole model)
   adj_rsq_mod <- sum_mod$adj.r.squared
@@ -283,6 +291,10 @@ results <- replicate(1000, {
 results <- as.data.frame(results)
 results_t <- t(results)
 results_t <- as.data.frame(results_t)
+
+write.csv(results_t, "Outputs/M_Weight_Rand.csv")
+
+results_t <- read.csv("Outputs/M_Weight_Rand.csv")
 
 # Highest density for intercept
 
@@ -319,4 +331,4 @@ density(results_t$aic_mod)$x[max]
 
 hdi(results_t$aic_mod, credMass = 0.95)
 
-write.csv(results_t, "Outputs/M_Weight_Rand.csv")
+

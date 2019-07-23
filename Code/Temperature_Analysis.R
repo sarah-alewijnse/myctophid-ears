@@ -137,8 +137,7 @@ set.seed(1)
     
     # Get values
     val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    sci <- dplyr::select(myct, temp)
-    sci <- slice(sci, i)
+    sci <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
     values_T <- rbind(values_T, val_T)
     values_S <- rbind(values_S, sci)
     values <- cbind(values_S, values_T)
