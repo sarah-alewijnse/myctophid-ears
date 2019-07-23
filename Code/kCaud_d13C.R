@@ -89,12 +89,12 @@ mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
 # Plot with model and raw data
 
-plot(d13C ~ K_caud, data = d_sr, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5)
-points(d13C ~ K_caud, data = d_myct, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
+plot(d13C ~ K_caud, data = d_sr, pch = 17, col = col.alpha("#0072B2", 0.5), cex = 2, xlim = c(0.2, 6))
+points(d13C ~ K_caud, data = d_myct, pch = 16, col = col.alpha("#D55E00", 0.7), cex = 2)
 lines(K_caud.seq, mu.mean)
 shade(mu.HPDI, K_caud.seq)
 d_myct_lab <- d_myct
 d_myct_lab[1, 4] <- d_myct_lab[1, 4] - 0.14
 d_myct_lab[6, 4] <- d_myct_lab[6, 4] + 0.14
-text(d_myct_lab$d13C ~ d_myct_lab$K_caud, labels = d_myct_lab$sciname, pos = 4)
+text(d_myct_lab$d13C ~ d_myct_lab$K_caud, labels = d_myct_lab$sciname, pos = 2, font = 3, cex = 0.7)
 

@@ -94,11 +94,11 @@ boxplot(M ~ sciname,
         data = myct)
 
 myct$sciname = factor(myct$sciname, 
-                      levels = c("Electrona antarctica", 
+                      levels = c("Krefftichthys anderssoni",
                                  "Gymnoscopelus braueri",
-                                 "Krefftichthys anderssoni",
-                                 "Protomyctophum bolini",
+                                 "Electrona antarctica",
                                  "Electrona carlsbergi",
+                                 "Protomyctophum bolini",
                                  "Gymnoscopelus nicholsi"))
 
 # Carry out test
@@ -260,3 +260,15 @@ density(PRM_KRA$p_value)$x[max]
 
 hdi(PRM_KRA$p_value, credMass = 0.95)
 
+#### Boxplot ####
+
+ggplot(myct, aes(sciname, M)) +
+  geom_boxplot(lwd = 0.7) +
+  theme(legend.position = "none", # Get rid of the legend
+        text = element_text(size = 15),
+        panel.background = element_blank(), # Keep the background blank
+        panel.border = element_rect(colour = "black", fill = NA),
+        axis.text.x = element_text(face = "italic", colour = "black", angle = 45, hjust = 1),
+        axis.text.y = element_text(colour = "black")) + 
+  ylab("M") + # Add the y label
+  xlab("Species") # Add the x label

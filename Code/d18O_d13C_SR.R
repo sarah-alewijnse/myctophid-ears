@@ -80,8 +80,10 @@ mu <- link(model, data = data.frame(d18O = d18O.seq)) # Link model to mu
 mu.mean <- apply(mu, 2, mean)
 mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
-plot(d13C ~ d18O, data = d_sr, pch = 17, col = col.alpha("cornflowerblue", 0.5), cex = 1.5, xlim = c(min(d$d18O), max(d$d18O)))
-points(d13C ~ d18O, data = d_myct, pch = 16, col = col.alpha("red", 0.7), cex = 1.5)
+plot(d13C ~ d18O, data = d_sr, pch = 17, col = col.alpha("#0072B2", 0.5), cex = 2, xlim = c(min(d$d18O), max(d$d18O)), 
+     xlab = expression(delta^{18}*"O (\u2030)"),
+     ylab = expression(delta^{13}*"C (\u2030)"))
+points(d13C ~ d18O, data = d_myct, pch = 16, col = col.alpha("#D55E00", 0.7), cex = 2)
 lines(d18O.seq, mu.mean)
 shade(mu.HPDI, d18O.seq)
-text(d_myct$d13C ~ d_myct$d18O, labels = d_myct$sciname, pos = 2)
+text(d_myct$d13C ~ d_myct$d18O, labels = d_myct$sciname, pos = 4, font = 3, cex = 0.7)
