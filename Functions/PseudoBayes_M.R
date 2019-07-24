@@ -67,15 +67,12 @@ PseudoBayes_M <- function(d13C, d13C_sd,
   
   # Calculate M
   dist_M <- (dist_d13C - dist_DIC) / (dist_diet - dist_DIC)
-  max <- which.max(density(dist_M)$y)
+  min_M <- min(dist_M)
+  max_M <- max(dist_M)
+  max_dens <- which.max(density(dist_M)$y)
   M <- density(dist_M)$x[max]
-  M_HDI <- hdi(dist_M, credMass = 0.68) # Set so it matches stan devs
-  M_HDI_min <- unname(M_HDI[1])
-  M_HDI_max <- unname(M_HDI[2])
-  M_HDI_range_min <- M_HDI - M_HDI_min
-  M_HDI_range_max <- M_HDI_max - M_HDI
-  M_HDI_range <- mean(c(M_HDI_range_min, M_HDI_range_max))
-  result <- data.frame(M, M_HDI_min, M_HDI_max, M_HDI_range)
+  sd_M <- sd(dist_M)
+  result <- data.frame(M, sd_M, min_M, max_M)
   return(result)
 }
 
@@ -83,7 +80,7 @@ save("PseudoBayes_M", file = "Functions/PseudoBayes_M.Rdata")
 
 ## Test
 
-with(myct[2,],
+with(myct[50,],
      PseudoBayes_M(d13C, 0.02, # SD based on values from isotope lab
                    Year.x, 10000,
                    DIC, 0.202, 0, 3, # From Tagliabue & Bopp, 2007
@@ -94,4 +91,6 @@ with(myct[2,],
                    UseTroph, UseTrophSe, 2, 5, # From FishBase
                    0.8, 1.1, # From DeNiro & Epstein
                    0, 1.8)) # From Solomon et al. 
+
+
 

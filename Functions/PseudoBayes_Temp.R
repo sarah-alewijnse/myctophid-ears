@@ -32,15 +32,12 @@ PseudoBayes_Temp <- function(d18O, d18O_sd,
   # Calculate temperature
   dist_d18 <- dist_d18O - dist_d18O_water
   dist_temp <- (dist_d18 - dist_param_1)/dist_param_2 # From Shephard et al. 2007
-  max <- which.max(density(dist_temp)$y)
+  max_dens <- which.max(density(dist_temp)$y)
   temp <- density(dist_temp)$x[max]
-  temp_HDI <- hdi(dist_temp, credMass = 0.68) # Set so it matches stan devs
-  temp_HDI_min <- unname(temp_HDI[1])
-  temp_HDI_max <- unname(temp_HDI[2])
-  temp_HDI_range_min <- temp_HDI - temp_HDI_min
-  temp_HDI_range_max <- temp_HDI_max - temp_HDI
-  temp_HDI_range <- mean(c(temp_HDI_range_min, temp_HDI_range_max))
-  result <- data.frame(temp, temp_HDI_min, temp_HDI_max, temp_HDI_range)
+  min_temp <- min(dist_temp)
+  max_temp <- max(dist_temp)
+  sd_temp <- sd(dist_temp)
+  result <- data.frame(temp, sd_temp, min_temp, max_temp)
   return(result)
 }
 save("PseudoBayes_Temp", file = "Functions/PseudoBayes_Temp.Rdata")
@@ -51,7 +48,7 @@ d18O_sd <- sd(myct$D18O_vals)
 d18O_min <- min(myct$D18O_vals)
 d18O_max <- max(myct$D18O_vals)
 
-with(myct[3,],
+with(myct[5,],
      PseudoBayes_Temp(d18O, 0.02, # Based on NOCS values
                       D18O_vals, 0.138, # SD from data
                       -0.373, 0.034, # Global min-max
