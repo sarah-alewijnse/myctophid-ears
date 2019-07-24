@@ -15,6 +15,11 @@ max(myct$M)
 min(myct$sd_M)
 max(myct$sd_M)
 
+## Species means
+
+avg <- aggregate(myct, FUN = mean, by = list(myct$sciname))
+sd <- aggregate(myct, FUN = sd, by = list(myct$sciname))
+
 ## Check for normal distributon with K-S test
 
 hist(myct$M)
