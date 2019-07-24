@@ -12,8 +12,8 @@ myct <- read.csv("Outputs/M_Values.csv")
 min(myct$M)
 max(myct$M)
 
-min(myct$M_HDI_range)
-max(myct$M_HDI_range)
+min(myct$sd_M)
+max(myct$sd_M)
 
 ## Check for normal distributon with K-S test
 
@@ -44,7 +44,7 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
+    val_T <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
     sci <- dplyr::select(myct, sciname)
     sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)
@@ -114,7 +114,7 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_T <- with(myct[i,], rnorm(1, M, M_HDI_range))
+    val_T <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
     sci <- dplyr::select(myct, sciname)
     sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)
@@ -221,6 +221,19 @@ density(ELC_GYR$p_value)$x[max]
 
 hdi(ELC_GYR$p_value, credMass = 0.95)
 
+## ELC - GYN
+
+ELC_GYN <- filter(results_t, Comp == "Electrona carlsbergi - Gymnoscopelus nicholsi")
+ELC_GYN$p_value <- as.character(ELC_GYN$p_value)
+ELC_GYN$p_value <- as.numeric(ELC_GYN$p_value)
+
+# Highest density for p
+
+max <- which.max(density(ELC_GYN$p_value)$y)
+density(ELC_GYN$p_value)$x[max]
+
+hdi(ELC_GYN$p_value, credMass = 0.95)
+
 ## ELC - PRM
 
 ELC_PRM <- filter(results_t, Comp == "Electrona carlsbergi - Protomyctophum bolini")
@@ -259,6 +272,71 @@ max <- which.max(density(PRM_KRA$p_value)$y)
 density(PRM_KRA$p_value)$x[max]
 
 hdi(PRM_KRA$p_value, credMass = 0.95)
+
+## GYR - GYN
+
+GYR_GYN <- filter(results_t, Comp == "Gymnoscopelus braueri - Gymnoscopelus nicholsi")
+GYR_GYN$p_value <- as.character(GYR_GYN$p_value)
+GYR_GYN$p_value <- as.numeric(GYR_GYN$p_value)
+
+# Highest density for p
+
+max <- which.max(density(GYR_GYN$p_value)$y)
+density(GYR_GYN$p_value)$x[max]
+
+hdi(GYR_GYN$p_value, credMass = 0.95)
+
+## GYR - PRM
+
+GYR_PRM <- filter(results_t, Comp == "Gymnoscopelus braueri - Protomyctophum bolini")
+GYR_PRM$p_value <- as.character(GYR_PRM$p_value)
+GYR_PRM$p_value <- as.numeric(GYR_PRM$p_value)
+
+# Highest density for p
+
+max <- which.max(density(GYR_PRM$p_value)$y)
+density(GYR_PRM$p_value)$x[max]
+
+hdi(GYR_PRM$p_value, credMass = 0.95)
+
+## GYR - KRA
+
+GYR_KRA <- filter(results_t, Comp == "Gymnoscopelus braueri - Krefftichthys anderssoni")
+GYR_KRA$p_value <- as.character(GYR_KRA$p_value)
+GYR_KRA$p_value <- as.numeric(GYR_KRA$p_value)
+
+# Highest density for p
+
+max <- which.max(density(GYR_KRA$p_value)$y)
+density(GYR_KRA$p_value)$x[max]
+
+hdi(GYR_KRA$p_value, credMass = 0.95)
+
+## GYN - PRM
+
+GYN_PRM <- filter(results_t, Comp == "Gymnoscopelus nicholsi - Protomyctophum bolini")
+GYN_PRM$p_value <- as.character(GYN_PRM$p_value)
+GYN_PRM$p_value <- as.numeric(GYN_PRM$p_value)
+
+# Highest density for p
+
+max <- which.max(density(GYN_PRM$p_value)$y)
+density(GYN_PRM$p_value)$x[max]
+
+hdi(GYN_PRM$p_value, credMass = 0.95)
+
+## GYN - KRA
+
+GYN_KRA <- filter(results_t, Comp == "Gymnoscopelus nicholsi - Krefftichthys anderssoni")
+GYN_KRA$p_value <- as.character(GYN_KRA$p_value)
+GYN_KRA$p_value <- as.numeric(GYN_KRA$p_value)
+
+# Highest density for p
+
+max <- which.max(density(GYN_KRA$p_value)$y)
+density(GYN_KRA$p_value)$x[max]
+
+hdi(GYN_KRA$p_value, credMass = 0.95)
 
 #### Boxplot ####
 
