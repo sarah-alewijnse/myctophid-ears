@@ -14,8 +14,8 @@ myct <- read.csv("Outputs/Combined.csv")
 min(myct$temp)
 max(myct$temp)
 
-min(myct$temp_HDI_range)
-max(myct$temp_HDI_range)
+min(myct$sd_temp)
+max(myct$sd_temp)
 
 ## Plot 
 
@@ -56,7 +56,7 @@ leveneTest(temp ~ sciname, data = myct)
 
 ## Proceed with Kruska-Wallis Test
 
-mod <- kruskal.test(temp ~ sciname, data = myct)
+kruskal.test(temp ~ sciname, data = myct)
 
 set.seed(1)
 results <- replicate(1000, {
@@ -66,7 +66,7 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    val_T <- with(myct[i,], rtruncnorm(1, min_temp, max_temp, temp, sd_temp))
     sci <- dplyr::select(myct, sciname)
     sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)

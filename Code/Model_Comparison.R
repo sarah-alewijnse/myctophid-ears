@@ -23,8 +23,8 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    val_M <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
+    val_T <- with(myct[i,], rtruncnorm(1, min_temp, max_temp, temp, sd_temp))
     values_M <- rbind(values_M, val_M)
     values_T <- rbind(values_T, val_T)
     values <- cbind(values_M, values_T)
@@ -102,8 +102,8 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    val_M <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
+    val_T <- with(myct[i,], rtruncnorm(1, min_temp, max_temp, temp, sd_temp))
     values_M <- rbind(values_M, val_M)
     values_T <- rbind(values_T, val_T)
     sci <- dplyr::select(myct, sciname)
@@ -172,10 +172,11 @@ hdi(results_t$aic_mod, credMass = 0.95)
 
 #### Model 3 - M ~ Weight ####
 
-mod_test <- lm(M ~ log10(Weight.x), data = myct)
-plot(mod_test$residuals)
-
-plot(M ~ log10(Weight.x), data = myct)
+myct$log_Weight <- log10(myct$Weight.x)
+myct$log_Weight_sd <- log10(myct$Weight_SD)
+myct$log_Weight_sd[myct$log_Weight_sd == "-Inf"] <- "0"
+myct$log_Weight_sd <- as.numeric(myct$log_Weight_sd)
+myct$log_Weight_sd <- abs(myct$log_Weight_sd)
 
 set.seed(1)
 results <- replicate(1000, {
@@ -185,8 +186,8 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    val_W <- with(myct[i,], rnorm(1, log10(Weight.x), Weight_SD))
+    val_M <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
+    val_W <- with(myct[i,], rnorm(1, log_Weight, log_Weight_sd))
     values_M <- rbind(values_M, val_M)
     values_W <- rbind(values_W, val_W)
     values <- cbind(values_M, values_W)
@@ -254,6 +255,12 @@ hdi(results_t$aic_mod, credMass = 0.95)
 mod_test <- lmer(M ~ log10(Weight.x) + (1|sciname), data = myct)
 summary(mod_test)
 
+myct$log_Weight <- log10(myct$Weight.x)
+myct$log_Weight_sd <- log10(myct$Weight_SD)
+myct$log_Weight_sd[myct$log_Weight_sd == "-Inf"] <- "0"
+myct$log_Weight_sd <- as.numeric(myct$log_Weight_sd)
+myct$log_Weight_sd <- abs(myct$log_Weight_sd)
+
 set.seed(1)
 results <- replicate(1000, {
   values_M <- data.frame()
@@ -263,8 +270,8 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    val_W <- with(myct[i,], rnorm(1, log10(Weight.x), Weight_SD))
+    val_M <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
+    val_W <- with(myct[32,], rnorm(1, log_Weight, log_Weight_sd))
     values_M <- rbind(values_M, val_M)
     values_W <- rbind(values_W, val_W)
     sci <- dplyr::select(myct, sciname)
@@ -347,9 +354,9 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    val_W <- with(myct[i,], rnorm(1, log10(Weight.x), Weight_SD))
-    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    val_M <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
+    val_W <- with(myct[i,], rnorm(1, log_Weight, log_Weight_sd))
+    val_T <- with(myct[i,], rtruncnorm(1, min_temp, max_temp, temp, sd_temp))
     values_M <- rbind(values_M, val_M)
     values_W <- rbind(values_W, val_W)
     values_T <- rbind(values_T, val_T)
@@ -461,9 +468,9 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct)){
     
     # Get values
-    val_M <- with(myct[i,], rnorm(1, M, M_HDI_range))
-    val_W <- with(myct[i,], rnorm(1, log10(Weight.x), Weight_SD))
-    val_T <- with(myct[i,], rnorm(1, temp, temp_HDI_range))
+    val_M <- with(myct[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
+    val_W <- with(myct[i,], rnorm(1, log_Weight, log_Weight_sd))
+    val_T <- with(myct[i,], rtruncnorm(1, min_temp, max_temp, temp, sd_temp))
     sci <- dplyr::select(myct, sciname)
     sci <- slice(sci, i)
     values_M <- rbind(values_M, val_M)
