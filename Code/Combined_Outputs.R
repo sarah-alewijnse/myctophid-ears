@@ -8,9 +8,9 @@ temp <- read.csv("Outputs/Temperature.csv")
 temp <- select(temp,
                temp,
                MyNumber,
-               temp_HDI_min,
-               temp_HDI_max,
-               temp_HDI_range)
+               min_temp,
+               max_temp,
+               sd_temp)
 
 ## Combine
 
