@@ -36,8 +36,8 @@ with(myct_T,
      plot(Temp, temp))
 with(myct_T,
      boxplot(temp ~ sciname))
-min(myct_T$temp_HDI_range)
-max(myct_T$temp_HDI_range)
+min(myct_T$sd_temp)
+max(myct_T$sd_temp)
 min(myct_T$temp)
 max(myct_T$temp)
 
