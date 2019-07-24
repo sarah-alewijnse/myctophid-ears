@@ -4,7 +4,7 @@ library(tidyverse)
 library(HDInterval)
 
 myct <- read.csv("Outputs/Combined.csv")
-myct_tidy <- dplyr::select(myct, sciname, M, M_HDI_range, Weight.x)
+myct_tidy <- dplyr::select(myct, sciname, M, sd_M, min_M, max_M, Weight.x)
 myct_tidy <- na.omit(myct_tidy)
 
 ## Initial plot - weight vs d13C
@@ -58,7 +58,7 @@ results <- replicate(1000, {
   for(i in 1:nrow(myct_tidy)){
     
     # Get values
-    val_T <- with(myct_tidy[i,], rnorm(1, M, M_HDI_range))
+    val_T <- with(myct_tidy[i,], rtruncnorm(1, min_M, max_M, M, sd_M))
     sci <- dplyr::select(myct_tidy, log10_Weight)
     sci <- slice(sci, i)
     values_T <- rbind(values_T, val_T)
