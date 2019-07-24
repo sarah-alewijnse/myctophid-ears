@@ -70,7 +70,7 @@ PseudoBayes_M <- function(d13C, d13C_sd,
   min_M <- min(dist_M)
   max_M <- max(dist_M)
   max_dens <- which.max(density(dist_M)$y)
-  M <- density(dist_M)$x[max]
+  M <- density(dist_M)$x[max_dens]
   sd_M <- sd(dist_M)
   result <- data.frame(M, sd_M, min_M, max_M)
   return(result)

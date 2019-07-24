@@ -33,7 +33,7 @@ PseudoBayes_Temp <- function(d18O, d18O_sd,
   dist_d18 <- dist_d18O - dist_d18O_water
   dist_temp <- (dist_d18 - dist_param_1)/dist_param_2 # From Shephard et al. 2007
   max_dens <- which.max(density(dist_temp)$y)
-  temp <- density(dist_temp)$x[max]
+  temp <- density(dist_temp)$x[max_dens]
   min_temp <- min(dist_temp)
   max_temp <- max(dist_temp)
   sd_temp <- sd(dist_temp)
