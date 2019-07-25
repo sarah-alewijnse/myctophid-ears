@@ -1654,20 +1654,17 @@ library(truncnorm)</code></pre>
   # Calculate M
   dist_M &lt;- (dist_d13C - dist_DIC) / (dist_diet - dist_DIC)
   
-  # Get maximum density of M
-  max &lt;- which.max(density(dist_M)$y)
-  M &lt;- density(dist_M)$x[max]
+  # Get maximum density value for M
+  max_dens &lt;- which.max(density(dist_M)$y)
+  M &lt;- density(dist_M)$x[max_dens]
   
-  # Get highest density intervals of M
-  M_HDI &lt;- hdi(dist_M, credMass = 0.68) # credMass set so it matches standard deviation
-  M_HDI_min &lt;- unname(M_HDI[1])
-  M_HDI_max &lt;- unname(M_HDI[2])
-  M_HDI_range_min &lt;- M_HDI - M_HDI_min
-  M_HDI_range_max &lt;- M_HDI_max - M_HDI
-  M_HDI_range &lt;- mean(c(M_HDI_range_min, M_HDI_range_max))
+  # Get minimum, maximum and sd for M distribution
+  min_M &lt;- min(dist_M)
+  max_M &lt;- max(dist_M)
+  sd_M &lt;- sd(dist_M)
   
   # Combine results
-  result &lt;- data.frame(M, M_HDI_min, M_HDI_max, M_HDI_range)
+  result &lt;- data.frame(M, sd_M, min_M, max_M)
   return(result)
 }</code></pre>
 </div>
@@ -1693,7 +1690,7 @@ with(myct[2,], # Fish number two in master data set
                    0, 1.8)) # From Solomon et al. 2006</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["M"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["M_HDI_min"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["M_HDI_max"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["M_HDI_range"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.258657","2":"0.2396844","3":"0.2843531","4":"0.02233439"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["M"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sd_M"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["min_M"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["max_M"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.258657","2":"0.02391067","3":"0.1944767","4":"0.3897002"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -1701,9 +1698,9 @@ with(myct[2,], # Fish number two in master data set
 <h2>Outputs</h2>
 <ul>
 <li>M = value at maximum density of distribution of M values.</li>
-<li>M_HDI_min = minimum value at 68% HDI.</li>
-<li>M_HDI_max = maximum value at 68% HDI.</li>
-<li>M_HDI_range = difference between M_HDI_min and M_HDI_max.</li>
+<li>sd_M = standard deviation of M distribution.</li>
+<li>min_M = minimum value of M distribution.</li>
+<li>max_M = maximum value of M distribution.</li>
 </ul>
 </div>
 

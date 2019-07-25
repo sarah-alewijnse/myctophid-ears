@@ -1,5 +1,5 @@
 ---
-title: "PseudoBayes_M"
+title: "PseudoBayes_Temp"
 author: "Sarah R. Alewijnse"
 output:
   html_document:
@@ -54,20 +54,17 @@ PseudoBayes_Temp <- function(d18O, d18O_sd, # d18O_otolith values and SD
   dist_d18 <- dist_d18O - dist_d18O_water
   dist_temp <- (dist_d18 - dist_param_1)/dist_param_2
   
-  # Get maximum density of M
-  max <- which.max(density(dist_temp)$y)
-  temp <- density(dist_temp)$x[max]
+  # Get maximum density of temperature
+  max_dens <- which.max(density(dist_temp)$y)
+  temp <- density(dist_temp)$x[max_dens]
   
-  # Get highest density intervals of M
-  temp_HDI <- hdi(dist_temp, credMass = 0.68) # credMass set so it matches standard deviation
-  temp_HDI_min <- unname(temp_HDI[1])
-  temp_HDI_max <- unname(temp_HDI[2])
-  temp_HDI_range_min <- temp_HDI - temp_HDI_min
-  temp_HDI_range_max <- temp_HDI_max - temp_HDI
-  temp_HDI_range <- mean(c(temp_HDI_range_min, temp_HDI_range_max))
+  # Get minimum, maximum and sd of temperature
+  min_temp <- min(dist_temp)
+  max_temp <- max(dist_temp)
+  sd_temp <- sd(dist_temp)
   
-  # Combine results
-  result <- data.frame(temp, temp_HDI_min, temp_HDI_max, temp_HDI_range)
+  # Return results
+  result <- data.frame(temp, sd_temp, min_temp, max_temp)
   return(result)
 }
 ```
@@ -98,7 +95,7 @@ with(myct[3,], # Fish number three in master data set
 
 ## Outputs
 
-* M = value at maximum density of distribution of M values.
-* M_HDI_min = minimum value at 68% HDI.
-* M_HDI_max = maximum value at 68% HDI.
-* M_HDI_range = difference between M_HDI_min and M_HDI_max.
+* temp = value at maximum density of distribution of temperature values.
+* sd_temp = standard deviation of temperature distribution.
+* min_temp = minimum value of temperature distribution.
+* max_temp = maximum value of temperature distribution.
