@@ -80,6 +80,7 @@ mu <- link(model, data = data.frame(d18O = d18O.seq)) # Link model to mu
 mu.mean <- apply(mu, 2, mean)
 mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
+par(mar = c(5, 5, 3, 3))
 plot(d13C ~ d18O, data = d_sr, pch = 17, col = col.alpha("#0072B2", 0.5), cex = 2, xlim = c(min(d$d18O), max(d$d18O)), 
      xlab = expression(delta^{18}*"O (\u2030)"),
      ylab = expression(delta^{13}*"C (\u2030)"))

@@ -89,7 +89,9 @@ mu.HPDI <- apply(mu, 2, HPDI, prob = 0.95)
 
 # Plot with model and raw data
 
-plot(d13C ~ K_caud, data = d_sr, pch = 17, col = col.alpha("#0072B2", 0.5), cex = 2, xlim = c(0.2, 6))
+plot(d13C ~ K_caud, data = d_sr, pch = 17, col = col.alpha("#0072B2", 0.5), cex = 2, xlim = c(0.2, 6),
+     xlab = "Caudal Aspect Ratio",
+     ylab = expression(delta^{13}*"C (\u2030)"))
 points(d13C ~ K_caud, data = d_myct, pch = 16, col = col.alpha("#D55E00", 0.7), cex = 2)
 lines(K_caud.seq, mu.mean)
 shade(mu.HPDI, K_caud.seq)
