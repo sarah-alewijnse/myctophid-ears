@@ -21,10 +21,12 @@ M_W_list <- list(
 model_M_W <- map2stan(
   alist(
     M_est ~ dnorm(mu, sigma),
-    mu <- a[Species] + b*Weight,
+    mu <- a + b*Weight + a_Var[Species],
     M_obs ~ dnorm(M_est, M_sd),
-    a[Species] ~ dnorm(0.25, 1),
+    a ~ dnorm(0.25, 1),
     b ~ dnorm(0, 1),
+    a_Var[Species] ~ dnorm(0 , sigma_Species),
+    sigma_Species ~ dunif(0, 1),
     sigma ~ dunif(0, 1)
   ),
 data = M_W_list,
