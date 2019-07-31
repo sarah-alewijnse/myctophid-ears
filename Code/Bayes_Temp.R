@@ -43,7 +43,7 @@ model_M_T <- map2stan(
 ## Precis Tables
 
 precis(model_M_T)
-precis(model_M_W, depth = 2)
+precis(model_M_T, depth = 2, digits = 4)
 
 ## Check chains
 
@@ -85,7 +85,7 @@ ELN_M_T <- map2stan(
 
 ## Precis Tables
 
-precis(ELN_M_T)
+precis(ELN_M_T, digits = 4)
 
 ## Check chains
 
@@ -147,7 +147,7 @@ ELC_M_T <- map2stan(
 
 ## Precis Tables
 
-precis(ELC_M_T)
+precis(ELC_M_T, digit = 4)
 
 ## Check chains
 
@@ -207,7 +207,7 @@ GYR_M_T <- map2stan(
 
 ## Precis Tables
 
-precis(GYR_M_T)
+precis(GYR_M_T, digits = 4)
 
 ## Check chains
 
@@ -267,7 +267,7 @@ GYN_M_T <- map2stan(
 
 ## Precis Tables
 
-precis(GYN_M_T)
+precis(GYN_M_T, digits = 4)
 
 ## Check chains
 
@@ -329,7 +329,7 @@ KRA_M_T <- map2stan(
 
 ## Precis Tables
 
-precis(KRA_M_T)
+precis(KRA_M_T, digits = 4)
 
 ## Check chains
 
@@ -391,7 +391,7 @@ PRM_M_T <- map2stan(
 
 ## Precis Tables
 
-precis(PRM_M_T)
+precis(PRM_M_T, digits = 4)
 
 ## Check chains
 

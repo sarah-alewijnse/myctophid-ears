@@ -4,16 +4,13 @@ library(tidyverse)
 library(gridExtra)
 
 myct <- read.csv("Outputs/Combined.csv")
-myct$log_Weight <- log10(myct$Weight.x)
-myct$log_Weight_sd <- log10(myct$Weight_SD)
-myct$log_Weight_sd[myct$log_Weight_sd == "-Inf"] <- "0"
-myct$log_Weight_sd <- as.numeric(myct$log_Weight_sd)
-myct$log_Weight_sd <- abs(myct$log_Weight_sd)
+myct_tidy <- filter(myct, Weight_SD == "0")
+myct_tidy$log10_Weight <- log10(myct_tidy$Weight.x)
 
 
 #### Plot ####
 
-cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+cbPalette <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 
 plot1 <- ggplot(myct, aes(temp, M, sciname)) +
   scale_fill_manual(values = cbPalette) +
@@ -45,9 +42,6 @@ plot2 <- ggplot(myct, aes(log_Weight, M, sciname)) +
   # Colour error-bars according to species
   geom_errorbar(aes(ymin = M - sd_M, # Vertical
                     ymax = M + sd_M,
-                    col = sciname), alpha = 0.40, lwd = 1) +
-  geom_errorbarh(aes(xmin = log_Weight - log_Weight_sd,
-                    xmax = log_Weight + log_Weight_sd,
                     col = sciname), alpha = 0.40, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme

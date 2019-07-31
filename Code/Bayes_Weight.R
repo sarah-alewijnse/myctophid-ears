@@ -41,7 +41,7 @@ control = list(adapt_delta = 0.99))
 ## Precis Tables
 
 precis(model_M_W)
-precis(model_M_W, depth = 2)
+precis(model_M_W, depth = 2, digits = 4)
 
 ## Check chains
 
@@ -96,7 +96,7 @@ ELN_M_W <- map2stan(
 
 ## Precis Tables
 
-precis(ELN_M_W)
+precis(ELN_M_W, digits = 4)
 
 ## Check chains
 
@@ -153,7 +153,7 @@ ELC_M_W <- map2stan(
 
 ## Precis Tables
 
-precis(ELC_M_W)
+precis(ELC_M_W, digits = 4)
 
 ## Check chains
 
@@ -198,7 +198,7 @@ GYR_M_W <- map2stan(
 
 ## Precis Tables
 
-precis(GYR_M_W)
+precis(GYR_M_W, digits = 4)
 
 ## Check chains
 
@@ -255,7 +255,7 @@ GYN_M_W <- map2stan(
 
 ## Precis Tables
 
-precis(GYN_M_W)
+precis(GYN_M_W, digits = 4)
 
 ## Check chains
 
@@ -312,7 +312,7 @@ KRA_M_W <- map2stan(
 
 ## Precis Tables
 
-precis(KRA_M_W)
+precis(KRA_M_W, digits = 4)
 
 ## Check chains
 
@@ -357,7 +357,7 @@ PRM_M_W <- map2stan(
 
 ## Precis Tables
 
-precis(PRM_M_W)
+precis(PRM_M_W, digits = 4)
 
 ## Check chains
 
