@@ -5,7 +5,7 @@ library(gridExtra)
 
 myct <- read.csv("Outputs/Combined.csv")
 myct_tidy <- filter(myct, Weight_SD == "0")
-myct_tidy$log10_Weight <- log10(myct_tidy$Weight.x)
+myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 
 
 #### Plot ####
@@ -36,7 +36,7 @@ plot1 <- ggplot(myct, aes(temp, M, sciname)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-plot2 <- ggplot(myct, aes(log_Weight, M, sciname)) +
+plot2 <- ggplot(myct_tidy, aes(ln_Weight, M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
   # Colour error-bars according to species
@@ -46,7 +46,7 @@ plot2 <- ggplot(myct, aes(log_Weight, M, sciname)) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme
   scale_shape_manual(values = c(21, 22, 23, 24, 25, 21)) +
-  xlab("log10(Weight) (g)") +
+  xlab("Ln(Weight) (g)") +
   ylab("M") +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank

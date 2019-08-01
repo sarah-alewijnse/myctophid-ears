@@ -117,3 +117,5 @@ ggplot(add, aes(x = M, fill = sciname))+
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))
 
+ggplot(add, aes(x = sciname, y = M))+
+  geom_violin()
