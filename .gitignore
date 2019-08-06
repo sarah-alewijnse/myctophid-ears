@@ -3,4 +3,19 @@
 .RData
 .Ruserdata
 /Archive
-.gitignore
+
+# LaTeX #
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fff
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.ttt
+*.fdb_latexmk
+*.pdf
+*.fls
