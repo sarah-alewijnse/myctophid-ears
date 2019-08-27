@@ -4,6 +4,8 @@
 .Ruserdata
 /Archive
 
+/Outputs/Big_Model.csv
+
 # LaTeX #
 *.aux
 *.bbl
