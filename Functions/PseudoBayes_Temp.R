@@ -13,7 +13,7 @@ d18O_sd <- sd(myct$D18O_vals)
 
 #### Create function for temperature ####
 
-PseudoBayes_Temp <- function(d18O, d18O_sd,
+Temp_Vals <- function(d18O, d18O_sd,
                              d18O_water, d18O_water_sd,
                              d18O_water_min, d18O_water_max,
                              reps){
@@ -40,7 +40,7 @@ PseudoBayes_Temp <- function(d18O, d18O_sd,
   result <- data.frame(temp, sd_temp, min_temp, max_temp)
   return(result)
 }
-save("PseudoBayes_Temp", file = "Functions/PseudoBayes_Temp.Rdata")
+save("Temp_Vals", file = "Functions/Temp_Vals.Rdata")
 
 # Run for one
 
@@ -49,7 +49,7 @@ d18O_min <- min(myct$D18O_vals)
 d18O_max <- max(myct$D18O_vals)
 
 with(myct[5,],
-     PseudoBayes_Temp(d18O, 0.02, # Based on NOCS values
+     Temp_Vals(d18O, 0.02, # Based on NOCS values
                       D18O_vals, 0.138, # SD from data
                       -0.373, 0.034, # Global min-max
                       10000))
