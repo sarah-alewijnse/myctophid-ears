@@ -1,0 +1,270 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{}
+  \pretitle{\vspace{\droptitle}}
+  \posttitle{}
+  \author{}
+  \preauthor{}\postauthor{}
+  \date{}
+  \predate{}\postdate{}
+
+
+\begin{document}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(HDInterval)}
+\KeywordTok{library}\NormalTok{(truncnorm)}
+
+\NormalTok{M_val <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(d13C, d13C_sd, }
+                  \CommentTok{# d13C_otolith value and SD}
+\NormalTok{                  Year, }
+                  \CommentTok{# Year of capture}
+\NormalTok{                  reps, }
+                  \CommentTok{# Number of repetitions when sampling from distributions}
+\NormalTok{                  DIC_surf, DIC_surf_sd, }
+                  \CommentTok{# d13C_DIC value and SD from capture location}
+\NormalTok{                  DIC_min, DIC_max, }
+                  \CommentTok{# Global d13C_DIC min and max}
+\NormalTok{                  suess, suess_sd, }
+                  \CommentTok{# Post-1970 Suess effect and SD from capture location}
+\NormalTok{                  suess_min, suess_max, }
+                  \CommentTok{# Global Suess effect min and max}
+\NormalTok{                  suess_}\DecValTok{1970}\NormalTok{, suess_}\DecValTok{1970}\NormalTok{_sd, }
+                  \CommentTok{# Pre-1970 Suess effect and SD}
+\NormalTok{                  phyto, phyto_sd, }
+                  \CommentTok{# d13C_phyto and SD from capture location}
+\NormalTok{                  phyto_min, phyto_max, }
+                  \CommentTok{# Global d13C_phyto min and max}
+\NormalTok{                  phyto_suess, phyto_suess_sd, }
+                  \CommentTok{# Suess effect for phytoplankton and SD}
+\NormalTok{                  troph, troph_se,}
+                  \CommentTok{# Trophic level and SE}
+\NormalTok{                  troph_min, troph_max, }
+                  \CommentTok{# Min and max trophic level for fishes}
+\NormalTok{                  enrich, enrich_se, }
+                  \CommentTok{# Trophic enrichment of d13C and SD}
+\NormalTok{                  e_value)\{ }\CommentTok{# e (fractiontion) term}
+  
+  \CommentTok{# Calculate distributions of component values with set.seeds to ensure reproducibility}
+  \KeywordTok{set.seed}\NormalTok{(d13C)}
+\NormalTok{  dist_d13C <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(reps, d13C, d13C_sd)}
+  \KeywordTok{set.seed}\NormalTok{(DIC_surf)}
+\NormalTok{  dist_DIC_surf <-}\StringTok{ }\KeywordTok{rtruncnorm}\NormalTok{(reps, DIC_min, DIC_max, DIC_surf, DIC_surf_sd)}
+  \KeywordTok{set.seed}\NormalTok{(suess)}
+\NormalTok{  dist_suess <-}\StringTok{ }\KeywordTok{rtruncnorm}\NormalTok{(reps, suess_min, suess_max, suess, suess_sd)}
+  \KeywordTok{set.seed}\NormalTok{(suess_}\DecValTok{1970}\NormalTok{)}
+\NormalTok{  dist_suess_}\DecValTok{1970}\NormalTok{ <-}\StringTok{ }\KeywordTok{rtruncnorm}\NormalTok{(reps, suess_min, suess_max, suess_}\DecValTok{1970}\NormalTok{, suess_}\DecValTok{1970}\NormalTok{_sd)}
+  \KeywordTok{set.seed}\NormalTok{(phyto)}
+\NormalTok{  dist_phyto <-}\StringTok{ }\KeywordTok{rtruncnorm}\NormalTok{(reps, phyto_min, phyto_max, phyto, phyto_sd)}
+  \KeywordTok{set.seed}\NormalTok{(phyto_suess)}
+\NormalTok{  dist_phyto_suess <-}\StringTok{ }\KeywordTok{rtruncnorm}\NormalTok{(reps, suess_min, suess_max, phyto_suess, phyto_suess_sd)}
+  \KeywordTok{set.seed}\NormalTok{(troph)}
+\NormalTok{  dist_troph <-}\StringTok{ }\KeywordTok{rtruncnorm}\NormalTok{(reps, troph_min, troph_max, troph, troph_se)}
+  \KeywordTok{set.seed}\NormalTok{(enrich)}
+\NormalTok{  dist_enrich <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(reps, enrich, enrich_se)}
+  \KeywordTok{set.seed}\NormalTok{(}\KeywordTok{Sys.time}\NormalTok{())}
+  
+  \CommentTok{# Calculate d13C_DIC, correcting for the Suess effect}
+\NormalTok{  dist_DIC <-}\StringTok{ }\ControlFlowTok{if}\NormalTok{(Year }\OperatorTok{<}\StringTok{ }\DecValTok{1970}\NormalTok{)\{}
+\NormalTok{    dist_DIC_surf}\OperatorTok{-}\NormalTok{(dist_suess_}\DecValTok{1970}\OperatorTok{*}\NormalTok{((}\DecValTok{1990}\OperatorTok{-}\NormalTok{Year)}\OperatorTok{/}\DecValTok{10}\NormalTok{))}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(Year }\OperatorTok{<}\StringTok{ }\DecValTok{1990}\NormalTok{)\{}
+\NormalTok{    dist_DIC_surf}\OperatorTok{-}\NormalTok{(dist_suess}\OperatorTok{*}\NormalTok{((}\DecValTok{1990}\OperatorTok{-}\NormalTok{Year)}\OperatorTok{/}\DecValTok{10}\NormalTok{))}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    dist_DIC_surf}\OperatorTok{+}\NormalTok{(dist_suess}\OperatorTok{*}\NormalTok{((}\DecValTok{1990}\OperatorTok{-}\NormalTok{Year)}\OperatorTok{/}\DecValTok{10}\NormalTok{))}
+\NormalTok{  \}}
+  
+  \CommentTok{# Calculate d13C_Phyto, correcting for the Suess effect}
+\NormalTok{  dist_phyto_corr <-}\StringTok{ }\ControlFlowTok{if}\NormalTok{(Year }\OperatorTok{<}\StringTok{ }\DecValTok{1970}\NormalTok{)\{}
+\NormalTok{    dist_phyto}\OperatorTok{-}\NormalTok{(dist_phyto_suess}\OperatorTok{*}\NormalTok{((}\DecValTok{2001}\OperatorTok{-}\NormalTok{Year)}\OperatorTok{/}\DecValTok{10}\NormalTok{))}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(Year }\OperatorTok{<}\StringTok{ }\DecValTok{2001}\NormalTok{)\{}
+\NormalTok{    dist_phyto}\OperatorTok{-}\NormalTok{(dist_phyto_suess}\OperatorTok{*}\NormalTok{((}\DecValTok{2001}\OperatorTok{-}\NormalTok{Year)}\OperatorTok{/}\DecValTok{10}\NormalTok{))}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(Year }\OperatorTok{>}\StringTok{ }\DecValTok{2010}\NormalTok{)\{}
+\NormalTok{    dist_phyto}\OperatorTok{+}\NormalTok{(dist_phyto_suess}\OperatorTok{*}\NormalTok{((}\DecValTok{2010}\OperatorTok{-}\NormalTok{Year)}\OperatorTok{/}\DecValTok{10}\NormalTok{))}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    dist_phyto}
+\NormalTok{  \}}
+  
+  \CommentTok{# Calculate d13C_diet}
+\NormalTok{  dist_diet <-}\StringTok{ }\NormalTok{dist_phyto_corr }\OperatorTok{+}\StringTok{ }\NormalTok{(dist_troph }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{dist_enrich}
+  
+  \CommentTok{# Calculate M}
+\NormalTok{  dist_M <-}\StringTok{ }\NormalTok{(dist_d13C }\OperatorTok{-}\StringTok{ }\NormalTok{dist_DIC) }\OperatorTok{/}\StringTok{ }\NormalTok{(dist_diet }\OperatorTok{-}\StringTok{ }\NormalTok{dist_DIC) }\OperatorTok{+}\StringTok{ }\NormalTok{e_value}
+  
+  \CommentTok{# Get maximum density value for M}
+\NormalTok{  max_dens <-}\StringTok{ }\KeywordTok{which.max}\NormalTok{(}\KeywordTok{density}\NormalTok{(dist_M)}\OperatorTok{$}\NormalTok{y)}
+\NormalTok{  M <-}\StringTok{ }\KeywordTok{density}\NormalTok{(dist_M)}\OperatorTok{$}\NormalTok{x[max_dens]}
+  
+  \CommentTok{# Get minimum, maximum and sd for M distribution}
+\NormalTok{  min_M <-}\StringTok{ }\KeywordTok{min}\NormalTok{(dist_M)}
+\NormalTok{  max_M <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dist_M)}
+\NormalTok{  sd_M <-}\StringTok{ }\KeywordTok{sd}\NormalTok{(dist_M)}
+  
+  \CommentTok{# Combine results}
+\NormalTok{  result <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(M, sd_M, min_M, max_M)}
+  \KeywordTok{return}\NormalTok{(result)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Read in data}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/PhD/GitHub/mytophid-ears"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\StringTok{"Functions/M_Val.Rdata"}\NormalTok{)}
+\NormalTok{myct <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Data/Myctophids_Master.csv"}\NormalTok{)}
+
+\KeywordTok{with}\NormalTok{(myct[}\DecValTok{2}\NormalTok{,], }\CommentTok{# Fish number two in master data set}
+     \KeywordTok{M_Val}\NormalTok{(d13C, }\FloatTok{0.02}\NormalTok{, }
+           \CommentTok{# SD from isotope lab}
+\NormalTok{           Year.x, }\DecValTok{10000}\NormalTok{,}
+\NormalTok{           DIC, }\FloatTok{0.202}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{3}\NormalTok{, }
+           \CommentTok{# From Tagliabue & Bopp, 2007}
+\NormalTok{           Suess, }\FloatTok{0.202}\NormalTok{, }\FloatTok{-0.28}\NormalTok{, }\DecValTok{0}\NormalTok{, }
+           \CommentTok{# From Tagliabue & Bopp, 2007. SD same as for DIC}
+           \FloatTok{-0.07}\NormalTok{, }\FloatTok{0.202}\NormalTok{, }
+           \CommentTok{# From Tagliabue & Bopp, 2007. SD same as for DIC}
+\NormalTok{           Phyto, Phyto_sd, }\DecValTok{-31}\NormalTok{, }\FloatTok{-16.5}\NormalTok{, }
+           \CommentTok{# From Magozzi et al. 2017. Based on values for Longhurst provinces}
+           \FloatTok{-0.17}\NormalTok{, }\FloatTok{0.202}\NormalTok{, }
+           \CommentTok{# From Clive - per comms. SD same as for DIC}
+\NormalTok{           UseTroph, UseTrophSe, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }
+           \CommentTok{# From FishBase}
+           \FloatTok{0.8}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }
+           \CommentTok{# From DeNiro & Epstein 1978}
+           \DecValTok{0}\NormalTok{)) }\CommentTok{# From Solomon et al. 2006}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          M       sd_M     min_M     max_M
+## 1 0.258657 0.02391067 0.1944767 0.3897002
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  M = value at maximum density of distribution of M values.
+\item
+  sd\_M = standard deviation of M distribution.
+\item
+  min\_M = minimum value of M distribution.
+\item
+  max\_M = maximum value of M distribution.
+\end{itemize}
+
+
+\end{document}

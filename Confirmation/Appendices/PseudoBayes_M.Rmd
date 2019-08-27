@@ -1,26 +1,12 @@
 ---
-title: "PseudoBayes_M"
-author: "Sarah R. Alewijnse"
 output:
-  html_document:
-    df_print: paged
+  pdf_document:
+    keep_tex:  true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## The Function
-
-The PseudoBayes_M function generates a value for M. M is the proportion of metabolic carbon in the blood of a fish, as derived from otolith isotopes according to the equation:
-
-$M = \frac{\delta^{13}C_{oto}-\delta^{13}C_{DIC-SW}}{\delta^{13}C_{diet}-\delta^{13}C_{DIC-SW}} + e$
-
-Where $\delta^{13}C_{oto}$ is the $\delta^{13}C$ value of the fish's otolith, $\delta^{13}C_{DIC-SW}$ is the value for $\delta^{13}C$ of dissolved inorganic carbon ingested by the fish through seawater, $\delta^{13}C_{diet}$ is the  $\delta^{13}C$ of the diet, and $e$ is the isotopic fractionation factor.
-
-Equation from Chung *et al.* 2019.
-
-## Required Packages
 
 ```{r message = FALSE}
 
@@ -28,22 +14,35 @@ library(tidyverse)
 library(HDInterval)
 library(truncnorm)
 
-```
-
-## Code
-
-```{r eval = FALSE}
-PseudoBayes_M <- function(d13C, d13C_sd, # d13C_otolith value and SD
-                         Year, # Year of capture
-                         reps, # Number of repetitions when sampling from distributions
-                         DIC_surf, DIC_surf_sd, DIC_min, DIC_max, # d13C_DIC value and SD from capture location, global d13C_DIC min and max
-                         suess, suess_sd, suess_min, suess_max, # Post-1970 Suess effect and SD from capture location, global Suess effect min and max
-                         suess_1970, suess_1970_sd, # Pre-1970 Suess effect and SD
-                         phyto, phyto_sd, phyto_min, phyto_max, # d13C_phyto and SD from capture location, global d13C_phyto min and max
-                         phyto_suess, phyto_suess_sd, # Suess effect for phytoplankton and SD
-                         troph, troph_se, troph_min, troph_max, # Trophic level and SE, min and max for fishes
-                         enrich, enrich_se, # Trophic enrichment of d13C and SE
-                         e_value, e_sd){ # e (fractiontion) term and SD
+M_val <- function(d13C, d13C_sd, 
+                  # d13C_otolith value and SD
+                  Year, 
+                  # Year of capture
+                  reps, 
+                  # Number of repetitions when sampling from distributions
+                  DIC_surf, DIC_surf_sd, 
+                  # d13C_DIC value and SD from capture location
+                  DIC_min, DIC_max, 
+                  # Global d13C_DIC min and max
+                  suess, suess_sd, 
+                  # Post-1970 Suess effect and SD from capture location
+                  suess_min, suess_max, 
+                  # Global Suess effect min and max
+                  suess_1970, suess_1970_sd, 
+                  # Pre-1970 Suess effect and SD
+                  phyto, phyto_sd, 
+                  # d13C_phyto and SD from capture location
+                  phyto_min, phyto_max, 
+                  # Global d13C_phyto min and max
+                  phyto_suess, phyto_suess_sd, 
+                  # Suess effect for phytoplankton and SD
+                  troph, troph_se,
+                  # Trophic level and SE
+                  troph_min, troph_max, 
+                  # Min and max trophic level for fishes
+                  enrich, enrich_se, 
+                  # Trophic enrichment of d13C and SD
+                  e_value){ # e (fractiontion) term
   
   # Calculate distributions of component values with set.seeds to ensure reproducibility
   set.seed(d13C)
@@ -62,8 +61,6 @@ PseudoBayes_M <- function(d13C, d13C_sd, # d13C_otolith value and SD
   dist_troph <- rtruncnorm(reps, troph_min, troph_max, troph, troph_se)
   set.seed(enrich)
   dist_enrich <- rnorm(reps, enrich, enrich_se)
-  set.seed(e_value)
-  dist_e <- rnorm(reps, e_value, e_sd)
   set.seed(Sys.time())
   
   # Calculate d13C_DIC, correcting for the Suess effect
@@ -90,7 +87,7 @@ PseudoBayes_M <- function(d13C, d13C_sd, # d13C_otolith value and SD
   dist_diet <- dist_phyto_corr + (dist_troph - 1) * dist_enrich
   
   # Calculate M
-  dist_M <- (dist_d13C - dist_DIC) / (dist_diet - dist_DIC)
+  dist_M <- (dist_d13C - dist_DIC) / (dist_diet - dist_DIC) + e_value
   
   # Get maximum density value for M
   max_dens <- which.max(density(dist_M)$y)
@@ -105,33 +102,37 @@ PseudoBayes_M <- function(d13C, d13C_sd, # d13C_otolith value and SD
   result <- data.frame(M, sd_M, min_M, max_M)
   return(result)
 }
-```
 
-## Example
+```
 
 ```{r}
 
 # Read in data
+
 setwd("~/PhD/GitHub/mytophid-ears")
+load("Functions/M_Val.Rdata")
 myct <- read.csv("Data/Myctophids_Master.csv")
 
-# Read in function
-load("Functions/PseudoBayes_M.Rdata")
-
 with(myct[2,], # Fish number two in master data set
-     PseudoBayes_M(d13C, 0.02, # SD from isotope lab
-                   Year.x, 10000,
-                   DIC, 0.202, 0, 3, # From Tagliabue & Bopp, 2007
-                   Suess, 0.202, -0.28, 0, # From Tagliabue & Bopp, 2007. SD same as for DIC
-                   -0.07, 0.202, # From Tagliabue & Bopp, 2007. SD same as for DIC
-                   Phyto, Phyto_sd, -31, -16.5, # From Magozzi et al. 2017. Based on values for Longhurst provinces
-                   -0.17, 0.202, # From Clive - per comms. SD same as for DIC
-                   UseTroph, UseTrophSe, 2, 5, # From FishBase
-                   0.8, 1.1, # From DeNiro & Epstein 1978
-                   0, 1.8)) # From Solomon et al. 2006
+     M_Val(d13C, 0.02, 
+           # SD from isotope lab
+           Year.x, 10000,
+           DIC, 0.202, 0, 3, 
+           # From Tagliabue & Bopp, 2007
+           Suess, 0.202, -0.28, 0, 
+           # From Tagliabue & Bopp, 2007. SD same as for DIC
+           -0.07, 0.202, 
+           # From Tagliabue & Bopp, 2007. SD same as for DIC
+           Phyto, Phyto_sd, -31, -16.5, 
+           # From Magozzi et al. 2017. Based on values for Longhurst provinces
+           -0.17, 0.202, 
+           # From Clive - per comms. SD same as for DIC
+           UseTroph, UseTrophSe, 2, 5, 
+           # From FishBase
+           0.8, 1.1, 
+           # From DeNiro & Epstein 1978
+           0)) # From Solomon et al. 2006
 ```
-
-## Outputs
 
 * M = value at maximum density of distribution of M values.
 * sd_M = standard deviation of M distribution.
