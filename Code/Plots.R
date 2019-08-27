@@ -16,16 +16,14 @@ plot1 <- ggplot(myct, aes(temp, M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
   geom_errorbarh(aes(xmin = temp - sd_temp, # Horizontal
-                     xmax = temp + sd_temp,
-                     col = sciname), alpha = 0.40, lwd = 1) + # Colour error-bars according to species
+                     xmax = temp + sd_temp), alpha = 0.2, lwd = 1) + # Colour error-bars according to species
   geom_errorbar(aes(ymin = M - sd_M, # Vertical
-                    ymax = M + sd_M,
-                    col = sciname), alpha = 0.40, lwd = 1) +
+                    ymax = M + sd_M), alpha = 0.2, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme
-  scale_shape_manual(values = c(21, 22, 23, 24, 25, 21)) +
+  scale_shape_manual(values = c(21, 22, 23, 24, 25, 24)) +
   xlab(expression('Temperature ('*~degree*C*')')) +
-  ylab("M") +
+  ylab("M Values") +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 15),
@@ -41,13 +39,12 @@ plot2 <- ggplot(myct_tidy, aes(ln_Weight, M, sciname)) +
   scale_colour_manual(values = cbPalette) +
   # Colour error-bars according to species
   geom_errorbar(aes(ymin = M - sd_M, # Vertical
-                    ymax = M + sd_M,
-                    col = sciname), alpha = 0.40, lwd = 1) +
+                    ymax = M + sd_M), alpha = 0.2, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme
-  scale_shape_manual(values = c(21, 22, 23, 24, 25, 21)) +
-  xlab("Ln(Weight) (g)") +
-  ylab("M") +
+  scale_shape_manual(values = c(21, 22, 23, 24, 25, 24)) +
+  xlab("Ln(Body Mass) (g)") +
+  ylab("M Values") +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 15),
@@ -59,3 +56,4 @@ plot2 <- ggplot(myct_tidy, aes(ln_Weight, M, sciname)) +
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
 grid.arrange(plot1, plot2)
+

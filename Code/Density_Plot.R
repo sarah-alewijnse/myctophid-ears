@@ -94,7 +94,7 @@ max_dens <- data.frame(M = c(ELN_dens, ELC_dens, GYR_dens, GYN_dens, KRA_dens, P
 
 ## Attempt plot
 
-cbp1 <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
+cbp1 <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "deeppink")
 
 ggplot(add, aes(x = M))+
   geom_density()+
@@ -106,10 +106,11 @@ ggplot(add, aes(x = M, fill = sciname))+
   scale_fill_manual(name = "Species", values = cbp1) +
   scale_colour_manual(name = "Species", values = cbp1) +
   scale_x_continuous(breaks = round(seq(min(add$M), max(add$M), by = 0.05),1), limits = c(0.1, 0.5)) +
-  scale_y_continuous(limits = c(0, 25), expand = c(0, 0))+
-  ylab("Density")+
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 15),
+  scale_y_continuous(limits = c(0, 21), expand = c(0, 0))+
+  ylab("Kernel Density")+
+  xlab("M Values")+
+  theme(panel.background = element_blank(),
+        text = element_text(size = 25),
         panel.border = element_rect(colour = "black", fill = NA),
         legend.title = element_text(),
         legend.key=element_blank(),
