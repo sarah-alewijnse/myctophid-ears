@@ -5,6 +5,7 @@
 /Archive
 
 /Outputs/Posteriors/
+/MixSIAR/Outputs/
 
 # LaTeX #
 *.aux
