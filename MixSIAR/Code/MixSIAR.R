@@ -409,7 +409,7 @@ load_discr_data_mod <- function (filename, mix)
 ### Partition mixture data
 
 mixture <- read.csv("myct_mix.csv")
-mix_1 <- filter(source_csv, MyNumber == "BAS_19")
+mix_1 <- filter(mixture, MyNumber == "BAS_87")
 
 ### Load mixture data
 
@@ -424,7 +424,7 @@ mix <- load_mix_data_mod(mix_1,
 
 source_csv <- read.csv("myct_source.csv")
 source_csv$n <- 10000
-source_19 <- filter(source_csv, MyNumber == "BAS_19")
+source_19 <- filter(source_csv, MyNumber == "BAS_87")
 
 ### Load source data
 
@@ -444,8 +444,6 @@ discr <- load_discr_data_mod(disc, mix)
 
 plot_data(filename = "isospace_plot", plot_save_pdf = FALSE, plot_save_png = FALSE, mix,source,discr)
 
-plot_prior(alpha.prior = 1, source)
-
 ### Write JAGS model
 
 model_filename <- "MixSIAR_model.txt"
@@ -460,8 +458,8 @@ test_mod <- run_model(run = "normal", mix, source, discr, model_filename,
 
 ### Output
 
-output_options <- list(summary_save = FALSE,
-                       summary_name = "sum_stat_19",
+output_options <- list(summary_save = TRUE,
+                       summary_name = "sum_stat_87",
                        sup_post = TRUE,
                        plot_post_save_pdf = FALSE,
                        plot_post_name = "posterior_density",
@@ -470,12 +468,12 @@ output_options <- list(summary_save = FALSE,
                        plot_pairs_name = "pairs_plot",
                        sup_xy = FALSE,
                        plot_xy_save_pdf = TRUE,
-                       plot_xy_name = "trace_19",
+                       plot_xy_name = "trace_87",
                        gelman = TRUE,
                        heidel = FALSE,
                        geweke = FALSE,
                        diag_save = FALSE,
-                       diag_name = "diagnostics_19",
+                       diag_name = "diagnostics_87",
                        indiv_effect = FALSE,
                        plot_post_save_png = FALSE,
                        plot_pairs_save_png = FALSE,
