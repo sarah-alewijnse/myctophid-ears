@@ -37,14 +37,15 @@ calc_DIC <- function(Year, reps,
 
 # Calculate DIC values
 
-DIC_vals <- read.csv("myct_source.csv")
-ID <- select(DIC_vals, MyNumber)
+myct <- read.csv("Myctophids_Master.csv")
+myct <- filter(myct, d13C != "NA")
+ID <- select(myct, MyNumber)
 
 DIC_values <- data.frame()
 
-for(i in 1:nrow(DIC_vals)){
-  ms <- with(DIC_vals[i,],
-             calc_DIC(Year, 10000,
+for(i in 1:nrow(myct)){
+  ms <- with(myct[i,],
+             calc_DIC(Year.x, 10000,
                            DIC, 0.202, 0, 3, # From Tagliabue & Bopp, 2007
                            Suess, 0.202, -0.28, 0, # From Tagliabue & Bopp, 2007. SD same as for DIC
                            -0.07, 0.202 # From Tagliabue & Bopp, 2007. SD same as for DIC
@@ -80,9 +81,9 @@ calc_diet <- function(Year, reps,
 
 diet_values <- data.frame()
 
-for(i in 1:nrow(DIC_vals)){
-  ms <- with(DIC_vals[i,],
-             calc_diet(Year, 10000,
+for(i in 1:nrow(myct)){
+  ms <- with(myct[i,],
+             calc_diet(Year.x, 10000,
                       d13C_musc, d13C_musc_SD,
                       0.8, 1.1
              )) 

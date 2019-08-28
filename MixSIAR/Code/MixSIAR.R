@@ -1,5 +1,7 @@
 #### MixSIAR One Individual ####
 
+setwd("~/PhD/GitHub/mytophid-ears/MixSIAR")
+
 library(tidyverse)
 library(MixSIAR)
 
@@ -407,7 +409,7 @@ load_discr_data_mod <- function (filename, mix)
 ### Partition mixture data
 
 mixture <- read.csv("myct_mix.csv")
-mix_1 <- slice(mixture, 1)
+mix_1 <- filter(source_csv, MyNumber == "BAS_19")
 
 ### Load mixture data
 
@@ -453,27 +455,27 @@ write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 #### Run model
 
-test_mod <- run_model(run="test", mix, source, discr, model_filename, 
+test_mod <- run_model(run = "normal", mix, source, discr, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ### Output
 
 output_options <- list(summary_save = FALSE,
-                       summary_name = "summary_statistics",
-                       sup_post = FALSE,
+                       summary_name = "sum_stat_19",
+                       sup_post = TRUE,
                        plot_post_save_pdf = FALSE,
                        plot_post_name = "posterior_density",
-                       sup_pairs = FALSE,
+                       sup_pairs = TRUE,
                        plot_pairs_save_pdf = FALSE,
                        plot_pairs_name = "pairs_plot",
                        sup_xy = FALSE,
-                       plot_xy_save_pdf = FALSE,
-                       plot_xy_name = "xy_plot",
+                       plot_xy_save_pdf = TRUE,
+                       plot_xy_name = "trace_19",
                        gelman = TRUE,
                        heidel = FALSE,
-                       geweke = TRUE,
+                       geweke = FALSE,
                        diag_save = FALSE,
-                       diag_name = "diagnostics",
+                       diag_name = "diagnostics_19",
                        indiv_effect = FALSE,
                        plot_post_save_png = FALSE,
                        plot_pairs_save_png = FALSE,
