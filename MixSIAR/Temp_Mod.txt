@@ -1,0 +1,10 @@
+model{
+  for (i in 1:n){
+    Temp[i] ~ dnorm(mu[i], sigma)
+    mu[i] <- (d18O - W - a) / b
+  }
+  a ~ dnorm(3.90, 0.24)
+  b ~ dnorm(-0.20, 0.019)
+  W ~ dnorm(0, 5)
+  sigma ~ dnorm(0, 1)
+}
