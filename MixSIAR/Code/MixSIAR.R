@@ -406,10 +406,14 @@ load_discr_data_mod <- function (filename, mix)
   return(list(mu = discr_mu, sig2 = discr_sig2))
 }
 
+#### Create M Value function ####
+
+M_Value <- function(label, number){
+  
 ### Partition mixture data
 
 mixture <- read.csv("myct_mix.csv")
-mix_1 <- filter(mixture, MyNumber == "BAS_87")
+mix_1 <- filter(mixture, MyNumber == label)
 
 ### Load mixture data
 
@@ -424,7 +428,7 @@ mix <- load_mix_data_mod(mix_1,
 
 source_csv <- read.csv("myct_source.csv")
 source_csv$n <- 10000
-source_19 <- filter(source_csv, MyNumber == "BAS_87")
+source_19 <- filter(source_csv, MyNumber == label)
 
 ### Load source data
 
@@ -459,7 +463,7 @@ test_mod <- run_model(run = "normal", mix, source, discr, model_filename,
 ### Output
 
 output_options <- list(summary_save = TRUE,
-                       summary_name = "sum_stat_87",
+                       summary_name = paste("sum_stat", number),
                        sup_post = TRUE,
                        plot_post_save_pdf = FALSE,
                        plot_post_name = "posterior_density",
@@ -468,15 +472,26 @@ output_options <- list(summary_save = TRUE,
                        plot_pairs_name = "pairs_plot",
                        sup_xy = FALSE,
                        plot_xy_save_pdf = TRUE,
-                       plot_xy_name = "trace_87",
+                       plot_xy_name = paste("trace_", number),
                        gelman = TRUE,
                        heidel = FALSE,
                        geweke = FALSE,
                        diag_save = FALSE,
-                       diag_name = "diagnostics_87",
+                       diag_name = paste("diagnostics", number),
                        indiv_effect = FALSE,
                        plot_post_save_png = FALSE,
                        plot_pairs_save_png = FALSE,
                        plot_xy_save_png = FALSE)
 
 output_JAGS(test_mod, mix, source, output_options)
+
+}
+
+M_Value("BAS_93", "BAS_93")
+
+mixture <- slice(mixture, 40:108)
+
+for(i in 1:nrow(mixture)){
+  with(mixture[i,],
+       M_Value(MyNumber, MyNumber))
+}
