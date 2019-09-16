@@ -17,6 +17,7 @@ tbl_with_sources <-
 
 names <- tbl_with_sources$filename
 names <- substring(names, 11, 17)
+names <- gsub (" ", "", names, fixed = TRUE)
 
 tbl_with_sources$filename <- names
 
@@ -24,4 +25,4 @@ post <- tbl_with_sources
 post <- select(post, post_M, filename)
 colnames(post) <- c("M", "MyNumber")
 
-write.csv(post, "M_Post.csv")
+write.csv(post, "M_Post.csv", row.names = FALSE)
