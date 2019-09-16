@@ -1,4 +1,4 @@
-#### Psuedo-Bayesian Calculation of M ####
+#### Psuedo-Bayesian Calculation of M Distribution ####
 
 library(tidyverse)
 library(HDInterval)
@@ -10,14 +10,14 @@ myct <- read.csv("Data/Myctophids_Master.csv")
 
 #### Create Function to calculate M ####
 
-M_Val <- function(d13C, d13C_sd,
-                         Year, reps,
-                         DIC_surf, DIC_surf_sd, DIC_min, DIC_max,
-                         suess, suess_sd, suess_min, suess_max,
-                         suess_1970, suess_1970_sd,
-                         musc, musc_sd,
-                         enrich, enrich_se,
-                         e_value){
+M_Val_Dist <- function(d13C, d13C_sd,
+                  Year, reps,
+                  DIC_surf, DIC_surf_sd, DIC_min, DIC_max,
+                  suess, suess_sd, suess_min, suess_max,
+                  suess_1970, suess_1970_sd,
+                  musc, musc_sd,
+                  enrich, enrich_se,
+                  e_value){
   
   # Calculate distributions with set.seeds to ensure reproducibility
   set.seed(d13C)
@@ -48,26 +48,19 @@ M_Val <- function(d13C, d13C_sd,
   
   # Calculate M
   dist_M <- (dist_d13C - dist_DIC) / (dist_diet - dist_DIC)
-  min_M <- min(dist_M)
-  max_M <- max(dist_M)
-  mean_M <- mean(dist_M)
-  sd_M <- sd(dist_M)
-  result <- data.frame(mean_M, sd_M, min_M, max_M)
-  return(result)
+  return(dist_M)
 }
 
-save("M_Val", file = "Functions/M_Val.Rdata")
+save("M_Val_Dist", file = "Functions/M_Val_Dist.Rdata")
 
 ## Test
 
 with(myct[29,],
-     M_Val(d13C, 0.02, # SD based on values from isotope lab
-                   Year.x, 10000,
-                   DIC, 0.202, 0, 3, # From Tagliabue & Bopp, 2007
-                   Suess, 0.202, -0.28, 0, # From Tagliabue & Bopp, 2007. SD same as for DIC
-                   -0.07, 0.202, # From Tagliabue & Bopp, 2007. SD same as for DIC
-                   d13C_musc, d13C_musc_SD,
-                   0.8, 1.1, # From DeNiro & Epstein
-                   0)) # From Solomon et al. 
-
-
+     M_Val_Dist(d13C, 0.02, # SD based on values from isotope lab
+                Year.x, 10000,
+                DIC, 0.202, 0, 3, # From Tagliabue & Bopp, 2007
+                Suess, 0.202, -0.28, 0, # From Tagliabue & Bopp, 2007. SD same as for DIC
+                -0.07, 0.202, # From Tagliabue & Bopp, 2007. SD same as for DIC
+                d13C_musc, d13C_musc_SD,
+                0.8, 1.1, # From DeNiro & Epstein
+                0)) # From Solomon et al. 
