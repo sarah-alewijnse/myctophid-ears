@@ -460,24 +460,31 @@ write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 test_mod <- run_model(run = "normal", mix, source, discr, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
+### Get posterior
+
+R2jags::attach.jags(test_mod)
+post_M <- p.fac1[,1,2]
+post_M <- as.data.frame(post_M)
+write.csv(post_M, paste("post_M_", number, ".csv"))
+
 ### Output
 
 output_options <- list(summary_save = TRUE,
-                       summary_name = paste("sum_stat", number),
+                       summary_name = paste("sum_stat_", number, sep = ""),
                        sup_post = TRUE,
-                       plot_post_save_pdf = FALSE,
-                       plot_post_name = "posterior_density",
+                       plot_post_save_pdf = TRUE,
+                       plot_post_name = paste("posterior_density", number, sep = ""),
                        sup_pairs = TRUE,
                        plot_pairs_save_pdf = FALSE,
                        plot_pairs_name = "pairs_plot",
                        sup_xy = FALSE,
                        plot_xy_save_pdf = TRUE,
-                       plot_xy_name = paste("trace_", number),
+                       plot_xy_name = paste("trace_", number, sep = ""),
                        gelman = TRUE,
                        heidel = FALSE,
-                       geweke = FALSE,
-                       diag_save = FALSE,
-                       diag_name = paste("diagnostics", number),
+                       geweke = TRUE,
+                       diag_save = TRUE,
+                       diag_name = paste("diagnostics_", number, sep = ""),
                        indiv_effect = FALSE,
                        plot_post_save_png = FALSE,
                        plot_pairs_save_png = FALSE,
@@ -487,9 +494,7 @@ output_JAGS(test_mod, mix, source, output_options)
 
 }
 
-M_Value("BAS_93", "BAS_93")
-
-mixture <- slice(mixture, 40:108)
+M_Value("BAS_214", "BAS_214")
 
 for(i in 1:nrow(mixture)){
   with(mixture[i,],
