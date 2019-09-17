@@ -417,6 +417,14 @@ mixture <- read.csv("myct_mix.csv")
 source_csv <- read.csv("myct_source.csv")
 source_csv$n <- 10000
 
+source_DIC <- filter(source_csv, Sources == "DIC")
+source_diet <- filter(source_csv, Sources == "Diet")
+
+source_DIC$Meand13C <- max(source_DIC$Meand13C)
+source_DIC$SDd13C <- mean(source_DIC$SDd13C)
+
+source_csv <- rbind(source_DIC, source_diet)
+
 # Discrimination
 
 disc <- read.csv("myct_discrimination.csv")
@@ -474,39 +482,19 @@ M_Value <- function(label, number){
   
   R2jags::attach.jags(test_mod)
   post_M <- p.fac1[,1,2]
-  post_M <- as.data.frame(post_M)
-  write.csv(post_M, paste("post_M_", number, ".csv"))
-  
-  ### Output
-  
-  output_options <- list(summary_save = TRUE,
-                         summary_name = paste("sum_stat_", number, sep = ""),
-                         sup_post = TRUE,
-                         plot_post_save_pdf = TRUE,
-                         plot_post_name = paste("posterior_density", number, sep = ""),
-                         sup_pairs = FALSE,
-                         plot_pairs_save_pdf = FALSE,
-                         plot_pairs_name = "pairs_plot",
-                         sup_xy = FALSE,
-                         plot_xy_save_pdf = FALSE,
-                         plot_xy_name = paste("trace_", number, sep = ""),
-                         gelman = TRUE,
-                         heidel = FALSE,
-                         geweke = TRUE,
-                         diag_save = TRUE,
-                         diag_name = paste("diagnostics_", number, sep = ""),
-                         indiv_effect = FALSE,
-                         plot_post_save_png = FALSE,
-                         plot_pairs_save_png = FALSE,
-                         plot_xy_save_png = FALSE)
-  
-  output_JAGS(test_mod, mix, source, output_options)
+  mean_M <- mean(post_M)
+  return(mean_M)
   
 }
 
 M_Value("BAS_214", "BAS_214")
 
+M_values <- data.frame()
+
 for(i in 1:nrow(mixture)){
-  with(mixture[i,],
+  ms <- with(mixture[i,],
        M_Value(MyNumber, MyNumber))
+  M_values <- rbind(M_values, ms)
 }
+
+write.csv(M_values, "DIC_Max.csv", row.names = FALSE)
