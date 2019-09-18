@@ -417,17 +417,22 @@ mixture <- read.csv("myct_mix.csv")
 source_csv <- read.csv("myct_source.csv")
 source_csv$n <- 10000
 
-source_DIC <- filter(source_csv, Sources == "DIC")
-source_diet <- filter(source_csv, Sources == "Diet")
+#source_DIC <- filter(source_csv, Sources == "DIC")
+#source_diet <- filter(source_csv, Sources == "Diet")
 
-source_DIC$Meand13C <- max(source_DIC$Meand13C)
-source_DIC$SDd13C <- mean(source_DIC$SDd13C)
+#source_DIC$Meand13C <- max(source_DIC$Meand13C)
+#source_DIC$SDd13C <- mean(source_DIC$SDd13C)
 
-source_csv <- rbind(source_DIC, source_diet)
+#source_diet$Meand13C <- max(source_diet$Meand13C)
+#source_diet$SDd13C <- mean(source_diet$SDd13C)
+
+#source_csv <- rbind(source_DIC, source_diet)
 
 # Discrimination
 
 disc <- read.csv("myct_discrimination.csv")
+
+disc$Meand13C <- -1.8
 
 #### Create M Value function ####
 
@@ -497,4 +502,4 @@ for(i in 1:nrow(mixture)){
   M_values <- rbind(M_values, ms)
 }
 
-write.csv(M_values, "DIC_Max.csv", row.names = FALSE)
+write.csv(M_values, "e_Term_Min.csv", row.names = FALSE)
