@@ -1,11 +1,11 @@
 #### Sensitivity Analyses ####
 
-setwd("~/PhD/GitHub/mytophid-ears/MixSIAR/Sensitivity")
-
 library(tidyverse)
 library(MixSIAR)
 
 ### Edit load_mix_data function
+
+setwd("~/PhD/GitHub/mytophid-ears/MixSIAR")
 
 load_mix_data_mod <- function (filename, iso_names, factors, fac_random, fac_nested, 
                                cont_effects) 
