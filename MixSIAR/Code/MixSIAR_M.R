@@ -406,13 +406,16 @@ load_discr_data_mod <- function (filename, mix)
   return(list(mu = discr_mu, sig2 = discr_sig2))
 }
 
+### Read in data ####
+
+mixture <- read.csv("myct_mix.csv")
+
 #### Create M Value function ####
 
 M_Value <- function(label, number){
   
 ### Partition mixture data
 
-mixture <- read.csv("myct_mix.csv")
 mix_1 <- filter(mixture, MyNumber == label)
 
 ### Load mixture data
@@ -495,7 +498,7 @@ output_JAGS(test_mod, mix, source, output_options)
 }
 
 M_Value("BAS_214", "BAS_214")
-
+  
 for(i in 1:nrow(mixture)){
   with(mixture[i,],
        M_Value(MyNumber, MyNumber))

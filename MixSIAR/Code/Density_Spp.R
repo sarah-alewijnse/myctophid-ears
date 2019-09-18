@@ -3,7 +3,7 @@
 library(tidyverse)
 library(MixSIAR)
 
-post_M <- read.csv("MixSIAR/Outputs/Posteriors/M_Post.csv")
+post_M <- read.csv("MixSIAR/Outputs/M/Posteriors/M_Post.csv")
 
 ## Join with species
 

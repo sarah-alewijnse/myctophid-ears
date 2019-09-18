@@ -1,6 +1,6 @@
 #### Combine Posteriors ####
 
-setwd("~/PhD/GitHub/mytophid-ears/MixSIAR/Outputs/Posteriors")
+setwd("~/PhD/GitHub/mytophid-ears/MixSIAR/Outputs/M/Posteriors")
 
 library(tidyverse)
 library(MixSIAR)
