@@ -21,11 +21,11 @@ calc_DIC <- function(Year, reps,
   
   # Calculate DIC, correcting for the Suess effect
   dist_DIC <- if(Year < 1970){
-    dist_DIC_surf-(dist_suess_1970*((1990-Year)/10))
+    dist_DIC_surf-(dist_suess_1970*(abs(1990-Year)/10))
   } else if(Year < 1990){
-    dist_DIC_surf-(dist_suess*((1990-Year)/10))
+    dist_DIC_surf-(dist_suess*(abs(1990-Year)/10))
   } else {
-    dist_DIC_surf+(dist_suess*((1990-Year)/10))
+    dist_DIC_surf+(dist_suess*(abs(1990-Year)/10))
   }
   
   # Get distribution
