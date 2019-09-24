@@ -1,11 +1,11 @@
 model
     {
     for (i in 1:N){
-    iso[i] ~ dnorm(mu[i], sigma)
-    mu[i] <- a_est - b_est * Temp
+    mu[i] <- a_est + b_est * Temp
+    iso[i] ~ dnorm(mu[i], tau)
     }
-    a_est ~ dnorm(a_obs, a_sd)
-    b_est ~ dnorm(b_obs, b_sd)
-    Temp ~ dunif(-10, 10)
-    sigma ~ dunif(0, 1)
+    a_est ~ dnorm(a_obs, a_var)
+    b_est ~ dnorm(b_obs, b_var)
+    Temp ~ dnorm(0, 0.04)
+    tau <- 1/(sigma^2)
     }

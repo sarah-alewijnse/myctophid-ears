@@ -3,24 +3,25 @@
 setwd("~/PhD/GitHub/mytophid-ears/MixSIAR")
 
 library(tidyverse)
-library(rethinking)
+library(rjags)
+library(coda)
 
 ### Load and partition data
 
 myct <- read.csv("Myctophids_Master.csv")
-myct_1 <- filter(myct, MyNumber == "BAS_32")
+myct$dif <- myct$d18O - myct$D18O_vals
+myct_1 <- filter(myct, MyNumber == "BAS_111")
+
 
 ## Try in JAGS
 
-library(rjags)
-library(coda)
-
 iso_list <- list(
-  iso = myct_1$d18O - myct_1$D18O_val,
+  iso = myct_1$dif,
+  sigma = 0.33,
   a_obs = 3.90,
-  a_sd = 0.24,
+  a_var = 1/(0.24^2),
   b_obs = -0.20,
-  b_sd = 0.019,
+  b_var = 1/(0.019^2),
   N = 1
 )
 
@@ -29,19 +30,20 @@ inits <- list(Temp = 0.0)
 cat("model
     {
     for (i in 1:N){
-    iso[i] ~ dnorm(mu[i], sigma)
-    mu[i] <- a_est - b_est * Temp
+    mu[i] <- a_est + b_est * Temp
+    iso[i] ~ dnorm(mu[i], tau)
     }
-    a_est ~ dnorm(a_obs, a_sd)
-    b_est ~ dnorm(b_obs, b_sd)
-    Temp ~ dunif(-10, 10)
-    sigma ~ dunif(0, 1)
+    a_est ~ dnorm(a_obs, a_var)
+    b_est ~ dnorm(b_obs, b_var)
+    Temp ~ dnorm(0, 0.04)
+    tau <- 1/(sigma^2)
     }", file="Temp_Jags.txt")
 
-jags_mod <- jags.model(file = "Temp_Jags.txt", data = iso_list, inits = inits, n.chains = 1, n.adapt = 500)
+jags_mod <- jags.model(file = "Temp_Jags.txt", data = iso_list, inits = inits, n.chains = 4, n.adapt = 5000)
 
 output <- coda.samples(jags_mod,
-                       "Temp",
-                       n.iter = 1000,
-                       thin = 1)
+                       c("Temp", "a_est", "b_est"),
+                       n.iter = 10000,
+                       thin = 10)
 summary(output)
+plot(output)
