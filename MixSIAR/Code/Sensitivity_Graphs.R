@@ -3,7 +3,7 @@
 library(tidyverse)
 library(gridExtra)
 
-setwd("~/PhD/GitHub/mytophid-ears/MixSIAR/Sensitivity")
+setwd("~/PhD/GitHub/mytophid-ears/MixSIAR/Outputs/M/Sensitivity")
 
 #### DIC ####
 
@@ -14,13 +14,13 @@ DIC_0 <- read.csv("DIC_0.csv")
 DIC_0$DIC <- 0
 
 DIC_min <- read.csv("DIC_Min.csv")
-DIC_min$DIC <- 2.01
+DIC_min$DIC <- 1.46
 
-DIC_mean <- read.csv("DIC_mean.csv")
-DIC_mean$DIC <- 2.17
+DIC_mean <- read.csv("DIC_Mean.csv")
+DIC_mean$DIC <- 1.56
 
 DIC_max <- read.csv("DIC_Max.csv")
-DIC_max$DIC <- 2.25
+DIC_max$DIC <- 1.79
 
 DIC_3 <- read.csv("DIC_3.csv")
 DIC_3$DIC <- 3
@@ -44,8 +44,7 @@ DIC <- ggplot(full, aes(x = DIC, y = M_vals))+
 
 #### Diet ####
 
-base <- read.csv("Baseline.csv")
-base$Diet <- "Baseline"
+colnames(base) <- c("M_vals", "Diet")
 
 Diet_min <- read.csv("Diet_Min.csv")
 Diet_min$Diet <- -29.55
@@ -75,8 +74,7 @@ Diet <- ggplot(full, aes(x = Diet, y = M_vals))+
 
 #### e-Term ####
 
-base <- read.csv("Baseline.csv")
-base$e <- "Baseline"
+colnames(base) <- c("M_vals", "e")
 
 e_Term_Min <- read.csv("e_Term_Min.csv")
 e_Term_Min$e <- -1.8
