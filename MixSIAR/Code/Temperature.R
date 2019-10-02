@@ -13,14 +13,14 @@ myct$dif <- myct$d18O - myct$D18O_vals
 
 ## Create temperature function
 
-Temp <- function(MyNumber){
-myct_1 <- dplyr::filter(myct, MyNumber == MyNumber)
+Temp <- function(Num){
+myct_1 <- dplyr::filter(myct, MyNumber == Num)
 
 ## Try in JAGS
 
 iso_list <- list(
   iso = myct_1$dif,
-  sigma = 0.33,
+  sigma = 1/(0.33^2),
   a_obs = 3.90,
   a_var = 1/(0.24^2),
   b_obs = -0.20,
@@ -33,13 +33,13 @@ inits <- list(Temp = 0.0)
 cat("model
     {
     for (i in 1:N){
-    mu[i] <- a_est + b_est * Temp
+    mu[i] <- a_est + Temp * b_est
     iso[i] ~ dnorm(mu[i], tau)
     }
     a_est ~ dnorm(a_obs, a_var)
     b_est ~ dnorm(b_obs, b_var)
     Temp ~ dunif(-2, 6)
-    tau <- 1/(sigma^2)
+    tau <- sigma
     }", file="Temp_Jags.txt")
 
 jags_mod <- jags.model(file = "Temp_Jags.txt", data = iso_list, inits = inits, n.chains = 3, n.adapt = 50000)
@@ -52,10 +52,11 @@ output <- coda.samples(jags_mod,
 ## Summary and traceplots
 
 sum <- summary(output)
+print(sum)
 
-capture.output(c(sum), file = paste("Summary_", MyNumber, ".txt", sep = ""))
+capture.output(c(sum), file = paste("Summary_", Num, ".txt", sep = ""))
 
-bmp(file = paste("Plot_Temp", MyNumber, ".bmp", sep = ""))
+bmp(file = paste("Plot_Temp", Num, ".bmp", sep = ""))
 plot(output)
 dev.off()
 
@@ -91,7 +92,7 @@ colnames(geweke_fail) <- paste("Chain", 1:3)
 rownames(geweke_fail) <- "Geweke"
 print(geweke_fail)
 
-capture.output(c(gelman, samp_size, geweke_fail), file = paste("Diagnostics_", MyNumber, ".txt", sep = ""))
+capture.output(c(gelman, samp_size, geweke_fail), file = paste("Diagnostics_", Num, ".txt", sep = ""))
 
 ## Posterior
 
@@ -101,7 +102,7 @@ post_3 <- as.data.frame(output[[3]])
 
 post_full <- rbind(post_1, post_2, post_3)
 
-write.csv(post_full, paste("Post_Temp_", MyNumber, ".csv", sep = ""))
+write.csv(post_full, paste("Post_Temp_", Num, ".csv", sep = ""))
 }
 
 for(i in 1:nrow(myct)){
