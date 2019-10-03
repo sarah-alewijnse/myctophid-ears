@@ -40,4 +40,4 @@ myct <- read.csv("Myctophids_Master.csv")
 
 all <- left_join(myct, outputs, by = "MyNumber")
 
-write.csv(all, "Myctophids_M_Temp.csv")
+write.csv(all, "Myctophids_M_Temp.csv", row.names = FALSE)
