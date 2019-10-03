@@ -11,6 +11,8 @@ library(coda)
 myct <- read.csv("Myctophids_Master.csv")
 myct$dif <- myct$d18O - myct$D18O_vals
 
+hist(rnorm(1000, 2, 3))
+
 ## Create temperature function
 
 Temp <- function(Num){
@@ -26,6 +28,8 @@ iso_list <- list(
   b_obs = -0.20,
   b_var = 1/(0.019^2),
   N = 1
+  #temp_mu = temp_mu,
+  #temp_sigma = 1/(temp_sigma^2)
 )
 
 inits <- list(Temp = 0.0)
@@ -38,7 +42,7 @@ cat("model
     }
     a_est ~ dnorm(a_obs, a_var)
     b_est ~ dnorm(b_obs, b_var)
-    Temp ~ dunif(-2, 6)
+    Temp ~ dnorm(2, 1/(3^2))
     tau <- sigma
     }", file="Temp_Jags.txt")
 
@@ -109,3 +113,5 @@ for(i in 1:nrow(myct)){
   with(myct[i,],
        Temp(MyNumber))
 }
+
+Temp("BAS_220")
