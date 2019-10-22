@@ -27,33 +27,45 @@ M_T_W_list <- list(
 model_M_T_W <- map2stan(
   alist(
     M_est ~ dnorm(mu , sigma),
+    
+    # Linear model
     mu <- a + a_Var[Species] +
       b_W*Weight +
       b_T*Temp_est[i],
+    
+    # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
     Temp_obs ~ dnorm(Temp_est, Temp_sd),
-    a ~ dnorm(0, 1),
-    b_W ~ dnorm(0, 1),
-    b_T ~ dnorm(0, 1),
+    
+    # Transformed parameters
+    a <- 1*a_raw,
+    b_T <- 1*b_T_raw,
+    b_W <- 1*b_W_raw,
+    sigma <- 1*sigma_raw,
+    
+    # Normal parameters
+    a_raw ~ dnorm(0, 1),
+    b_W_raw ~ dnorm(0, 1),
+    b_T_raw ~ dnorm(0, 1),
     a_Var[Species] ~ dnorm(0 , sigma_Species),
-    sigma_Species ~ dexp(1),
-    sigma ~ dcauchy(0, 1)
+    sigma_Species ~ dcauchy(0, 1),
+    sigma_raw ~ dcauchy(0, 1)
   ),
   data = M_T_W_list,
   start = list(M_est = M_T_W_list$M_obs,
                Temp_est = M_T_W_list$Temp_obs),
   WAIC = FALSE,
-  iter = 1e6,
-  warmup = 1e5,
-  chains = 1,
-  cores = 1,
-  control = list(adapt_delta = 0.999, max_treedepth = 15))
+  iter = 1000,
+  warmup = 500,
+  chains = 3,
+  cores = 3,
+  control = list(adapt_delta = 0.9999, max_treedepth = 15))
 
 ## Extract the posterior
 
 post <- extract.samples(model_M_T_W)
 post <- as.data.frame(post)
-write.csv(post, "Outputs/M_T_W_Post.csv")
+write.csv(post, "Outputs/M_T_W_Post_Short.csv")
 
 ## Run diagnostics
 
@@ -61,29 +73,6 @@ colnames(post)[217:227] <- c("a_1", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_V
 
 check_energy(model_M_T_W@stanfit)
 check_treedepth(model_M_T_W@stanfit)
-
-check_n_eff <- function(fit) {
-  fit_summary <- summary(fit, probs = c(0.5))$summary
-  N <- dim(fit_summary)[[1]]
-  
-  iter <- dim(extract(fit)[[1]])[[1]]
-  
-  no_warning <- TRUE
-  for (n in 1:N) {
-    ratio <- fit_summary[,5][n] / iter
-    if (ratio < 0.001) {
-      print(sprintf('n_eff / iter for parameter %s is %s!',
-                    rownames(fit_summary)[n], ratio))
-      no_warning <- FALSE
-    }
-  }
-  if (no_warning)
-    print('n_eff / iter looks reasonable for all parameters')
-  else
-    print('  n_eff / iter below 0.001 indicates that the effective sample size has likely been overestimated')
-}
-
-check_n_eff(model_M_T_W@stanfit)
 
 divergent <- get_sampler_params(model_M_T_W@stanfit, inc_warmup=FALSE)[[1]][,'divergent__']
 sum(divergent)
@@ -103,7 +92,7 @@ mcmc_intervals(post,
 
 ## Plot pairs
 
-mcmc_pairs(post, c("a_1", "b_W", "b_T", "sigma", "sigma_Species"))
+pairs(model_M_T_W, pars = c("a_raw", "b_W_raw", "b_T_raw", "sigma_raw", "sigma_Species"))
 
 ## Plot trace
 
