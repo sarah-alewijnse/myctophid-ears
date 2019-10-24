@@ -2,10 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
-/Archive
-/MixSIAR/Archive/
-/MixSIAR/Outputs/M/
-/MixSIAR/Outputs/Temperature/
+/Archive/
+/Outputs/M/
+/Outputs/Temperature/
 # LaTeX #
 *.aux
 *.bbl
