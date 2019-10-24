@@ -6,7 +6,7 @@ post_M <- read.csv("Outputs/M/Posteriors/M_Post.csv")
 
 ## Join with species
 
-myct <- read.csv("Data/Myctophids_Master.csv")
+myct <- read.csv("Myctophids_Master.csv")
 spp <- select(myct, MyNumber, sciname)
 
 post_M_spp <- left_join(post_M, spp, by = "MyNumber")
@@ -51,11 +51,11 @@ ggplot(post_M_spp, aes(x = M, fill = sciname))+
 
 #### Species Density Plot - Temperature ####
 
-post_Temp <- read.csv("MixSIAR/Outputs/Temperature/Posteriors/Temp_Post.csv")
+post_Temp <- read.csv("Outputs/Temperature/Posteriors/Temp_Post.csv")
 
 ## Join with species
 
-myct <- read.csv("Data/Myctophids_Master.csv")
+myct <- read.csv("Myctophids_Master.csv")
 spp <- select(myct, MyNumber, sciname)
 
 post_Temp_spp <- left_join(post_Temp, spp, by = "MyNumber")
