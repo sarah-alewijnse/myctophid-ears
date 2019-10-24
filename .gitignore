@@ -4,8 +4,6 @@
 .Ruserdata
 /Archive
 
-/Outputs/Posteriors/
-/MixSIAR/Outputs/
 /MixSIAR/Archive/
 
 # LaTeX #
@@ -23,3 +21,7 @@
 *.fdb_latexmk
 *.pdf
 *.fls
+
+# Models #
+
+*.rds
