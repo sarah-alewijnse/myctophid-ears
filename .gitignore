@@ -3,9 +3,9 @@
 .RData
 .Ruserdata
 /Archive
-
 /MixSIAR/Archive/
-
+/MixSIAR/Outputs/M/
+/MixSIAR/Outputs/Temperature/
 # LaTeX #
 *.aux
 *.bbl
@@ -21,7 +21,5 @@
 *.fdb_latexmk
 *.pdf
 *.fls
-
 # Models #
-
 *.rds

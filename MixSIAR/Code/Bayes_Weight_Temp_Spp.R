@@ -5,6 +5,8 @@ library(tidyverse)
 library(rethinking)
 library(bayesplot)
 
+options(max.print=999999)
+
 myct <- read.csv("Myctophids_M_Temp.csv")
 glimpse(myct)
 
@@ -91,19 +93,10 @@ model_M_T_W <- map2stan(
   start = list(M_est = mod_list$M_obs,
                Temp_est = mod_list$Temp_obs),
   WAIC = FALSE,
-  chains = 1,
-  cores = 1,
-  control = list(adapt_delta = 0.9999, max_treedepth = 15))
-
-## Extract the posterior
-
-post <- extract.samples(model_M_T_W)
-post <- as.data.frame(post)
-write.csv(post, "Outputs/M_T_W_Post_Short.csv")
+  iter = 3000,
+  warmup = 1500)
 
 ## Run diagnostics
-
-colnames(post)[217:227] <- c("a_1", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
 
 check_energy(model_M_T_W@stanfit)
 check_treedepth(model_M_T_W@stanfit)
@@ -111,32 +104,51 @@ check_treedepth(model_M_T_W@stanfit)
 divergent <- get_sampler_params(model_M_T_W@stanfit, inc_warmup=FALSE)[[1]][,'divergent__']
 sum(divergent)
 
-precis(model_M_T_W, digits = 4)
+precis(model_M_T_W, digits = 4, prob = 0.95, depth = 2)
+
+## Save stanfit
+
+saveRDS(model_M_T_W, "Outputs/M_T_W/M_T_W_model.rds")
+
+## Extract samples
 
 ## Plot intervals
 
-mcmc_intervals(post,
-               pars = c("a_1", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma"),
-               prob = 0.5, prob_outer = 0.9) +
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 15, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black"))  # Print the minor gridlines
+post <- extract.samples(model_M_T_W)
+post <- as.data.frame(post)
+
+colnames(post)[217:227] <- c("a", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
 
 ## Plot pairs
 
 pairs(model_M_T_W, pars = c("a", "b_W", "b_T", "sigma", "sigma_Species"))
 
+## Plot intervals
+
+color_scheme_set("darkgray")
+
+mcmc_intervals(post,
+               pars = c("a", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "b_W", "b_T",  "sigma_Species", "sigma"),
+               prob = 0.5, prob_outer = 0.95) +
+  labs(x = "Posterior Predictions", y = "Parameters") +
+  theme(panel.background = element_blank(),
+        legend.position = "none",
+        strip.background = element_rect(fill = "white"),
+        strip.text.x = element_text(size = 10, face = "italic"),
+        text = element_text(size = 10, family = "sans"),
+        panel.border = element_rect(colour = "black", fill = NA),
+        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
+        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
+
 ## Plot trace
 
-p <- mcmc_trace(post,  pars = c("a_1", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma"),
-                facet_args = list(nrow = 3, labeller = label_parsed))
-plot <- p + facet_text(size = 15) +
+p <- mcmc_trace(post, pars = c("a", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "b_W", "b_T",  "sigma_Species", "sigma"),
+                facet_args = list(nrow = 4, labeller = label_parsed))
+plot <- p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 15, family = "sans"),
+        text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black"))  # Print the minor gridlines
+        axis.text = element_text(colour = "black", size = 10, face = "plain"))
 plot
 
