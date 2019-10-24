@@ -24,6 +24,48 @@ M_T_W_list <- list(
   Species = myct_tidy$sciname
 )
 
+## Convert to z-scores
+
+# Weight
+
+Weight_mean <- mean(M_T_W_list$Weight)
+Weight_sd <- sd(M_T_W_list$Weight)
+
+for(i in 1:length(M_T_W_list$Weight)){
+  M_T_W_list$Weight_Z[i] <- (M_T_W_list$Weight[i] - Weight_mean) / Weight_sd
+}
+
+# Temp_obs
+
+Temp_obs_mean <- mean(M_T_W_list$Temp_obs)
+Temp_obs_sd <- sd(M_T_W_list$Temp_obs)
+
+for(i in 1:length(M_T_W_list$Temp_obs)){
+  M_T_W_list$Temp_Obs_Z[i] <- (M_T_W_list$Temp_obs[i] - Temp_obs_mean) / Temp_obs_sd
+}
+
+# Temp_sd
+
+Temp_sd_mean <- mean(M_T_W_list$Temp_sd)
+Temp_sd_sd <- sd(M_T_W_list$Temp_sd)
+
+for(i in 1:length(M_T_W_list$Temp_sd)){
+  M_T_W_list$Temp_SD_Z[i] <- abs((M_T_W_list$Temp_sd[i] - Temp_sd_mean) / Temp_sd_sd)
+}
+
+# Tidy list
+
+mod_list <- list(
+  M_obs = M_T_W_list$M_obs,
+  M_sd = M_T_W_list$M_sd,
+  Weight = M_T_W_list$Weight_Z,
+  Temp_obs = M_T_W_list$Temp_Obs_Z,
+  Temp_sd = M_T_W_list$Temp_SD_Z,
+  Species = M_T_W_list$Species
+)
+
+## Model
+
 model_M_T_W <- map2stan(
   alist(
     M_est ~ dnorm(mu , sigma),
@@ -37,28 +79,20 @@ model_M_T_W <- map2stan(
     M_obs ~ dnorm(M_est, M_sd),
     Temp_obs ~ dnorm(Temp_est, Temp_sd),
     
-    # Transformed parameters
-    a <- 1*a_raw,
-    b_T <- 1*b_T_raw,
-    b_W <- 1*b_W_raw,
-    sigma <- 1*sigma_raw,
-    
-    # Normal parameters
-    a_raw ~ dnorm(0, 1),
-    b_W_raw ~ dnorm(0, 1),
-    b_T_raw ~ dnorm(0, 1),
+    # Parameters
+    a ~ dnorm(0, 1),
+    b_W ~ dnorm(0, 1),
+    b_T ~ dnorm(0, 1),
     a_Var[Species] ~ dnorm(0 , sigma_Species),
     sigma_Species ~ dcauchy(0, 1),
-    sigma_raw ~ dcauchy(0, 1)
+    sigma ~ dexp(1)
   ),
-  data = M_T_W_list,
-  start = list(M_est = M_T_W_list$M_obs,
-               Temp_est = M_T_W_list$Temp_obs),
+  data = mod_list,
+  start = list(M_est = mod_list$M_obs,
+               Temp_est = mod_list$Temp_obs),
   WAIC = FALSE,
-  iter = 1000,
-  warmup = 500,
-  chains = 3,
-  cores = 3,
+  chains = 1,
+  cores = 1,
   control = list(adapt_delta = 0.9999, max_treedepth = 15))
 
 ## Extract the posterior
@@ -92,7 +126,7 @@ mcmc_intervals(post,
 
 ## Plot pairs
 
-pairs(model_M_T_W, pars = c("a_raw", "b_W_raw", "b_T_raw", "sigma_raw", "sigma_Species"))
+pairs(model_M_T_W, pars = c("a", "b_W", "b_T", "sigma", "sigma_Species"))
 
 ## Plot trace
 
