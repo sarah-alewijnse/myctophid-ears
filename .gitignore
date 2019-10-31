@@ -5,6 +5,7 @@
 /Archive/
 /Outputs/M/
 /Outputs/Temperature/
+/Outputs/Belcher/
 # LaTeX #
 *.aux
 *.bbl

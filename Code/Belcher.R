@@ -54,6 +54,11 @@ Bel <- function(Num){
                          n.iter = 100000,
                          thin = 50)
   
+  output_graph <- coda.samples(jags_mod,
+                               c("Metabol", "temp_est"),
+                               n.iter = 100000,
+                               thin = 50)
+  
   ## Summary and traceplots
   
   sum <- summary(output)
@@ -61,12 +66,8 @@ Bel <- function(Num){
   
   capture.output(c(sum), file = paste("Outputs/Belcher/Summary_", Num, ".txt", sep = ""))
   
-  plot(output)
-  bmp(file = paste("Outputs/Belcher/Plot_Metabol_", Num, "_1.bmp", sep = ""))
-  plot(output, 1)
-  dev.off()
-  bmp(file = paste("Outputs/Belcher/Plot_Metabol_", Num, "_2.bmp", sep = ""))
-  plot(output, 2)
+  bmp(file = paste("Outputs/Belcher/Plot_Metabol", Num, ".bmp", sep = ""))
+  plot(output_graph)
   dev.off()
   
   ## Diagnostics
@@ -75,13 +76,13 @@ Bel <- function(Num){
   gel <- gel$psrf
   gelman <- as.data.frame(gel[, 1])
   print(gelman)
-  capture.output(gelman, file = "Outputs/Belcher/Gelmen_Metabol.txt")
+  capture.output(gelman, file = paste("Outputs/Belcher/Gelmen_Metabol", Num, ".txt"))
   
   samp_size <- as.data.frame(effectiveSize(output))
   print(samp_size)
   
   geweke <- coda::geweke.diag(output)
-  geweke.all <- data.frame(matrix(NA, nrow = 3, ncol = 3))
+  geweke.all <- data.frame(matrix(NA, nrow = 5, ncol = 3))
   colstring <- rep(NA, 3)
   for (i in 1:3) {
     geweke.tmp <- as.data.frame(geweke[[i]]$z)
@@ -111,7 +112,12 @@ Bel <- function(Num){
   
   post_full <- rbind(post_1, post_2, post_3)
   
-  write.csv(post_full, paste("Outputs/Belcher/Post__", Num, ".csv", sep = ""))
+  write.csv(post_full, paste("Outputs/Belcher/Post_", Num, ".csv", sep = ""))
 }
 
-Bel("BAS_220")
+Bel("BAS_220") # Test
+
+for(i in 1:nrow(myct_tidy)){
+  with(myct_tidy[i,],
+       Bel(MyNumber))
+}
