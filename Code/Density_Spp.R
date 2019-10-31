@@ -27,6 +27,21 @@ post_M_spp$sciname <- factor(post_M_spp$sciname, levels =
                                  "Gymnoscopelus braueri",
                                  "Electrona antarctica"))
 
+## Intercepts from body mass temp model
+
+a <- data.frame(sciname = c("Gymnoscopelus nicholsi",
+                            "Protomyctophum bolini",
+                            "Electrona carlsbergi",
+                            "Krefftichthys anderssoni",
+                            "Gymnoscopelus braueri",
+                            "Electrona antarctica"),
+                M = c(0.1444,
+                      0.1705,
+                      0.1725,
+                      0.1938,
+                      0.1999,
+                      0.2115))
+
 ## Plot
 
 cbp1 <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#E69F00", "#0072B2")
@@ -40,11 +55,12 @@ ggplot(post_M_spp, aes(x = M, fill = sciname))+
   ylab("Kernel Density")+
   xlab("M Values")+
   geom_vline(data = means, aes(xintercept = M), lwd = 1)+
+  geom_vline(data = a, aes(xintercept = M), lwd = 1, linetype = "dotted") +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
         strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10),
+        text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))
