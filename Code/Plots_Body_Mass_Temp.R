@@ -31,7 +31,7 @@ plot1 <- ggplot(myct, aes(mean_Temp, mean_M, sciname)) +
                     ymax = mean_M + sd_M), alpha = 0.2, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   geom_abline(intercept = 0.1835, slope = -0.0038, lwd = 1) +
-  geom_ribbon(x = preds, y = y, ymin = ymin, ymax = ymax) +
+  #geom_ribbon(x = preds, y = y, ymin = ymin, ymax = ymax) +
   # Customise the theme
   scale_shape_manual(values = c(21, 22, 23, 24, 25, 24)) +
   xlab(expression('Temperature ('*~degree*C*')')) +
