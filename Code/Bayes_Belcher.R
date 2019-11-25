@@ -24,24 +24,6 @@ M_Metabol_list <- list(
 
 ## Convert to z-scores
 
-# Temp_obs
-
-Temp_obs_mean <- mean(M_Metabol_list$Temp_obs)
-Temp_obs_sd <- sd(M_Metabol_list$Temp_obs)
-
-for(i in 1:length(M_Metabol_list$Temp_obs)){
-  M_Metabol_list$Temp_Obs_Z[i] <- (M_Metabol_list$Temp_obs[i] - Temp_obs_mean) / Temp_obs_sd
-}
-
-# Temp_sd
-
-Temp_sd_mean <- mean(M_Metabol_list$Temp_sd)
-Temp_sd_sd <- sd(M_Metabol_list$Temp_sd)
-
-for(i in 1:length(M_Metabol_list$Temp_sd)){
-  M_Metabol_list$Temp_SD_Z[i] <- abs((M_Metabol_list$Temp_sd[i] - Temp_sd_mean) / Temp_sd_sd)
-}
-
 # Metabol_obs
 
 Metabol_obs_mean <- mean(M_Metabol_list$Metabol_obs)
