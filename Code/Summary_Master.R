@@ -22,7 +22,8 @@ M_se <- aggregate(M, by = list(M$MyNumber), FUN = se)
 colnames(M_se) <- c("MyNumber", "se_M", "ds")
 M_se <- select(M_se, MyNumber, se_M)
 
-M <- left_join(M_means, M_sd, M_se, by = "MyNumber")
+M <- left_join(M_means, M_sd, M_se, by = "MyNumber") %>%
+  left_join(., M_se, by = "MyNumber")
 
 ## Temp
 
@@ -40,7 +41,8 @@ Temp_se <- aggregate(Temp, by = list(Temp$MyNumber), FUN = se)
 colnames(Temp_se) <- c("MyNumber", "se_Temp", "ds")
 Temp_se <- select(Temp_se, MyNumber, se_Temp)
 
-Temp <- left_join(Temp_means, Temp_sd, Temp_se, by = "MyNumber")
+Temp <- left_join(Temp_means, Temp_sd, by = "MyNumber") %>%
+  left_join(., Temp_se, by = "MyNumber")
 
 ## Belcher Metabolic Rate
 
@@ -62,11 +64,13 @@ Bel_se <- aggregate(Bel, by = list(Bel$MyNumber), FUN = se)
 colnames(Bel_se) <- c("MyNumber", "se_log_Metabol", "ds", "se_Metabol")
 Bel_se <- select(Bel_se, MyNumber, se_Metabol, se_log_Metabol)
 
-Bel <- left_join(Bel_means, Bel_sd, by = "MyNumber")
+Bel <- left_join(Bel_means, Bel_sd, by = "MyNumber") %>%
+  left_join(., Bel_se, by = "MyNumber")
 
 ## Combine
 
-outputs <- left_join(Temp, M, by = "MyNumber")
+outputs <- left_join(Temp, M, by = "MyNumber") %>%
+  left_join(., Bel, by = "MyNumber")
 
 myct <- read.csv("Myctophids_Master.csv")
 
