@@ -53,17 +53,18 @@ ggplot(post_M_spp, aes(x = M, fill = sciname))+
   scale_colour_manual(name = "Species", values = cbp1) +
   scale_y_continuous(limits = c(0, 27), expand = c(0, 0))+
   ylab("Kernel Density")+
-  xlab("M Values")+
+  xlab(expression("M" ["oto"]))+
   geom_vline(data = means, aes(xintercept = M), lwd = 1)+
   geom_vline(data = a, aes(xintercept = M), lwd = 1, linetype = "dotted") +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
         strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
+        text = element_text(size = 15, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))
+
 
 #### Species Density Plot - Temperature ####
 
