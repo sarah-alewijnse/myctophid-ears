@@ -156,15 +156,24 @@ colours <- cbPalette[as.numeric(myct_tidy$sciname)]
 shapes <- c(21, 22, 23, 24, 25, 21)
 shapes <- shapes[as.numeric(myct_tidy$sciname)]
 
-plot(mean_M ~ mean_Temp, data = myct_tidy, col = "black", bg = colours, pch = shapes,
+par(mar=c(5.2, 4.5, 4.1, 14), xpd=TRUE)
+plot(mean_M ~ mean_Temp, data = myct_tidy, col = "black", bg = colours, pch = shapes, cex = 1.3,
      xlab = expression('Temperature ('*~degree*C*')'),
      ylab = expression("M" ["oto"]))
-with(myct_tidy,
-     arrows(x0 = mean_Temp, y0 = mean_M - se_M,
-            x1 = mean_Temp, y1 = mean_M + se_M, code = 0, col = colours))
-with(myct_tidy,
-     arrows(x0 = mean_Temp - se_Temp, y0 = mean_M,
-            x1 = mean_Temp + se_Temp, y1 = mean_M, code = 0, col = colours))
+#with(myct_tidy,
+     #arrows(x0 = mean_Temp, y0 = mean_M - se_M,
+            #x1 = mean_Temp, y1 = mean_M + se_M, code = 0, col = colours))
+#with(myct_tidy,
+     #arrows(x0 = mean_Temp - se_Temp, y0 = mean_M,
+            #x1 = mean_Temp + se_Temp, y1 = mean_M, code = 0, col = colours))
+legend("right", inset = c(-0.6), legend = c("Electrona antarctica",
+                                                  "Electrona carlsbergi",
+                                                  "Gymnoscopelus braueri",
+                                                  "Gymnoscopelus nicholsi",
+                                                  "Protomyctophum bolini",
+                                                  "Krefftichthys anderssoni"),
+       pch = c(21, 22, 23, 24, 25, 21), col = "black", text.font = 3,
+       pt.bg = c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7"))
 
 load("LM_CI.rdata")
 
@@ -172,3 +181,18 @@ lm.ci(myct_tidy$mean_Temp,
       0.1825, -0.0036,
       0.1528, -0.0089,
       0.2168, 0.0019)
+
+## Plot M v body mass
+
+par(mar=c(5.2, 4.5, 4.1, 14), xpd=TRUE)
+plot(mean_M ~ log_Weight, data = myct_tidy, col = "black", bg = colours, pch = shapes, cex = 1.3,
+     xlab = "ln(Weight (g))",
+     ylab = expression("M" ["oto"]))
+legend("right", inset = c(-0.6), legend = c("Electrona antarctica",
+                                            "Electrona carlsbergi",
+                                            "Gymnoscopelus braueri",
+                                            "Gymnoscopelus nicholsi",
+                                            "Protomyctophum bolini",
+                                            "Krefftichthys anderssoni"),
+       pch = c(21, 22, 23, 24, 25, 21), col = "black", text.font = 3,
+       pt.bg = c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7"))
