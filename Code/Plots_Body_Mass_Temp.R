@@ -2,21 +2,13 @@
 
 library(tidyverse)
 library(gridExtra)
+library(rethinking)
 
-myct <- read.csv("Myctophids_M_Temp.csv")
+myct <- read.csv("Myctophids_M_Temp_Bel.csv")
 myct_tidy <- filter(myct, Weight_SD == "0")
 myct_tidy <- filter(myct_tidy, !is.na(mean_M))
 myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 
-## Get confidence intervals
-
-min_temp <- -1.87780193 - 1.698682
-max_temp <- 2.98660327 + 1.689986
-
-preds <- data.frame(x = seq(min_temp, max_temp, 0.07502794))
-y <- 0.1835 + preds * -0.0038
-ymin <- 0.1501 + preds * -0.0088
-ymax <- 0.2185 + preds * 0.0011
 
 #### Plot ####
 
@@ -25,10 +17,10 @@ cbPalette <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 plot1 <- ggplot(myct, aes(mean_Temp, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
-  geom_errorbarh(aes(xmin = mean_Temp - sd_Temp, # Horizontal
-                     xmax = mean_Temp + sd_Temp, col = sciname), alpha = 0.3, lwd = 1 )+ # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = sciname), alpha = 0.3, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Temp - se_Temp, # Horizontal
+                     xmax = mean_Temp + se_Temp, col = sciname), alpha = 0.3, lwd = 1 )+ # Colour error-bars according to species
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = sciname), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(intercept = 0.1835, slope = -0.0038, lwd = 1) +
   #geom_ribbon(x = preds, y = y, ymin = ymin, ymax = ymax) +
@@ -47,6 +39,32 @@ plot1 <- ggplot(myct, aes(mean_Temp, mean_M, sciname)) +
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
 plot1
+
+# Do in base
+
+colours <- cbPalette[as.numeric(myct_tidy$sciname)]
+
+shapes <- c(21, 22, 23, 24, 25, 21)
+shapes <- shapes[as.numeric(myct_tidy$sciname)]
+
+plot(mean_M ~ mean_Temp, data = myct_tidy, col = "black", bg = colours, pch = shapes)
+  with(myct_tidy,
+       arrows(x0 = mean_Temp, y0 = mean_M - se_M,
+              x1 = mean_Temp, y1 = mean_M + se_M, code = 0, col = colours))
+  with(myct_tidy,
+       arrows(x0 = mean_Temp - se_Temp, y0 = mean_M,
+              x1 = mean_Temp + se_Temp, y1 = mean_M, code = 0, col = colours))
+  
+model_M_T_W <- readRDS("Outputs/M_T_W/M_T_W_model.rds")
+post <- extract.samples(model_M_T_W)
+mu <- link(model_M_T_W, data = mod_list)
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI, prob = 0.95)
+temp_seq <- seq(from = min(myct_tidy$mean_Temp), to = max(myct_tidy$mean_Temp, length.out = length(post)))
+lines(temp_seq, mu.mean)
+
+
+## Body mass
 
 plot2 <- ggplot(myct_tidy, aes(ln_Weight, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
