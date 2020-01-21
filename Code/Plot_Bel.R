@@ -7,15 +7,15 @@ options(max.print=999999)
 myct <- read.csv("Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
-cbPalette <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
+cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 
   plot1 <- ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
-  geom_errorbarh(aes(xmin = mean_Metabol - sd_Metabol, # Horizontal
-                     xmax = mean_Metabol + sd_Metabol, col = sciname), alpha = 0.3, lwd = 1) + # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = sciname), alpha = 0.2, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Metabol - se_Metabol, # Horizontal
+                     xmax = mean_Metabol + se_Metabol, col = sciname), alpha = 0.3, lwd = 1) + # Colour error-bars according to species
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = sciname), alpha = 0.2, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(intercept = 0.1859, slope = -0.0047, lwd = 1) +
   # Customise the theme

@@ -17,9 +17,9 @@ glimpse(myct_tidy)
 
 M_Metabol_list <- list(
   M_obs = myct_tidy$mean_M,
-  M_sd = myct_tidy$sd_M,
+  M_se = myct_tidy$se_M,
   Metabol_obs = myct_tidy$mean_Metabol,
-  Metabol_sd = myct_tidy$sd_Metabol
+  Metabol_se = myct_tidy$se_Metabol
 )
 
 ## Convert to z-scores
@@ -33,22 +33,13 @@ for(i in 1:length(M_Metabol_list$Metabol_obs)){
   M_Metabol_list$Metabol_Obs_Z[i] <- (M_Metabol_list$Metabol_obs[i] - Metabol_obs_mean) / Metabol_obs_sd
 }
 
-# Metabol_sd
-
-Metabol_sd_mean <- mean(M_Metabol_list$Metabol_sd)
-Metabol_sd_sd <- sd(M_Metabol_list$Metabol_sd)
-
-for(i in 1:length(M_Metabol_list$Metabol_sd)){
-  M_Metabol_list$Metabol_SD_Z[i] <- (M_Metabol_list$Metabol_sd[i] - Metabol_sd_mean) / Metabol_sd_sd
-}
-
 # Tidy list
 
 mod_list <- list(
   M_obs = M_Metabol_list$M_obs,
-  M_sd = M_Metabol_list$M_sd,
+  M_se = M_Metabol_list$M_se,
   Metabol_obs = M_Metabol_list$Metabol_Obs_Z,
-  Metabol_sd = abs(M_Metabol_list$Metabol_SD_Z)
+  Metabol_se = M_Metabol_list$Metabol_se
 )
 
 ## Model
@@ -61,8 +52,8 @@ mod_list <- list(
     mu <- a + b * Metabol_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Metabol_obs ~ dnorm(Metabol_est, Metabol_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Metabol_obs ~ dnorm(Metabol_est, Metabol_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -73,8 +64,8 @@ mod_list <- list(
   start = list(M_est = mod_list$M_obs,
                Metabol_est = mod_list$Metabol_obs),
   WAIC = FALSE,
-  iter = 3000,
-  warmup = 1500)
+  iter = 10000,
+  warmup = 5000)
 
   ## Run diagnostics
   
@@ -91,6 +82,8 @@ mod_list <- list(
   ## Save stanfit
   
   saveRDS(model_M_Metabol, "Outputs/M_Belcher/M_Belcher_model.rds")
+  
+  model_M_Metabol <- readRDS("Outputs/M_Belcher/M_Belcher_model.rds")
 
   ## Extract samples
   
@@ -130,3 +123,39 @@ mod_list <- list(
           axis.text = element_text(colour = "black", size = 10, face = "plain"))
   plot  
   
+  ## Plot M v Metabol
+  
+  # Do in base
+  
+  cbPalette <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
+  
+  colours <- cbPalette[as.numeric(myct_tidy$sciname)]
+  
+  shapes <- c(21, 22, 23, 24, 25, 21)
+  shapes <- shapes[as.numeric(myct_tidy$sciname)]
+  
+  par(mar=c(5.2, 4.5, 4.1, 14), xpd=TRUE)
+  plot(mean_M ~ mean_Metabol, data = myct_tidy, col = "black", bg = colours, pch = shapes, cex = 1.3,
+       xlab = expression(paste("Mass-Specific Oxygen Consumption (", mu, "l O"["2"], " mg"["-1"], "h"["-1"], ")")),
+       ylab = expression("M" ["oto"]))
+  with(myct_tidy,
+  arrows(x0 = mean_Metabol - se_Metabol, y0 = mean_M,
+  x1 = mean_Metabol + se_Metabol, y1 = mean_M, code = 0, col = colours))
+  points(mean_M ~ mean_Metabol, data = myct_tidy, col = "black", bg = colours, pch = shapes, cex = 1.3)
+  legend("right", inset = c(-0.6), legend = c("Electrona antarctica",
+                                              "Electrona carlsbergi",
+                                              "Gymnoscopelus braueri",
+                                              "Gymnoscopelus nicholsi",
+                                              "Protomyctophum bolini",
+                                              "Krefftichthys anderssoni"),
+         pch = c(21, 22, 23, 24, 25, 21), col = "black", text.font = 3,
+         pt.bg = c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7"))
+  
+  load("LM_CI.rdata")
+  
+  lm.ci(myct_tidy$mean_Metabol,
+        0.1861, -0.0047,
+        0.1801, -0.0106,
+        0.1919, 0.0010)
+
+

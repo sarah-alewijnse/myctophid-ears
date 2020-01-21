@@ -12,7 +12,7 @@ myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 
 #### Plot ####
 
-cbPalette <- c("#56B4E9", "#0072B2", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
+cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 
 plot1 <- ggplot(myct, aes(mean_Temp, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
@@ -70,8 +70,8 @@ plot2 <- ggplot(myct_tidy, aes(ln_Weight, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
   # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = sciname), alpha = 0.3, lwd = 1) +
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = sciname), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme
   scale_shape_manual(values = c(21, 22, 23, 24, 25, 21)) +
