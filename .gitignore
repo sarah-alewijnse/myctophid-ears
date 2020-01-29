@@ -21,5 +21,6 @@
 *.fdb_latexmk
 *.pdf
 *.fls
+/Paper/Anna_Plots/
 # Models #
 *.rds
