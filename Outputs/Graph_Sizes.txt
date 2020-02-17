@@ -1,0 +1,6 @@
+Graph sizes
+
+Within speices
+Pairs - 500x500
+Post individuals - 600x300
+Traceplots - 500x600

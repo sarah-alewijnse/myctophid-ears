@@ -23,5 +23,7 @@
 *.fls
 *.enex
 /Paper/Anna_Plots/
+/Code/Bayes_Test.R
 # Models #
 *.rds
+
