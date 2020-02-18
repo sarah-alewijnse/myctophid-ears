@@ -24,7 +24,7 @@ M_T_list <- list(
   Species = myct_tidy$sciname
 )
 
-## Convert to z-scores
+## Convert to z-scores ######## DO AFTER SUBSETTING
 
 # Temp_obs
 
