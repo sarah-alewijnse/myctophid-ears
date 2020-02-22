@@ -4,3 +4,4 @@ Within speices
 Pairs - 500x500
 Post individuals - 600x300
 Traceplots - 500x600
+	650 height for M_T_W

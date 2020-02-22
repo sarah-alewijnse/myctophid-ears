@@ -9,14 +9,13 @@ options(max.print=999999)
 myct <- read.csv("Myctophids_M_Temp.csv")
 glimpse(myct)
 
-#### Overall Model with Weight and Temp ####
+# Tidy data
 
-myct_tidy <- filter(myct, Weight_SD == "0")
-myct_tidy <- filter(myct, !is.na(mean_M))
-myct_tidy$log_Weight <- log(myct_tidy$Weight.x)
-glimpse(myct_tidy)
+myct_tidy <- filter(myct, !is.na(mean_M)) # Exclude those without an M_oto
 
-M_T_list <- list(
+# Put into data fame
+
+M_T_data <- data.frame(
   M_obs = myct_tidy$mean_M,
   M_sd = myct_tidy$sd_M,
   Temp_obs = myct_tidy$mean_Temp,
@@ -24,40 +23,24 @@ M_T_list <- list(
   Species = myct_tidy$sciname
 )
 
-## Convert to z-scores ######## DO AFTER SUBSETTING
+glimpse(M_T_data) # Inspect data
 
-# Temp_obs
+#### ELN - Electrona antarctica ####
 
-Temp_obs_mean <- mean(M_T_list$Temp_obs)
-Temp_obs_sd <- sd(M_T_list$Temp_obs)
+# Subset by species
 
-for(i in 1:length(M_T_list$Temp_obs)){
-  M_T_list$Temp_Obs_Z[i] <- (M_T_list$Temp_obs[i] - Temp_obs_mean) / Temp_obs_sd
-}
-
-# Temp_sd
-
-Temp_sd_mean <- mean(M_T_list$Temp_sd)
-Temp_sd_sd <- sd(M_T_list$Temp_sd)
-
-for(i in 1:length(M_T_list$Temp_sd)){
-  M_T_list$Temp_SD_Z[i] <- abs((M_T_list$Temp_sd[i] - Temp_sd_mean) / Temp_sd_sd)
-}
-
-# Tidy list
-
-mod_df <- data.frame(
-  M_obs = M_T_list$M_obs,
-  M_sd = M_T_list$M_sd,
-  Temp_obs = M_T_list$Temp_Obs_Z,
-  Temp_sd = M_T_list$Temp_SD_Z,
-  Species = M_T_list$Species
-)
-
-#### ELN ####
-
-ELN <- filter(mod_df, Species == "Electrona antarctica")
+ELN <- filter(M_T_data, Species == "Electrona antarctica")
 ELN <- as.list(ELN)
+
+# Convert temperature to z-score
+
+ELN_temp_mean <- mean(ELN$Temp_obs) # Get species mean of temperature
+ELN_temp_sd <- sd(ELN$Temp_obs) # Get species standard deviation of temperature
+for(i in 1:length(ELN$Temp_obs)){ # Loop to get z-scores
+  ELN$Temp_Z[i] <- (ELN$Temp_obs[i] - ELN_temp_mean) / ELN_temp_sd
+}
+
+glimpse(ELN) # Check data
 
 ## Model
 
@@ -71,7 +54,7 @@ model_ELN <- map2stan(
     
     # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
-    Temp_obs ~ dnorm(Temp_est, Temp_sd),
+    Temp_Z ~ dnorm(Temp_est, Temp_sd),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -82,8 +65,8 @@ model_ELN <- map2stan(
   start = list(M_est = ELN$M_obs,
                Temp_est = ELN$Temp_obs),
   WAIC = FALSE,
-  iter = 3000,
-  warmup = 1500,
+  iter = 6000,
+  warmup = 3000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -96,13 +79,15 @@ sum(divergent)
 
 precis(model_ELN, digits = 4, prob = 0.95, depth = 2)
 
-## Plot pairs
+# Check with data
 
-pairs(model_ELN, pars = c("a", "b_T", "sigma"))
+plot(ELN$Temp_Z, ELN$M_obs, pch = 16)
+abline(0.2147, 0.0011)
 
 ## Save stanfit
 
 saveRDS(model_ELN, "Outputs/Within_Species/ELN/M_T_model.rds")
+model_ELN <- readRDS("Outputs/Within_Species/ELN/M_T_model.rds")
 
 ## Extract samples
 
@@ -111,7 +96,13 @@ saveRDS(model_ELN, "Outputs/Within_Species/ELN/M_T_model.rds")
 post <- extract.samples(model_ELN)
 post <- as.data.frame(post)
 
+# Name columns to match vairables
+
 colnames(post)[39:41] <- c("a", "b_T", "sigma")
+
+## Plot pairs
+
+pairs(model_ELN, pars = c("a", "b_T", "sigma")) # Check for autocorrelation
 
 ## Plot intervals
 
@@ -119,7 +110,7 @@ color_scheme_set("darkgray")
 
 mcmc_intervals(post,
                pars = c("a", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
+               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
   labs(x = "Posterior Predictions", y = "Parameters") +
   theme(panel.background = element_blank(),
         legend.position = "none",
@@ -134,18 +125,29 @@ mcmc_intervals(post,
 
 p <- mcmc_trace(post, pars = c("a", "b_T", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
+p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
 
-#### ELC ####
+#### ELC - Electrona carlsbergi ####
 
-ELC <- filter(mod_df, Species == "Electrona carlsbergi")
+# Subset by species
+
+ELC <- filter(M_T_data, Species == "Electrona carlsbergi")
 ELC <- as.list(ELC)
+
+# Convert temperature to z-score
+
+ELC_temp_mean <- mean(ELC$Temp_obs) # Get species mean of temperature
+ELC_temp_sd <- sd(ELC$Temp_obs) # Get species standard deviation of temperature
+for(i in 1:length(ELC$Temp_obs)){ # Loop to get z-scores
+  ELC$Temp_Z[i] <- (ELC$Temp_obs[i] - ELC_temp_mean) / ELC_temp_sd
+}
+
+glimpse(ELC) # Check data
 
 ## Model
 
@@ -159,7 +161,7 @@ model_ELC <- map2stan(
     
     # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
-    Temp_obs ~ dnorm(Temp_est, Temp_sd),
+    Temp_Z ~ dnorm(Temp_est, Temp_sd),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -184,9 +186,15 @@ sum(divergent)
 
 precis(model_ELC, digits = 4, prob = 0.95, depth = 2)
 
+# Check with data
+
+plot(ELC$Temp_Z, ELC$M_obs, pch = 16)
+abline(0.1689, 0.0005)
+
 ## Save stanfit
 
 saveRDS(model_ELC, "Outputs/Within_Species/ELC/M_T_model.rds")
+model_ELC <- readRDS("Outputs/Within_Species/ELC/M_T_model.rds")
 
 ## Extract samples
 
@@ -195,11 +203,13 @@ saveRDS(model_ELC, "Outputs/Within_Species/ELC/M_T_model.rds")
 post <- extract.samples(model_ELC)
 post <- as.data.frame(post)
 
+# Name columns to match vairables
+
 colnames(post)[35:37] <- c("a", "b_T", "sigma")
 
 ## Plot pairs
 
-pairs(model_ELC, pars = c("a", "b_T", "sigma"))
+pairs(model_ELC, pars = c("a", "b_T", "sigma")) # Check for autocorrelation
 
 ## Plot intervals
 
@@ -207,7 +217,7 @@ color_scheme_set("darkgray")
 
 mcmc_intervals(post,
                pars = c("a", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
+               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
   labs(x = "Posterior Predictions", y = "Parameters") +
   theme(panel.background = element_blank(),
         legend.position = "none",
@@ -222,18 +232,29 @@ mcmc_intervals(post,
 
 p <- mcmc_trace(post, pars = c("a", "b_T", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
+p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
 
-#### GYR ####
+#### GYR - Gymnoscopelus braueri ####
 
-GYR <- filter(mod_df, Species == "Gymnoscopelus braueri")
+# Subset by species
+
+GYR <- filter(M_T_data, Species == "Gymnoscopelus braueri")
 GYR <- as.list(GYR)
+
+# Convert temperature to z-score
+
+GYR_temp_mean <- mean(GYR$Temp_obs) # Get species mean of temperature
+GYR_temp_sd <- sd(GYR$Temp_obs) # Get species standard deviation of temperature
+for(i in 1:length(GYR$Temp_obs)){ # Loop to get z-scores
+  GYR$Temp_Z[i] <- (GYR$Temp_obs[i] - GYR_temp_mean) / GYR_temp_sd
+}
+
+glimpse(GYR) # Check data
 
 ## Model
 
@@ -247,7 +268,7 @@ model_GYR <- map2stan(
     
     # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
-    Temp_obs ~ dnorm(Temp_est, Temp_sd),
+    Temp_Z ~ dnorm(Temp_est, Temp_sd),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -272,22 +293,28 @@ sum(divergent)
 
 precis(model_GYR, digits = 4, prob = 0.95, depth = 2)
 
+# Check with data
+
+plot(GYR$Temp_Z, GYR$M_obs, pch = 16)
+abline(0.2068, 0.0016)
+
 ## Save stanfit
 
 saveRDS(model_GYR, "Outputs/Within_Species/GYR/M_T_model.rds")
+model_GYR <- readRDS("Outputs/Within_Species/GYR/M_T_model.rds")
 
 ## Extract samples
 
-## Plot intervals
-
 post <- extract.samples(model_GYR)
 post <- as.data.frame(post)
+
+# Name columns to match vairables
 
 colnames(post)[41:43] <- c("a", "b_T", "sigma")
 
 ## Plot pairs
 
-pairs(model_GYR, pars = c("a", "b_T", "sigma"))
+pairs(model_GYR, pars = c("a", "b_T", "sigma")) # Check for autocorrelation
 
 ## Plot intervals
 
@@ -295,7 +322,7 @@ color_scheme_set("darkgray")
 
 mcmc_intervals(post,
                pars = c("a", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
+               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
   labs(x = "Posterior Predictions", y = "Parameters") +
   theme(panel.background = element_blank(),
         legend.position = "none",
@@ -310,18 +337,29 @@ mcmc_intervals(post,
 
 p <- mcmc_trace(post, pars = c("a", "b_T", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
+p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
 
-#### GYN ####
+#### GYN - Gymnoscopelus braueri ####
 
-GYN <- filter(mod_df, Species == "Gymnoscopelus nicholsi")
+# Subset by species
+
+GYN <- filter(M_T_data, Species == "Gymnoscopelus nicholsi")
 GYN <- as.list(GYN)
+
+# Convert temperature to z-score
+
+GYN_temp_mean <- mean(GYN$Temp_obs) # Get species mean of temperature
+GYN_temp_sd <- sd(GYN$Temp_obs) # Get species standard deviation of temperature
+for(i in 1:length(GYN$Temp_obs)){ # Loop to get z-scores
+  GYN$Temp_Z[i] <- (GYN$Temp_obs[i] - GYN_temp_mean) / GYN_temp_sd
+}
+
+glimpse(GYN) # Check data
 
 ## Model
 
@@ -335,7 +373,7 @@ model_GYN <- map2stan(
     
     # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
-    Temp_obs ~ dnorm(Temp_est, Temp_sd),
+    Temp_Z ~ dnorm(Temp_est, Temp_sd),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -360,22 +398,28 @@ sum(divergent)
 
 precis(model_GYN, digits = 4, prob = 0.95, depth = 2)
 
+# Check with data
+
+plot(GYN$Temp_Z, GYN$M_obs, pch = 16)
+abline(0.1427, -0.0005)
+
 ## Save stanfit
 
 saveRDS(model_GYN, "Outputs/Within_Species/GYN/M_T_model.rds")
+model_GYN <- readRDS("Outputs/Within_Species/GYN/M_T_model.rds")
 
 ## Extract samples
-
-## Plot intervals
 
 post <- extract.samples(model_GYN)
 post <- as.data.frame(post)
 
-colnames(post)[25:28] <- c("a", "b_W", "b_T", "sigma")
+# Name columns to match vairables
+
+colnames(post)[25:27] <- c("a", "b_T", "sigma")
 
 ## Plot pairs
 
-pairs(model_GYN, pars = c("a", "b_T", "sigma"))
+pairs(model_GYN, pars = c("a", "b_T", "sigma")) # Check for autocorrelation
 
 ## Plot intervals
 
@@ -383,7 +427,7 @@ color_scheme_set("darkgray")
 
 mcmc_intervals(post,
                pars = c("a", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
+               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
   labs(x = "Posterior Predictions", y = "Parameters") +
   theme(panel.background = element_blank(),
         legend.position = "none",
@@ -398,18 +442,29 @@ mcmc_intervals(post,
 
 p <- mcmc_trace(post, pars = c("a", "b_T", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
+p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
 
-#### KRA ####
+#### KRA - Krefftichthys anderssoni ####
 
-KRA <- filter(mod_df, Species == "Krefftichthys anderssoni")
+# Subset by species
+
+KRA <- filter(M_T_data, Species == "Krefftichthys anderssoni")
 KRA <- as.list(KRA)
+
+# Convert temperature to z-score
+
+KRA_temp_mean <- mean(KRA$Temp_obs) # Get species mean of temperature
+KRA_temp_sd <- sd(KRA$Temp_obs) # Get species standard deviation of temperature
+for(i in 1:length(KRA$Temp_obs)){ # Loop to get z-scores
+  KRA$Temp_Z[i] <- (KRA$Temp_obs[i] - KRA_temp_mean) / KRA_temp_sd
+}
+
+glimpse(KRA) # Check data
 
 ## Model
 
@@ -423,7 +478,7 @@ model_KRA <- map2stan(
     
     # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
-    Temp_obs ~ dnorm(Temp_est, Temp_sd),
+    Temp_Z ~ dnorm(Temp_est, Temp_sd),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -448,22 +503,28 @@ sum(divergent)
 
 precis(model_KRA, digits = 4, prob = 0.95, depth = 2)
 
+# Check with data
+
+plot(KRA$Temp_Z, KRA$M_obs, pch = 16)
+abline(0.1907, -0.0029)
+
 ## Save stanfit
 
 saveRDS(model_KRA, "Outputs/Within_Species/KRA/M_T_model.rds")
+model_KRA <- readRDS("Outputs/Within_Species/KRA/M_T_model.rds")
 
 ## Extract samples
 
-## Plot intervals
-
 post <- extract.samples(model_KRA)
 post <- as.data.frame(post)
+
+# Name columns to match vairables
 
 colnames(post)[41:43] <- c("a", "b_T", "sigma")
 
 ## Plot pairs
 
-pairs(model_KRA, pars = c("a", "b_T", "sigma"))
+pairs(model_KRA, pars = c("a", "b_T", "sigma")) # Check for autocorrelation
 
 ## Plot intervals
 
@@ -471,7 +532,7 @@ color_scheme_set("darkgray")
 
 mcmc_intervals(post,
                pars = c("a", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
+               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
   labs(x = "Posterior Predictions", y = "Parameters") +
   theme(panel.background = element_blank(),
         legend.position = "none",
@@ -486,18 +547,29 @@ mcmc_intervals(post,
 
 p <- mcmc_trace(post, pars = c("a", "b_T", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
+p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
 
-#### PRM ####
+#### PRM - Protomyctophum bolini ####
 
-PRM <- filter(mod_df, Species == "Protomyctophum bolini")
+# Subset by species
+
+PRM <- filter(M_T_data, Species == "Protomyctophum bolini")
 PRM <- as.list(PRM)
+
+# Convert temperature to z-score
+
+PRM_temp_mean <- mean(PRM$Temp_obs) # Get species mean of temperature
+PRM_temp_sd <- sd(PRM$Temp_obs) # Get species standard deviation of temperature
+for(i in 1:length(PRM$Temp_obs)){ # Loop to get z-scores
+  PRM$Temp_Z[i] <- (PRM$Temp_obs[i] - PRM_temp_mean) / PRM_temp_sd
+}
+
+glimpse(PRM) # Check data
 
 ## Model
 
@@ -511,7 +583,7 @@ model_PRM <- map2stan(
     
     # Data uncertainties
     M_obs ~ dnorm(M_est, M_sd),
-    Temp_obs ~ dnorm(Temp_est, Temp_sd),
+    Temp_Z ~ dnorm(Temp_est, Temp_sd),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -522,8 +594,8 @@ model_PRM <- map2stan(
   start = list(M_est = PRM$M_obs,
                Temp_est = PRM$Temp_obs),
   WAIC = FALSE,
-  iter = 3000,
-  warmup = 1500,
+  iter = 6000,
+  warmup = 3000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -536,22 +608,28 @@ sum(divergent)
 
 precis(model_PRM, digits = 4, prob = 0.95, depth = 2)
 
+# Check with data
+
+plot(PRM$Temp_Z, PRM$M_obs, pch = 16)
+abline(0.1678, -0.0084)
+
 ## Save stanfit
 
 saveRDS(model_PRM, "Outputs/Within_Species/PRM/M_T_model.rds")
+model_PRM <- readRDS("Outputs/Within_Species/PRM/M_T_model.rds")
 
 ## Extract samples
 
-## Plot intervals
-
 post <- extract.samples(model_PRM)
 post <- as.data.frame(post)
+
+# Name columns to match vairables
 
 colnames(post)[41:43] <- c("a", "b_T", "sigma")
 
 ## Plot pairs
 
-pairs(model_PRM, pars = c("a", "b_T", "sigma"))
+pairs(model_PRM, pars = c("a", "b_T", "sigma")) # Check for autocorrelation
 
 ## Plot intervals
 
@@ -559,7 +637,7 @@ color_scheme_set("darkgray")
 
 mcmc_intervals(post,
                pars = c("a", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
+               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
   labs(x = "Posterior Predictions", y = "Parameters") +
   theme(panel.background = element_blank(),
         legend.position = "none",
@@ -574,10 +652,9 @@ mcmc_intervals(post,
 
 p <- mcmc_trace(post, pars = c("a", "b_T", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
+p + facet_text(size = 10) +
   labs(x = "Number of Iterations", y = "Parameter Value") +
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 10, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
