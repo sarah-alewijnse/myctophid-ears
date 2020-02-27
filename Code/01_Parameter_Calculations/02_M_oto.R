@@ -1,9 +1,13 @@
-#### MixSIAR M ####
+#### Estimate M_oto Using MIXSIAR ####
+
+# Load packages
 
 library(tidyverse)
 library(MixSIAR)
 
-### Edit load_mix_data function
+#### Edit MIXSIAR Functions ####
+
+# Edit load_mix_data function
 
 load_mix_data_mod <- function (filename, iso_names, factors, fac_random, fac_nested, 
           cont_effects) 
@@ -125,7 +129,7 @@ load_mix_data_mod <- function (filename, iso_names, factors, fac_random, fac_nes
               fac_random = fac_random, fac_nested = fac_nested, fere = fere))
 }
 
-### Edit load_source_data function
+# Edit load_source_data function
 
 load_source_data_mod <-  function (filename, source_factors = NULL, conc_dep, data_type, 
           mix) 
@@ -404,20 +408,20 @@ load_discr_data_mod <- function (filename, mix)
   return(list(mu = discr_mu, sig2 = discr_sig2))
 }
 
-### Read in data ####
+#### Calculate M_oto ####
 
-mixture <- read.csv("myct_mix.csv")
+# Load in data
 
-#### Create M Value function ####
+mixture <- read.csv("Data/MixSIAR_Data/myct_mix.csv")
+
+# Create M_oto function
 
 M_Value <- function(label, number){
   
-### Partition mixture data
-
+# Partition mixture data
 mix_1 <- filter(mixture, MyNumber == label)
 
-### Load mixture data
-
+# Load mixture data
 mix <- load_mix_data_mod(mix_1,
                        iso_names = "d13C",
                        factors = "MyNumber",
@@ -425,51 +429,44 @@ mix <- load_mix_data_mod(mix_1,
                        fac_nested = FALSE,
                        cont_effects = NULL)
 
-### Partition source data
-
-source_csv <- read.csv("myct_source.csv")
-source_csv$n <- 10000
+# Partition source data
+source_csv <- read.csv("Data/MixSIAR_Data/myct_source.csv")
+source_csv$n <- 10000 # Set n to an arbitrary high number
 source_19 <- filter(source_csv, MyNumber == label)
 
-### Load source data
-
+# Load source data
 source <- load_source_data_mod(source_19,
                            source_factors = NULL,
                            conc_dep = FALSE,
                            data_type = "means",
                            mix)
 
-### Load discrimination data
+# Load discrimination factgor data
+disc <- read.csv("Data/MixSIAR_Data/myct_discrimination.csv")
 
-disc <- read.csv("myct_discrimination.csv")
-
+# Partition discrimination factor data
 discr <- load_discr_data_mod(disc, mix)
 
-### Plot
-
+# Plot
 plot_data(filename = "isospace_plot", plot_save_pdf = FALSE, plot_save_png = FALSE, mix,source,discr)
 
-### Write JAGS model
-
-model_filename <- "MixSIAR_model.txt"
+# Write JAGS model
+model_filename <- "Outputs/05_Misc/JAGS_Model_Text_Files/M_MixSIAR_model.txt"
 resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
-#### Run model
-
+# Run JAGS model
 test_mod <- run_model(run = "normal", mix, source, discr, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
-### Get posterior
-
+# Get posterior
 R2jags::attach.jags(test_mod)
 post_M <- p.fac1[,1,2]
 post_M <- as.data.frame(post_M)
-write.csv(post_M, paste("post_M_", number, ".csv"))
+write.csv(post_M, paste("Outputs/01_Parameter_Calculations/01_M/Posteriors/post_M_", number, ".csv"))
 
-### Output
-
+# Output
 output_options <- list(summary_save = TRUE,
                        summary_name = paste("sum_stat_", number, sep = ""),
                        sup_post = TRUE,
@@ -494,6 +491,8 @@ output_options <- list(summary_save = TRUE,
 output_JAGS(test_mod, mix, source, output_options)
 
 }
+
+# Test
 
 M_Value("BAS_214", "BAS_214")
   

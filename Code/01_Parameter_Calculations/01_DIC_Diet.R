@@ -1,7 +1,17 @@
-#### DIC ####
+#### Estimate DIC and Diet Parameters ####
+
+# Load packages
 
 library(truncnorm)
 library(tidyverse)
+
+# Read in file
+
+myct <- read.csv("Data/Myctophids_Master.csv")
+myct <- filter(myct, d13C != "NA")
+ID <- select(myct, MyNumber)
+
+#### DIC ####
 
 # Create function for DIC
 
@@ -37,10 +47,6 @@ calc_DIC <- function(Year, reps,
 
 # Calculate DIC values
 
-myct <- read.csv("Myctophids_Master.csv")
-myct <- filter(myct, d13C != "NA")
-ID <- select(myct, MyNumber)
-
 DIC_values <- data.frame()
 
 for(i in 1:nrow(myct)){
@@ -70,7 +76,7 @@ calc_diet <- function(Year, reps,
   # Calculate diet
   dist_diet <- dist_musc - dist_enrich
   
-  # Calculate M
+  # Get distribution
   diet <- mean(dist_diet)
   sd_diet <- sd(dist_diet)
   result <- data.frame(diet, sd_diet)
@@ -92,4 +98,4 @@ for(i in 1:nrow(myct)){
 
 whole <- cbind(whole, diet_values) # Join metabol with M values
 
-write.csv(whole, "myct_source.csv", row.names = F)
+write.csv(whole, "MixSIAR_Data/myct_source.csv", row.names = F) # Write into CSV file

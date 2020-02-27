@@ -6,7 +6,7 @@ library(coda)
 
 ### Load in data
 
-myct <- read.csv("Myctophids_M_Temp.csv")
+myct <- read.csv("Data/Myctophids_M_Temp.csv")
 
 myct_tidy <- filter(myct, Weight_SD == "0")
 myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
@@ -112,7 +112,7 @@ Bel <- function(Num){
   
   post_full <- rbind(post_1, post_2, post_3)
   
-  write.csv(post_full, paste("Outputs/Belcher/Post_", Num, ".csv", sep = ""))
+  write.csv(post_full, paste("Outputs/01_Parameter_Calculations/03_Consumption/Post_", Num, ".csv", sep = ""))
 }
 
 Bel("BAS_220") # Test

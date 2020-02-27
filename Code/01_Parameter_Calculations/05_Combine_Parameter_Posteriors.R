@@ -1,11 +1,17 @@
-#### Combine Posteriors ####
+#### Combine Posteriors into Single File ####
 
-## M
-
-setwd("~/PhD/GitHub/mytophid-ears/Outputs/M/Posteriors")
+# Load packages
 
 library(tidyverse)
 library(MixSIAR)
+
+#### M_oto ####
+
+# Set working directory
+
+setwd("~/PhD/GitHub/mytophid-ears/Outputs/01_Parameter_Calculations/01_M/Posteriors")
+
+# Read all .csv files in folder
 
 read_plus <- function(flnm) {
   read_csv(flnm) %>% 
@@ -23,16 +29,23 @@ names <- gsub (" ", "", names, fixed = TRUE)
 
 tbl_with_sources$filename <- names
 
+# Convert to table
+
 post <- tbl_with_sources
 post <- select(post, post_M, filename)
 colnames(post) <- c("M", "MyNumber")
 
+# Write into file
+
 write.csv(post, "M_Post.csv", row.names = FALSE)
 
+#### Temperature ####
 
-## Temperature
+# Set working directory
 
-setwd("~/PhD/GitHub/mytophid-ears/Outputs/Temperature/Posteriors")
+setwd("~/PhD/GitHub/mytophid-ears/Outputs/01_Parameter_Calculations/02_Temperature/Posteriors")
+
+# Read all .csv files in folder
 
 read_plus <- function(flnm) {
   read_csv(flnm) %>% 
@@ -51,15 +64,23 @@ names <- gsub(".", "", names, fixed = TRUE)
 
 tbl_with_sources$filename <- names
 
+# Convert into table
+
 post <- tbl_with_sources
 post <- select(post, Temp, filename)
 colnames(post) <- c("Temp", "MyNumber")
 
+# Write into file
+
 write.csv(post, "Temp_Post.csv", row.names = FALSE)
 
-## Belcher Metabolic Rate
+#### Belcher Metabolic Rate ####
 
-setwd("~/PhD/GitHub/mytophid-ears/Outputs/Belcher/Posteriors")
+# Set working directory
+
+setwd("~/PhD/GitHub/mytophid-ears/Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Posteriors")
+
+# Read all .csv files in folder
 
 read_plus <- function(flnm) {
   read_csv(flnm) %>% 
@@ -78,8 +99,12 @@ names <- gsub(".", "", names, fixed = TRUE)
 
 tbl_with_sources$filename <- names
 
+# Convert into table
+
 post <- tbl_with_sources
 post <- select(post, Metabol, filename)
 colnames(post) <- c("Metabol", "MyNumber")
+
+# Write into file
 
 write.csv(post, "Belcher_Post.csv", row.names = FALSE)
