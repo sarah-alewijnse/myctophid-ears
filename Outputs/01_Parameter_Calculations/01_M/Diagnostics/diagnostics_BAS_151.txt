@@ -1,0 +1,63 @@
+
+################################################################################
+# Gelman-Rubin Diagnostic
+################################################################################
+
+Generally the Gelman diagnostic should be < 1.05
+
+
+Out of 7 variables: 0 > 1.01
+
+                      
+0 > 1.05
+
+                      
+0 > 1.1
+
+
+The worst variables are:
+
+            Point est. Upper C.I.
+deviance     0.9998815  1.0001935
+loglik       0.9998815  1.0001935
+p.fac1[1,1]  0.9995711  0.9996033
+p.global[1]  0.9995711  0.9996033
+p.fac1[1,2]  0.9995711  0.9996033
+p.global[2]  0.9995711  0.9996033
+ilr.fac1           NaN        NaN
+
+
+And here are the Gelman diagnostics for all variables:
+
+            Point est. Upper C.I.
+deviance     0.9998815  1.0001935
+ilr.fac1           NaN        NaN
+loglik       0.9998815  1.0001935
+p.fac1[1,1]  0.9995711  0.9996033
+p.fac1[1,2]  0.9995711  0.9996033
+p.global[1]  0.9995711  0.9996033
+p.global[2]  0.9995711  0.9996033
+
+################################################################################
+# Geweke Diagnostic
+################################################################################
+
+The Geweke diagnostic is a standard z-score, so we'd expect 5% to be outside +/-1.96
+Number of variables outside +/-1.96 in each chain (out of 
+7
+):
+
+
+       Chain 1 Chain 2 Chain 3
+Geweke       0       0       0
+
+
+And here are the Geweke diagnostics for all variables:
+
+            chain1 chain2 chain3
+deviance    -0.451  0.944 -1.934
+loglik       0.451 -0.944  1.934
+p.fac1[1,1] -0.576 -0.781  1.055
+p.fac1[1,2]  0.576  0.781 -1.055
+p.global[1] -0.576 -0.781  1.055
+p.global[2]  0.576  0.781 -1.055

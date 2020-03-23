@@ -12,6 +12,7 @@ lm.ci <- function(x_data,
   y0 <- a + x0*b
   y1 <- a + x1*b
   segments(x0, y0, x1, y1, lwd = 2)
+  df <- data.frame()
   if(x0 < 0){
   # Create sequence for x values
   x_seq_1 <- seq(from = min(x_data), to = 0, length.out = 10000)
@@ -56,10 +57,12 @@ lm.ci <- function(x_data,
     # Order points for polygon
     xxnew <- xx[order(Arg(scale(xx) + scale(yy) * 1i))]
     yynew <- yy[order(Arg(scale(xx) + scale(yy) * 1i))]
-    # Plot polygon
-    polygon(xxnew, yynew, col = rgb(64, 64, 64, max = 255, alpha = 75), border = NA)
   }
+outputs <- list(x_ribbon = xxnew, y_ribbon = yynew)
+outputs <- as.data.frame(outputs)
+return(outputs)
 }
 
 save(lm.ci, file = "LM_CI.Rdata")
+
 
