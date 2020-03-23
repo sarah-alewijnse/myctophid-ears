@@ -11,7 +11,7 @@ lm.ci <- function(x_data,
   x1 <- max(x_data)
   y0 <- a + x0*b
   y1 <- a + x1*b
-  segments(x0, y0, x1, y1, lwd = 2)
+  #segments(x0, y0, x1, y1, lwd = 2)
   df <- data.frame()
   if(x0 < 0){
   # Create sequence for x values
@@ -34,15 +34,13 @@ lm.ci <- function(x_data,
   # Order points for polygon
   xxnew <- xx[order(Arg(scale(xx) + scale(yy) * 1i))]
   yynew <- yy[order(Arg(scale(xx) + scale(yy) * 1i))]
-  # Plot polygon
-  polygon(xxnew, yynew, col = rgb(64, 64, 64, max = 255, alpha = 75), border = NA)
   }
   else {
     x0 <- min(x_data)
     x1 <- max(x_data)
     y0 <- a + x0*b
     y1 <- a + x1*b
-    segments(x0, y0, x1, y1, lwd = 2)
+    #segments(x0, y0, x1, y1, lwd = 2)
     # Create sequence for x values
     x_seq_1 <- seq(from = min(x_data), to = max(x_data), length.out = 10000)
     # Create upper CI

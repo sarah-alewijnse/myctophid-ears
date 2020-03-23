@@ -72,6 +72,8 @@ ELC_plot
 
 PRM_col <- c("#CC79A7")
 
+load("LM_CI.Rdata")
+
 PRM_ribbon <- lm.ci(PRM$ln_Weight, a = 0.1676,
                     b = 0.0114, a_up_ci = 0.1770,
                     a_low_ci = 0.1572, b_up_ci = 0.0213,
@@ -200,10 +202,10 @@ ELN_col <- c("#56B4E9")
 ELN_plot <- ggplot(ELN, aes(mean_Temp, mean_M)) +
   scale_fill_manual(values = ELN_col) +
   scale_colour_manual(values = ELN_col) +
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = ELN_col), alpha = 0.3, lwd = 1) +
-  geom_errorbarh(aes(xmin = mean_Temp - sd_Temp, # Horizontal
-                    xmax = mean_Temp + sd_Temp, col = ELN_col), alpha = 0.3, lwd = 1) +
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = ELN_col), alpha = 0.3, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Temp - se_Temp, # Horizontal
+                    xmax = mean_Temp + se_Temp, col = ELN_col), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(aes(intercept = 0.1963, slope = 0.0262), lwd = 1) +
   # Customise the theme
@@ -256,10 +258,10 @@ PRM_plot <- ggplot(PRM, aes(mean_Temp, mean_M)) +
   scale_fill_manual(values = PRM_col) +
   scale_colour_manual(values = PRM_col) +
   # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = PRM_col), alpha = 0.3, lwd = 1) +
-  geom_errorbarh(aes(xmin = mean_Temp - sd_Temp, # Horizontal
-                     xmax = mean_Temp + sd_Temp, col = PRM_col), alpha = 0.3, lwd = 1) +
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = PRM_col), alpha = 0.3, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Temp - se_Temp, # Horizontal
+                     xmax = mean_Temp + se_Temp, col = PRM_col), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(aes(intercept = 0.1963, slope = 0.0262), lwd = 1) +
   # Customise the theme
@@ -284,10 +286,10 @@ GYR_plot <- ggplot(GYR, aes(mean_Temp, mean_M)) +
   scale_fill_manual(values = GYR_col) +
   scale_colour_manual(values = GYR_col) +
   # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = GYR_col), alpha = 0.3, lwd = 1) +
-  geom_errorbarh(aes(xmin = mean_Temp - sd_Temp, # Horizontal
-                     xmax = mean_Temp + sd_Temp, col = GYR_col), alpha = 0.3, lwd = 1) +
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = GYR_col), alpha = 0.3, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Temp - se_Temp, # Horizontal
+                     xmax = mean_Temp + se_Temp, col = GYR_col), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(aes(intercept = 0.2162, slope = -0.0159), lwd = 1) +
   # Customise the theme
@@ -312,10 +314,10 @@ GYN_plot <- ggplot(GYN, aes(mean_Temp, mean_M)) +
   scale_fill_manual(values = GYN_col) +
   scale_colour_manual(values = GYN_col) +
   # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = GYN_col), alpha = 0.3, lwd = 1) +
-  geom_errorbarh(aes(xmin = mean_Temp - sd_Temp, # Horizontal
-                     xmax = mean_Temp + sd_Temp, col = GYN_col), alpha = 0.3, lwd = 1) +
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = GYN_col), alpha = 0.3, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Temp - se_Temp, # Horizontal
+                     xmax = mean_Temp + se_Temp, col = GYN_col), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(aes(intercept = 0.1963, slope = 0.0262), lwd = 1) +
   # Customise the theme
@@ -340,10 +342,10 @@ KRA_plot <- ggplot(KRA, aes(mean_Temp, mean_M)) +
   scale_fill_manual(values = KRA_col) +
   scale_colour_manual(values = KRA_col) +
   # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - sd_M, # Vertical
-                    ymax = mean_M + sd_M, col = KRA_col), alpha = 0.3, lwd = 1) +
-  geom_errorbarh(aes(xmin = mean_Temp - sd_Temp, # Horizontal
-                     xmax = mean_Temp + sd_Temp, col = KRA_col), alpha = 0.3, lwd = 1) +
+  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    ymax = mean_M + se_M, col = KRA_col), alpha = 0.3, lwd = 1) +
+  geom_errorbarh(aes(xmin = mean_Temp - se_Temp, # Horizontal
+                     xmax = mean_Temp + se_Temp, col = KRA_col), alpha = 0.3, lwd = 1) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(aes(intercept = 0.1963, slope = 0.0262), lwd = 1) +
   # Customise the theme
