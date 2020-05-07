@@ -53,11 +53,11 @@ b * 0.001309 # mg/kg
 
 ul_mg <- function(ul){
   b <- ul * 1e6
-  mg <- b * 0.001368
+  mg <- b * 0.001309
   print(mg)
 }
 
-ul_mg(1.41)/12
+ul_mg(0.0587)
 
 ul_mg(min(M_oto$mean_Metabol))
 ul_mg(max(M_oto$mean_Metabol))
@@ -73,7 +73,7 @@ C_resp <- function(mg_kg){
   print(C_resp)
 }
 
-C_resp(371.64)
+C_resp(445.85)
 
 # Get Belcher averages per species
 
