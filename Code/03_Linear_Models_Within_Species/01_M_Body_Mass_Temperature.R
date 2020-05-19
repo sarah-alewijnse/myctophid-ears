@@ -10,7 +10,7 @@ options(max.print=999999) # Enables viewing of whole output
 
 # Load data
 
-myct <- read.csv("Myctophids_M_Temp_Bel.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct) # Inspect data
 
 # Tidy data
@@ -82,8 +82,8 @@ model_ELN <- map2stan(
   start = list(M_est = ELN$M_obs,
                Temp_est = ELN$Temp_obs),
   WAIC = FALSE,
-  iter = 6000,
-  warmup = 3000,
+  iter = 10000,
+  warmup = 5000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -99,15 +99,15 @@ precis(model_ELN, digits = 4, prob = 0.95, depth = 2)
 # Check with data
 
 plot(ELN$Weight_Z, ELN$M_obs, pch = 16)
-abline(0.2147, 0.0051)
+abline(0.2146, 0.0015)
 
 plot(ELN$Temp_Z, ELN$M_obs, pch = 16)
-abline(0.2147, 0.0021)
+abline(0.2147, 0.0016)
 
 ## Save stanfit
 
-saveRDS(model_ELN, "Outputs/Within_Species/ELN/M_T_W_model.rds")
-model_ELN <- readRDS("Outputs/Within_Species/ELN/M_T_W_model.rds")
+saveRDS(model_ELN, "Outputs/03_Linear_Models_Within_Species/ELN/M_T_W_model.rds")
+model_ELN <- readRDS("Outputs/03_Linear_Models_Within_Species/ELN/M_T_W_model.rds")
 
 ## Extract samples
 
@@ -202,8 +202,8 @@ model_ELC <- map2stan(
   start = list(M_est = ELC$M_obs,
                Temp_est = ELC$Temp_obs),
   WAIC = FALSE,
-  iter = 6000,
-  warmup = 3000,
+  iter = 10000,
+  warmup = 5000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -219,15 +219,15 @@ precis(model_ELC, digits = 4, prob = 0.95, depth = 2)
 # Check with data
 
 plot(ELC$Weight_Z, ELC$M_obs, pch = 16)
-abline(0.1689, -0.0032)
+abline(0.1687, -0.0034)
 
 plot(ELC$Temp_Z, ELC$M_obs, pch = 16)
-abline(0.1689, 0.0001)
+abline(0.1687, 0.0001)
 
 ## Save stanfit
 
-saveRDS(model_ELC, "Outputs/Within_Species/ELC/M_T_W_model.rds")
-model_ELC <- readRDS("Outputs/Within_Species/ELC/M_T_W_model.rds")
+saveRDS(model_ELC, "Outputs/03_Linear_Models_Within_Species/ELC/M_T_W_model.rds")
+model_ELC <- readRDS("Outputs/03_Linear_Models_Within_Species/ELC/M_T_W_model.rds")
 
 ## Extract samples
 
@@ -322,8 +322,8 @@ model_GYR <- map2stan(
   start = list(M_est = GYR$M_obs,
                Temp_est = GYR$Temp_obs),
   WAIC = FALSE,
-  iter = 6000,
-  warmup = 3000,
+  iter = 10000,
+  warmup = 5000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -339,15 +339,15 @@ precis(model_GYR, digits = 4, prob = 0.95, depth = 2)
 # Check with data
 
 plot(GYR$Weight_Z, GYR$M_obs, pch = 16)
-abline(0.2071, -0.0049)
+abline(0.2073, -0.0051)
 
 plot(GYR$Temp_Z, GYR$M_obs, pch = 16)
-abline(0.2071, -0.0006)
+abline(0.2073, -0.0007)
 
 ## Save stanfit
 
-saveRDS(model_GYR, "Outputs/Within_Species/GYR/M_T_W_model.rds")
-model_GYR <- readRDS("Outputs/Within_Species/GYR/M_T_W_model.rds")
+saveRDS(model_GYR, "Outputs/03_Linear_Models_Within_Species/GYR/M_T_W_model.rds")
+model_GYR <- readRDS("Outputs/03_Linear_Models_Within_Species/GYR/M_T_W_model.rds")
 
 ## Extract samples
 
@@ -441,8 +441,8 @@ model_GYN <- map2stan(
   start = list(M_est = GYN$M_obs,
                Temp_est = GYN$Temp_obs),
   WAIC = FALSE,
-  iter = 6000,
-  warmup = 3000,
+  iter = 10000,
+  warmup = 5000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -458,15 +458,15 @@ precis(model_GYN, digits = 4, prob = 0.95, depth = 2)
 # Check with data
 
 plot(GYN$Weight_Z, GYN$M_obs, pch = 16)
-abline(0.1431, -0.0030)
+abline(0.1429, -0.0029)
 
 plot(GYN$Temp_Z, GYN$M_obs, pch = 16)
-abline(0.1431, -0.0007)
+abline(0.1429, -0.0005)
 
 ## Save stanfit
 
-saveRDS(model_GYN, "Outputs/Within_Species/GYN/M_T_W_model.rds")
-model_GYN <- readRDS("Outputs/Within_Species/GYN/M_T_W_model.rds")
+saveRDS(model_GYN, "Outputs/03_Linear_Models_Within_Species/GYN/M_T_W_model.rds")
+model_GYN <- readRDS("Outputs/03_Linear_Models_Within_Species/GYN/M_T_W_model.rds")
 
 ## Extract samples
 
@@ -559,8 +559,8 @@ model_KRA <- map2stan(
   start = list(M_est = KRA$M_obs,
                Temp_est = KRA$Temp_obs),
   WAIC = FALSE,
-  iter = 6000,
-  warmup = 3000,
+  iter = 10000,
+  warmup = 5000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -576,15 +576,15 @@ precis(model_KRA, digits = 4, prob = 0.95, depth = 2)
 # Check with data
 
 plot(KRA$Weight_Z, KRA$M_obs, pch = 16)
-abline(0.1910, 0.0036)
+abline(0.1908, 0.0015)
 
 plot(KRA$Temp_Z, KRA$M_obs, pch = 16)
-abline(0.1910, -0.0031)
+abline(0.1908, -0.0032)
 
 ## Save stanfit
 
-saveRDS(model_KRA, "Outputs/Within_Species/KRA/M_T_W_model.rds")
-model_KRA <- readRDS("Outputs/Within_Species/KRA/M_T_W_model.rds")
+saveRDS(model_KRA, "Outputs/03_Linear_Models_Within_Species/KRA/M_T_W_model.rds")
+model_KRA <- readRDS("Outputs/03_Linear_Models_Within_Species/KRA/M_T_W_model.rds")
 
 ## Extract samples
 
@@ -677,8 +677,8 @@ model_PRM <- map2stan(
   start = list(M_est = PRM$M_obs,
                Temp_est = PRM$Temp_obs),
   WAIC = FALSE,
-  iter = 6000,
-  warmup = 3000,
+  iter = 10000,
+  warmup = 5000,
   control = list(adapt_delta = 0.90))
 
 ## Run diagnostics
@@ -694,15 +694,15 @@ precis(model_PRM, digits = 4, prob = 0.95, depth = 2)
 # Check with data
 
 plot(PRM$Weight_Z, PRM$M_obs, pch = 16)
-abline(0.1676, 0.0114)
+abline(0.1678, 0.0115)
 
 plot(PRM$Temp_Z, PRM$M_obs, pch = 16)
-abline(0.1676, -0.0069)
+abline(0.1678, -0.0064)
 
 ## Save stanfit
 
-saveRDS(model_PRM, "Outputs/Within_Species/PRM/M_T_W_model.rds")
-model_PRM <- readRDS("Outputs/Within_Species/PRM/M_T_W_model.rds")
+saveRDS(model_PRM, "Outputs/03_Linear_Models_Within_Species/PRM/M_T_W_model.rds")
+model_PRM <- readRDS("Outputs/03_Linear_Models_Within_Species/PRM/M_T_W_model.rds")
 
 ## Extract samples
 
