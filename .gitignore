@@ -6,6 +6,7 @@
 /Outputs/M/
 /Outputs/Temperature/
 /Outputs/Belcher/
+/Paper/
 # LaTeX #
 *.aux
 *.bbl
@@ -22,8 +23,7 @@
 *.pdf
 *.fls
 *.enex
-/Paper/Anna_Plots/
 /Code/Bayes_Test.R
 # Models #
 *.rds
-
+*.docx
