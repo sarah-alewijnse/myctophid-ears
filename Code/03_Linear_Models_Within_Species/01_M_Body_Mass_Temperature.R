@@ -27,7 +27,7 @@ M_T_W_data <- data.frame(
   M_sd = myct_tidy$sd_M,
   Temp_obs = myct_tidy$mean_Temp,
   Temp_sd = myct_tidy$sd_Temp,
-  Weight = myct_tidy$Weight.x,
+  Weight = myct_tidy$log_Weight,
   Species = myct_tidy$sciname
 )
 glimpse(M_T_W_data) # Inspect data
