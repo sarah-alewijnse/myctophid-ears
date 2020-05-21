@@ -70,30 +70,46 @@ ELC_plot <- ggplot(ELC, aes(ln_Weight, mean_M)) +
 
 ELC_plot
 
+#### PRM ####
+
+# Convert weight to z-score
+
+PRM_weight_mean <- mean(PRM$ln_Weight) # Get species mean of weight
+PRM_weight_sd <- sd(PRM$ln_Weight) # Get species standard deviation of weight
+for(i in 1:length(PRM$ln_Weight)){ # Loop to get z-scores
+  PRM$Weight_Z[i] <- (PRM$ln_Weight[i] - PRM_weight_mean) / PRM_weight_sd
+}
+
 PRM_col <- c("#CC79A7")
 
 load("LM_CI.Rdata")
 
-PRM_ribbon <- lm.ci(PRM$ln_Weight, a = 0.1676,
-                    b = 0.0114, a_up_ci = 0.1770,
-                    a_low_ci = 0.1572, b_up_ci = 0.0213,
-                    b_low_ci = 0.0011)
+PRM_ribbon <- lm.ci(PRM$Weight_Z, a = 0.168,
+                    b = 0.012, a_up_ci = 0.178,
+                    a_low_ci = 0.158, b_up_ci = 0.022,
+                    b_low_ci = 0.0012)
 
-PRM_plot <- ggplot(PRM, aes(ln_Weight, mean_M)) +
+z_1 <- (-0.5 - mean(PRM$ln_Weight)) / sd(PRM$ln_Weight)
+z_2 <- (0 - mean(PRM$ln_Weight)) / sd(PRM$ln_Weight)
+z_3 <- (0.5 - mean(PRM$ln_Weight)) / sd(PRM$ln_Weight)
+
+PRM_plot <- ggplot(PRM, aes(Weight_Z, mean_M)) +
   scale_fill_manual(values = PRM_col) +
   scale_colour_manual(values = PRM_col) +
+  scale_x_continuous(breaks = c(z_1, z_2, z_3),
+                     labels = c(-0.5, 0, 0.5)) +
   # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
-                    ymax = mean_M + se_M, col = PRM_col), alpha = 0.3, lwd = 1) +
+  #geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
+                    #ymax = mean_M + se_M, col = PRM_col), alpha = 0.3, lwd = 1) +
   geom_polygon(data = PRM_ribbon, aes(x_ribbon, y_ribbon), alpha = 0.3) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   #geom_abline(aes(intercept = 0.1676, slope = 0.0114), lwd = 1) +
-  geom_segment(aes(x = min(ln_Weight), xend = max(ln_Weight), 
-                   y = 0.1676 + 0.0114* min(ln_Weight), yend = 0.1676 + 0.0114* max(ln_Weight)), lwd = 1) +
+  geom_segment(aes(x = min(Weight_Z), xend = max(Weight_Z), 
+                   y = 0.168 + 0.012* min(Weight_Z), yend = 0.168 + 0.012* max(Weight_Z)), lwd = 1) +
   # Customise the theme
   scale_shape_manual(values = c(21)) +
   xlab("ln(Body Mass) (g)") +
-  ylab(expression("M" ["oto"])) +
+  ylab(expression("C" ["resp"])) +
   ggtitle("Protomyctophum bolini") +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank
