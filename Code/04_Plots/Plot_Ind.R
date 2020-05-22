@@ -51,6 +51,7 @@ ELC_plot <- ggplot(ELC, aes(ln_Weight, mean_M)) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme
   scale_shape_manual(values = c(22)) +
+  scale_y_continuous(breaks = c(0.16, 0.17, 0.18)) +
   xlab("ln(Body Mass) (g)") +
   ylab(expression("C" ["resp"])) +
   theme(panel.background = element_blank(), # Keep the background blank
