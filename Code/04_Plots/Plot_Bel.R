@@ -4,24 +4,21 @@ library(tidyverse)
 
 options(max.print=999999)
 
-myct <- read.csv("Myctophids_M_Temp_Bel.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 
-  plot1 <- ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
+ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
   geom_errorbarh(aes(xmin = mean_Metabol - se_Metabol, # Horizontal
-                     xmax = mean_Metabol + se_Metabol, col = sciname), alpha = 0.3, lwd = 1) + # Colour error-bars according to species
-  geom_errorbar(aes(ymin = mean_M - se_M, # Vertical
-                    ymax = mean_M + se_M, col = sciname), alpha = 0.2, lwd = 1) +
+                     xmax = mean_Metabol + se_Metabol, col = sciname), lwd = 1) + # Colour error-bars according to species
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
-  #geom_abline(intercept = 0.1859, slope = -0.0047, lwd = 1) +
   # Customise the theme
   scale_shape_manual(values = c(21, 22, 23, 24, 25, 21)) +
-  xlab("Mass-Specific Oxygen Consumption") +
-  ylab(expression("M" ["oto"])) +
+  xlab(expression(paste("Oxygen Consumption (", mu, "l O" ["2"], " mg" ^"-1", " h" ^"-1", " )"))) +
+  ylab(expression("C" ["resp"])) +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 15, family = "sans"),
@@ -31,4 +28,3 @@ cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
         legend.text = element_text(face = "italic"),
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
-plot1
