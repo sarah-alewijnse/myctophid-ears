@@ -6,7 +6,7 @@ library(bayesplot)
 
 options(max.print=999999)
 
-myct <- read.csv("Myctophids_M_Temp_Bel.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 #### Overall Model with Weight and Temp ####
@@ -99,9 +99,9 @@ precis(model_M_T_W, digits = 4, prob = 0.95, depth = 2)
 
 ## Save stanfit
 
-saveRDS(model_M_T_W, "Outputs/M_T_W/M_T_W_model.rds")
+saveRDS(model_M_T_W, "Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/M_T_W_model.rds")
 
-model_M_T_W <- readRDS("Outputs/M_T_W/M_T_W_model.rds")
+model_M_T_W <- readRDS("Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/M_T_W_model.rds")
 
 ## Extract samples
 
@@ -121,17 +121,18 @@ pairs(model_M_T_W, pars = c("a", "b_W", "b_T", "sigma", "sigma_Species"), cex.la
 color_scheme_set("darkgray")
 
 mcmc_intervals(post,
-               pars = c("a", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "b_W", "b_T",  "sigma_Species", "sigma"),
+               pars = c("sigma", "sigma_Species", "a_Var_GYN", "a_Var_PRM", "a_Var_ELC", "a_Var_KRA", "a_Var_GYR",  "a_Var_ELN", "b_T", "b_W", "a"),
                prob = 0.5, prob_outer = 0.95) +
   labs(x = "Posterior Predictions", y = "Parameters") +
+  scale_y_discrete(labels = c("sigma", expression("sigma" ["species"]), expression("a_Var" ["GYN"]), expression("a_Var" ["PRM"]), expression("a_Var" ["ELC"]), expression("a_Var" ["KRA"]), expression("a_Var" ["GYR"]), expression("a_Var" ["ELN"]), expression ("b" ["t"]), expression("b" ["W"]), "a")) +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
+        strip.text.x = element_text(size = 15, face = "italic"),
+        text = element_text(size = 15, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
+        axis.text.x = element_text(colour = "black", face = "plain", size = 15),
+        axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
 ## Plot trace
 
