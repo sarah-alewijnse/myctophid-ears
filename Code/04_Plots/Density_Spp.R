@@ -1,116 +1,75 @@
 #### Species Density Plot - M ####
 
+# Load tidyverse
+
 library(tidyverse)
 
-post_M <- read.csv("Outputs/M/Posteriors/M_Post.csv")
+# Load posterior predictions
 
-## Join with species
+post_M <- read.csv("Outputs/01_Parameter_Calculations/01_M/Posteriors/M_Post.csv")
 
-myct <- read.csv("Myctophids_Master.csv")
+# Join to species
+
+myct <- read.csv("Data/Myctophids_Master.csv")
 spp <- select(myct, MyNumber, sciname)
 
 post_M_spp <- left_join(post_M, spp, by = "MyNumber")
 
-# Get means
+# Get means of posteriors
 
 means <- aggregate(post_M_spp, by = list(post_M_spp$sciname), FUN = mean)
 colnames(means) <- c("sciname", "M", "MyNumber", "ds")
 means <- select(means, sciname, M)
 
-# Make sciname a factor
+# Add labels 
 
-post_M_spp$sciname <- factor(post_M_spp$sciname, levels = 
-                               c("Gymnoscopelus nicholsi",
-                                 "Protomyctophum bolini",
-                                 "Electrona carlsbergi",
-                                 "Krefftichthys anderssoni",
-                                 "Gymnoscopelus braueri",
-                                 "Electrona antarctica"))
+means$label <- c("F", "C", "E", "A", "D", "B")
 
-## Intercepts from body mass temp model
+# Add labels to posteriors
 
-a <- data.frame(sciname = c("Gymnoscopelus nicholsi",
-                            "Protomyctophum bolini",
-                            "Electrona carlsbergi",
-                            "Krefftichthys anderssoni",
-                            "Gymnoscopelus braueri",
-                            "Electrona antarctica"),
-                M = c(0.1444,
-                      0.1705,
-                      0.1725,
-                      0.1938,
-                      0.1999,
-                      0.2115))
+post_M_spp$label <- post_M_spp$sciname
+post_M_spp$label[post_M_spp$label == "Electrona antarctica"] <- "F"
+post_M_spp$label[post_M_spp$label == "Gymnoscopelus braueri"] <- "E"
+post_M_spp$label[post_M_spp$label == "Krefftichthys anderssoni"] <- "D"
+post_M_spp$label[post_M_spp$label == "Electrona carlsbergi"] <- "C"
+post_M_spp$label[post_M_spp$label == "Protomyctophum bolini"] <- "B"
+post_M_spp$label[post_M_spp$label == "Gymnoscopelus nicholsi"] <- "A"
+
+# Add intercepts from body mass temp model 
+
+a <- data.frame(label = c("A",
+                          "B",
+                          "C",
+                          "D",
+                          "E",
+                          "F"),
+                M = c(0.144,
+                      0.171,
+                      0.173,
+                      0.193,
+                      0.201,
+                      0.212))
 
 ## Plot
 
 cbp1 <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#E69F00", "#0072B2")
 
-ggplot(post_M_spp, aes(x = M, fill = sciname))+
+ggplot(post_M_spp, aes(x = M, fill = label))+
   geom_density()+
-  facet_wrap(~sciname, ncol = 1) +
-  scale_fill_manual(name = "Species", values = cbp1) +
-  scale_colour_manual(name = "Species", values = cbp1) +
+  facet_wrap(~label, ncol = 1, strip.position = "top") +
+  scale_fill_manual(name = "label", values = cbp1) +
+  scale_colour_manual(name = "label", values = cbp1) +
   scale_y_continuous(limits = c(0, 27), expand = c(0, 0))+
   ylab("Kernel Density")+
-  xlab(expression("M" ["oto"]))+
+  xlab(expression("C" ["resp"]))+
   geom_vline(data = means, aes(xintercept = M), lwd = 1)+
   geom_vline(data = a, aes(xintercept = M), lwd = 1, linetype = "dotted") +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
+        strip.text.x = element_text(size = 15),
         text = element_text(size = 15, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))
 
-
-#### Species Density Plot - Temperature ####
-
-post_Temp <- read.csv("Outputs/Temperature/Posteriors/Temp_Post.csv")
-
-## Join with species
-
-myct <- read.csv("Myctophids_Master.csv")
-spp <- select(myct, MyNumber, sciname)
-
-post_Temp_spp <- left_join(post_Temp, spp, by = "MyNumber")
-
-# Get means
-
-means <- aggregate(post_Temp_spp, by = list(post_Temp_spp$sciname), FUN = mean)
-colnames(means) <- c("sciname", "Temp", "MyNumber", "ds")
-means <- select(means, sciname, Temp)
-
-# Make sciname a factor
-
-post_Temp_spp$sciname <- factor(post_Temp_spp$sciname, levels = 
-                               c("Gymnoscopelus braueri",
-                                 "Electrona antarctica",
-                                 "Krefftichthys anderssoni",
-                                 "Protomyctophum bolini",
-                                 "Gymnoscopelus nicholsi",
-                                 "Electrona carlsbergi"))
-
-## Plot
-
-cbp1 <- c("#E69F00", "#0072B2", "#009E73", "#CC79A7", "#D55E00", "#56B4E9")
-
-ggplot(post_Temp_spp, aes(x = Temp, fill = sciname))+
-  geom_density() +
-  facet_wrap(~sciname, ncol = 1) +
-  scale_fill_manual(name = "Species", values = cbp1) +
-  scale_colour_manual(name = "Species", values = cbp1) +
-  scale_y_continuous(limits = c(0, 0.27), expand = c(0, 0))+
-  ylab("Kernel Density")+
-  xlab("Temperature")+
-  geom_vline(data = means, aes(xintercept = Temp), lwd = 1)+
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black"),
-        axis.text.y = element_text(colour = "black"))
