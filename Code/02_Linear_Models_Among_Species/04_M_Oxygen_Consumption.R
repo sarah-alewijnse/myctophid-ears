@@ -6,7 +6,7 @@ library(bayesplot)
 
 options(max.print=999999)
 
-myct <- read.csv("Myctophids_M_Temp_Bel.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 #### Overall Model with Weight and Temp ####
@@ -81,9 +81,9 @@ mod_list <- list(
   
   ## Save stanfit
   
-  saveRDS(model_M_Metabol, "Outputs/M_Belcher/M_Belcher_model.rds")
+  saveRDS(model_M_Metabol, "Outputs/02_Linear_Models_Among_Species/04_M_Oxygen_Consumption/M_Belcher_model.rds")
   
-  model_M_Metabol <- readRDS("Outputs/M_Belcher/M_Belcher_model.rds")
+  model_M_Metabol <- readRDS("Outputs/02_Linear_Models_Among_Species/04_M_Oxygen_Consumption/M_Belcher_model.rds")
 
   ## Extract samples
   
@@ -95,7 +95,7 @@ mod_list <- list(
   colnames(post)[201:203] <- c("a", "b", "sigma")
   
 ## Plot intervals
-
+  
   color_scheme_set("darkgray")
   
   mcmc_intervals(post,
@@ -105,12 +105,12 @@ mod_list <- list(
     theme(panel.background = element_blank(),
           legend.position = "none",
           strip.background = element_rect(fill = "white"),
-          strip.text.x = element_text(size = 10, face = "italic"),
-          text = element_text(size = 10, family = "sans"),
+          strip.text.x = element_text(size = 15, face = "italic"),
+          text = element_text(size = 15, family = "sans"),
           panel.border = element_rect(colour = "black", fill = NA),
-          axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-          axis.text.y = element_text(colour = "black", face = "plain", size = 10))  
-
+          axis.text.x = element_text(colour = "black", face = "plain", size = 15),
+          axis.text.y = element_text(colour = "black", face = "plain", size = 15))  
+  
 ## Traceplot
   
   p <- mcmc_trace(post, pars = c("a", "b", "sigma"),
