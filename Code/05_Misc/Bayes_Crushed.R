@@ -6,7 +6,7 @@ library(bayesplot)
 
 options(max.print=999999)
 
-myct <- read.csv("Myctophids_M_Temp.csv")
+myct <- read.csv("Data/Myctophids_M_Temp.csv")
 glimpse(myct)
 
 #### Within PRM ####
@@ -40,8 +40,9 @@ model_PRM_crush <- map2stan(
   data = mod_list,
   start = list(M_est = mod_list$M_obs),
   WAIC = FALSE,
-  iter = 3000,
-  warmup = 1500)
+  iter = 10000,
+  warmup = 5000,
+  control = list(adapt_delta = 0.90))
 
 # Check model
 
@@ -55,7 +56,7 @@ precis(model_PRM_crush, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_PRM_crush, "Outputs/Crush/PRM_Crush_model.rds")
+saveRDS(model_PRM_crush, "Outputs/05_Misc/Supplementary_Crush_Mill/PRM_Crush_model.rds")
 
 # Extract samples
 
@@ -73,17 +74,18 @@ pairs(model_PRM_crush, pars = c("a", "b_C", "sigma"))
 color_scheme_set("darkgray")
 
 mcmc_intervals(post,
-               pars = c("a", "b_C", "sigma"),
+               pars = c("sigma", "b_C", "a"),
                prob = 0.5, prob_outer = 0.95) +
   labs(x = "Posterior Predictions", y = "Parameters") +
+  scale_y_discrete(labels = c("sigma", expression("b" ["Prep"]), "a")) +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
+        strip.text.x = element_text(size = 15, face = "italic"),
+        text = element_text(size = 15, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
+        axis.text.x = element_text(colour = "black", face = "plain", size = 15),
+        axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
 ## Plot trace
 
@@ -105,7 +107,7 @@ mod_list <- list(
   M_obs = myct_tidy$mean_M,
   M_sd = myct_tidy$sd_M,
   Crushed = myct_tidy$Crushed,
-  Species = myct_tidy$Label
+  Species = myct_tidy$sciname
 )
 
 # Model
@@ -130,8 +132,9 @@ model_all_crush <- map2stan(
   data = mod_list,
   start = list(M_est = mod_list$M_obs),
   WAIC = FALSE,
-  iter = 3000,
-  warmup = 1500)
+  iter = 10000,
+  warmup = 5000,
+  control = list(adapt_delta = 0.90))
 
 # Check model
 
@@ -145,7 +148,7 @@ precis(model_all_crush, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_all_crush, "Outputs/Crush/All_Crush_model.rds")
+saveRDS(model_all_crush, "Outputs/05_Misc/Supplementary_Crush_Mill/All_Crush_model.rds")
 
 # Extract samples
 
@@ -163,17 +166,18 @@ pairs(model_all_crush, pars = c("a", "b_C", "sigma_Species", "sigma"))
 color_scheme_set("darkgray")
 
 mcmc_intervals(post,
-               pars = c("a", "b_C", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma"),
+               pars = c("sigma", "sigma_Species", "a_Var_GYN", "a_Var_PRM", "a_Var_ELC", "a_Var_KRA", "a_Var_GYR",  "a_Var_ELN", "b_C", "a"),
                prob = 0.5, prob_outer = 0.95) +
   labs(x = "Posterior Predictions", y = "Parameters") +
+  scale_y_discrete(labels = c("sigma", expression("sigma" ["species"]), expression("a_Var" ["GYN"]), expression("a_Var" ["PRM"]), expression("a_Var" ["ELC"]), expression("a_Var" ["KRA"]), expression("a_Var" ["GYR"]), expression("a_Var" ["ELN"]), expression ("b" ["C"]), "a")) +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
+        strip.text.x = element_text(size = 15, face = "italic"),
+        text = element_text(size = 15, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
+        axis.text.x = element_text(colour = "black", face = "plain", size = 15),
+        axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
 ## Plot trace
 
