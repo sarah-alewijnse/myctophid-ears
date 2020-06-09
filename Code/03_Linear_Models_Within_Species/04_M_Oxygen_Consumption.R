@@ -6,7 +6,7 @@ library(bayesplot)
 
 # Load data
 
-myct <- read.csv("Myctophids_M_Temp_Bel.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct) # Inspect data
 
 # Tidy data
@@ -19,7 +19,7 @@ myct_tidy <- filter(myct_tidy, !is.na(mean_Metabol)) # Exclude those without a m
 M_M_data <- data.frame(
   M_obs = myct_tidy$mean_M,
   M_sd = myct_tidy$sd_M,
-  Metabol_obs = myct_tidy$mean_Metabol,
+  Metabol_obs = myct_tidy$Dir_mean_Metabol,
   Metabol_sd = myct_tidy$sd_Metabol,
   Species = myct_tidy$sciname
 )

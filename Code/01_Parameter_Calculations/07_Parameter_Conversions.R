@@ -8,7 +8,7 @@ myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 
 # Select M values
 
-M_oto <- select(myct, sciname, Weight.x, mean_M, mean_Metabol)
+M_oto <- select(myct, sciname, Weight.x, mean_M, Dir_mean_Metabol)
 
 #### Convert M Values to Oxygen Consumption (mg/kg/h) ####
 

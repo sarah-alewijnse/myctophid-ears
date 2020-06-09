@@ -18,7 +18,7 @@ glimpse(myct_tidy)
 M_Metabol_list <- list(
   M_obs = myct_tidy$mean_M,
   M_se = myct_tidy$se_M,
-  Metabol_obs = myct_tidy$mean_Metabol,
+  Metabol_obs = myct_tidy$Dir_mean_Metabol,
   Metabol_se = myct_tidy$se_Metabol
 )
 

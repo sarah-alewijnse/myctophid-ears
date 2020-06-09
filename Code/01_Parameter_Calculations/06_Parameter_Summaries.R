@@ -104,9 +104,17 @@ Bel <- left_join(Bel_means, Bel_sd, by = "MyNumber") %>%
 outputs <- left_join(Temp, M, by = "MyNumber") %>%
   left_join(., Bel, by = "MyNumber")
 
-# Write into file
-myct <- read.csv("Myctophids_Master.csv", row.names = FALSE)
+# Direct conversion of means
 
-all <- left_join(myct, outputs, by = "MyNumber")
+Bel$Dir_mean_Metabol <- e^(Bel$mean_log_Metabol)
+Bel_Dir <- select(Bel, MyNumber, Dir_mean_Metabol)
+
+outputs_d <- left_join(outputs, Bel_Dir, by = "MyNumber")
+
+# Write into file
+
+myct <- read.csv("Data/Myctophids_Master.csv")
+
+all <- left_join(myct, outputs_d, by = "MyNumber")
 
 write.csv(all, "Data/Myctophids_M_Temp_Bel.csv", row.names = FALSE)
