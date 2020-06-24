@@ -39,6 +39,7 @@ Analyses are divided into four sections.
 * **Fig_6_Intra_Body_Mass** are scatterplots of C<sub>resp</sub> with body mass within species (Figure 6).
 * **Fig_7_Intra_Temp** are scatterplots of C<sub>resp</sub> with temperature within species (Figure 7).
 * **Fig_9_Inter_Bel** is a scatterplot of C<sub>resp</sub> with allometrically-derived oxygen consumption (Figure 9).
+* The **LM_CI** folder contains the function used to add linear models with confidence intervals to plots from rethinking/Stan outputs.
 
 ## Outputs
 
