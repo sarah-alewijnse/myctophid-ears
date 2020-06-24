@@ -2,6 +2,8 @@
 
 Author: Sarah Alewijnse
 
+* **NB:** **C<sub>resp</sub>** is often referred to as **M** or **M_oto** throught these analyses.
+
 ## Data
 
 The main data sheets can be found in the Data folder:
