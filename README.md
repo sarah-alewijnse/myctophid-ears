@@ -41,6 +41,11 @@ Analyses are divided into four sections.
 * **Fig_9_Inter_Bel** is a scatterplot of C<sub>resp</sub> with allometrically-derived oxygen consumption (Figure 9).
 * The **LM_CI** folder contains the function used to add linear models with confidence intervals to plots from rethinking/Stan outputs.
 
+### 05_Misc
+
+1. **01_Bel_2020_Data** converts ETS-dervied oxygen consumption (ul/mg/h) to mg/kg/h and C<sub>resp</sub>.
+2. **02_Bayes_Crushed** tests whether there are differences in resulting C<sub>resp</sub> due to otolith preparation method.
+
 ## Outputs
 
 **01_Parameter_Calculations** gives outputs for all RJAGS models used to estimate C<sub>resp</sub>, temperature and allometrically-derived oxygen consumption.
