@@ -7,6 +7,7 @@
 /Outputs/Temperature/
 /Outputs/Belcher/
 /Paper/
+/Data/Raw_Isotopes
 # LaTeX #
 *.aux
 *.bbl

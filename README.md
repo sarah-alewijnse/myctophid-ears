@@ -1,4 +1,4 @@
-# Otolith derived field metabolic rates of myctophids from the Scotia Sea
+# Otolith-derived field metabolic rates of mesopelagic fishes (Family Myctophidae) from the Scotia Sea, Southern Ocean
 
 Author: Sarah Alewijnse
 
@@ -17,7 +17,7 @@ Analyses are divided into four sections.
 
 ### 01_Parameter_Calculations
 1. **01_DIC_Diet** calculates parameters for dissolved inorganic carbon (DIC) and myctophid diet.
-2. **02_C_resp** calculates otolith derived C<sub>resp<\sub> using MixSIAR.
+2. **02_C_resp** calculates otolith derived C<sub>resp</sub> using MixSIAR.
 3. **03_Temperature** calculates otolith derived temperature using RJAGS.
 4. **04_Belcher_O2_Consumptions** calculates oxygen consumptions from allometric equations in Belcher et al. 2019, using RJAGS.
 5. **05_Combine_Parameter_Posteriors** combines posteriors from the analyses above into single .csv files.
