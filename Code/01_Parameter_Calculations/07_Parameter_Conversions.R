@@ -1,18 +1,20 @@
 #### M Conversions ####
 
+# Converts oxygen consumption from C_resp to mg/kg/h, and from ul/mg/h to mg/kg/h
+
 library(tidyverse)
 
 # Read in file
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 
-# Select M values
+# Select M values (C_resp)
 
 M_oto <- select(myct, sciname, Weight.x, mean_M, Dir_mean_Metabol)
 
 #### Convert M Values to Oxygen Consumption (mg/kg/h) ####
 
-# Create function
+# Create function (from equation 4)
 
 mg_kg <- function(C_resp){
   C <- 27.46 # Upper bound - Martino et al. 2020
