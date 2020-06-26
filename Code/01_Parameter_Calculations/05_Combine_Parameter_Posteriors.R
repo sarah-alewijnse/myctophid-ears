@@ -1,11 +1,13 @@
-#### Combine Posteriors into Single File ####
+#### Combine Posteriors ####
+
+# Combines posteriors from all individuals into a single files
 
 # Load packages
 
 library(tidyverse)
 library(MixSIAR)
 
-#### M_oto ####
+#### M_oto (C_resp) ####
 
 # Set working directory
 
@@ -74,7 +76,7 @@ colnames(post) <- c("Temp", "MyNumber")
 
 write.csv(post, "Temp_Post.csv", row.names = FALSE)
 
-#### Belcher Metabolic Rate ####
+#### Belcher Log Oxygen Consumption (ul/mg/kg) ####
 
 # Set working directory
 
