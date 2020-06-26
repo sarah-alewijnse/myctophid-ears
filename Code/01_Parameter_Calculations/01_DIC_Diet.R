@@ -1,4 +1,6 @@
-#### Estimate DIC and Diet Parameters ####
+#### DIC and Diet Parameters ####
+
+# Estimate DIC and Diet a based on random sampling of normal distributions
 
 # Load packages
 
@@ -8,6 +10,9 @@ library(tidyverse)
 # Read in file
 
 myct <- read.csv("Data/Myctophids_Master.csv")
+
+# Tidy data
+
 myct <- filter(myct, d13C != "NA")
 ID <- select(myct, MyNumber)
 
@@ -29,7 +34,7 @@ calc_DIC <- function(Year, reps,
   set.seed(suess_1970)
   dist_suess_1970 <- rtruncnorm(reps, suess_min, suess_max, suess_1970, suess_1970_sd)
   
-  # Calculate DIC, correcting for the Suess effect
+  # Calculate DIC, correcting for the Suess effect (Tagliabue & Bopp 2008)
   dist_DIC <- if(Year < 1970){
     dist_DIC_surf-(dist_suess_1970*(abs(1990-Year)/10))
   } else if(Year < 1990){

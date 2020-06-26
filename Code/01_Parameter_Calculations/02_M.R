@@ -1,4 +1,6 @@
-#### Estimate M_oto Using MIXSIAR ####
+#### M_oto ####
+
+# Estimates M_oto (C_resp) using MixSIAR 
 
 # Load packages
 
@@ -384,7 +386,7 @@ load_source_data_mod <-  function (filename, source_factors = NULL, conc_dep, da
               by_factor = by_factor, data_type = data_type, conc_dep = conc_dep))
 }
 
-### Edit load_discr_data function
+# Edit load_discr_data function
 
 load_discr_data_mod <- function (filename, mix) 
 {
@@ -414,14 +416,16 @@ load_discr_data_mod <- function (filename, mix)
 
 mixture <- read.csv("Data/MixSIAR_Data/myct_mix.csv")
 
-# Create M_oto function
+#### Create M_oto function ####
 
 M_Value <- function(label, number){
   
 # Partition mixture data
+  
 mix_1 <- filter(mixture, MyNumber == label)
 
 # Load mixture data
+
 mix <- load_mix_data_mod(mix_1,
                        iso_names = "d13C",
                        factors = "MyNumber",
@@ -451,7 +455,7 @@ discr <- load_discr_data_mod(disc, mix)
 plot_data(filename = "isospace_plot", plot_save_pdf = FALSE, plot_save_png = FALSE, mix,source,discr)
 
 # Write JAGS model
-model_filename <- "Outputs/05_Misc/JAGS_Model_Text_Files/M_MixSIAR_model.txt"
+model_filename <- "Outputs/04_Misc/JAGS_Model_Text_Files/M_MixSIAR_model.txt"
 resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
