@@ -1,4 +1,6 @@
-#### Summary Statistics for Posteriors ####
+#### Summary Statistics ####
+
+# Get the summary statistics for various posteriors
 
 # Load packages
 
@@ -43,7 +45,8 @@ M <- left_join(M_means, M_sd, M_se, by = "MyNumber") %>%
 
 Temp <- read.csv("Outputs/01_Parameter_Calculations/02_Temperature/Posteriors/Temp_Post.csv")
 
-# Get mean
+# Get means
+
 Temp_means <- aggregate(Temp, by = list(Temp$MyNumber), FUN = mean)
 colnames(Temp_means) <- c("MyNumber", "mean_Temp", "ds")
 Temp_means <- select(Temp_means, MyNumber, mean_Temp)
@@ -104,7 +107,7 @@ Bel <- left_join(Bel_means, Bel_sd, by = "MyNumber") %>%
 outputs <- left_join(Temp, M, by = "MyNumber") %>%
   left_join(., Bel, by = "MyNumber")
 
-# Direct conversion of means
+# Direct conversion of log mean oxygen consumption to oxygen consumption (ul/mg/h)
 
 Bel$Dir_mean_Metabol <- e^(Bel$mean_log_Metabol)
 Bel_Dir <- select(Bel, MyNumber, Dir_mean_Metabol)
