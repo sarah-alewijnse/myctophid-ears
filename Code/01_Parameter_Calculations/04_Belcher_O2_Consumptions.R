@@ -1,17 +1,26 @@
-#### RJAGS Belcher Equation ####
+#### Belcher Oxygen Consumption ####
+
+# Estimates oxygen consumption (ul/mg/h) based on equation 1 (Belcher et al. 2019)
+
+# Load packages
 
 library(tidyverse)
 library(rjags)
 library(coda)
 
-### Load in data
+#Load in data
 
 myct <- read.csv("Data/Myctophids_M_Temp.csv")
 
+# Remove those with inaccurate body mass data
+
 myct_tidy <- filter(myct, Weight_SD == "0")
+
+# Log body masses
+
 myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 
-## Create temperature function
+#### Create oxygen consumption function ####
 
 Bel <- function(Num){
   myct_1 <- dplyr::filter(myct_tidy, MyNumber == Num)
@@ -45,9 +54,9 @@ Bel <- function(Num){
       param_3_est ~ dnorm(param_3, param_3_var)
       temp_est ~ dnorm(temp, temp_var)
       tau <- sigma
-      }", file="Outputs/Belcher_JAGS.txt")
+      }", file="Outputs/04_Misc/01_JAGS_Model_Text_Files/Belcher_JAGS.txt")
 
-  jags_mod <- jags.model(file = "Outputs/Belcher_JAGS.txt", data = param_list, inits = inits, n.chains = 3, n.adapt = 50000)
+  jags_mod <- jags.model(file = "Outputs/04_Misc/01_JAGS_Model_Text_Files/Belcher_JAGS.txt", data = param_list, inits = inits, n.chains = 3, n.adapt = 50000)
   
   output <- coda.samples(jags_mod,
                          c("Metabol", "param_1_est", "param_2_est", "param_3_est", "temp_est"),
@@ -64,9 +73,9 @@ Bel <- function(Num){
   sum <- summary(output)
   print(sum)
   
-  capture.output(c(sum), file = paste("Outputs/Belcher/Summary_", Num, ".txt", sep = ""))
+  capture.output(c(sum), file = paste("Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Summaries/Summary_", Num, ".txt", sep = ""))
   
-  bmp(file = paste("Outputs/Belcher/Plot_Metabol", Num, ".bmp", sep = ""))
+  bmp(file = paste("Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Traceplots/Plot_Metabol", Num, ".bmp", sep = ""))
   plot(output_graph)
   dev.off()
   
@@ -76,7 +85,7 @@ Bel <- function(Num){
   gel <- gel$psrf
   gelman <- as.data.frame(gel[, 1])
   print(gelman)
-  capture.output(gelman, file = paste("Outputs/Belcher/Gelmen_Metabol", Num, ".txt"))
+  #capture.output(gelman, file = paste("Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Gelmen_Metabol", Num, ".txt"))
   
   samp_size <- as.data.frame(effectiveSize(output))
   print(samp_size)
@@ -102,7 +111,7 @@ Bel <- function(Num){
   rownames(geweke_fail) <- "Geweke"
   print(geweke_fail)
   
-  capture.output(c(gelman, samp_size, geweke_fail), file = paste("Outputs/Belcher/Diagnostics_", Num, ".txt", sep = ""))
+  capture.output(c(gelman, samp_size, geweke_fail), file = paste("Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Diagnostics/Diagnostics_", Num, ".txt", sep = ""))
   
   ## Posterior
   
@@ -112,10 +121,12 @@ Bel <- function(Num){
   
   post_full <- rbind(post_1, post_2, post_3)
   
-  write.csv(post_full, paste("Outputs/01_Parameter_Calculations/03_Consumption/Post_", Num, ".csv", sep = ""))
+  write.csv(post_full, paste("Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Posteriors/Post_", Num, ".csv", sep = ""))
 }
 
-Bel("BAS_220") # Test
+# Test
+
+Bel("BAS_220")
 
 for(i in 1:nrow(myct_tidy)){
   with(myct_tidy[i,],
