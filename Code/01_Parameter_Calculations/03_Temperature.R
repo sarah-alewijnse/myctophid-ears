@@ -1,4 +1,6 @@
-#### Estimate M_oto Using RJAGS ####
+#### Temeprature ####
+
+# Estimates experienced temperature of myctophids based on oxygen isotopes in RJAGS
 
 # Load required packages
 

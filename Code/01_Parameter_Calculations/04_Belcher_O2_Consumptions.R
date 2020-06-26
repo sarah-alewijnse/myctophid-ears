@@ -1,6 +1,6 @@
 #### Belcher Oxygen Consumption ####
 
-# Estimates oxygen consumption (ul/mg/h) based on equation 1 (Belcher et al. 2019)
+# Estimates log oxygen consumption (ul/mg/h) based on equation 1 (Belcher et al. 2019)
 
 # Load packages
 
