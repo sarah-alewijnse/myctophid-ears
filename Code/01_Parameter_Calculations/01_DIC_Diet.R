@@ -103,4 +103,4 @@ for(i in 1:nrow(myct)){
 
 whole <- cbind(whole, diet_values) # Join metabol with M values
 
-write.csv(whole, "MixSIAR_Data/myct_source.csv", row.names = F) # Write into CSV file
+write.csv(whole, "Data/MixSIAR_Data/myct_source.csv", row.names = F) # Write into CSV file

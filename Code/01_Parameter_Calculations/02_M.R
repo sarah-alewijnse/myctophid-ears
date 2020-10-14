@@ -455,7 +455,7 @@ discr <- load_discr_data_mod(disc, mix)
 plot_data(filename = "isospace_plot", plot_save_pdf = FALSE, plot_save_png = FALSE, mix,source,discr)
 
 # Write JAGS model
-model_filename <- "Outputs/04_Misc/JAGS_Model_Text_Files/M_MixSIAR_model.txt"
+model_filename <- "Outputs/04_Misc/01_JAGS_Model_Text_Files/M_MixSIAR_model.txt"
 resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
@@ -498,7 +498,7 @@ output_JAGS(test_mod, mix, source, output_options)
 
 # Test
 
-M_Value("BAS_214", "BAS_214")
+M_Value("BAS_88", "BAS_88")
   
 for(i in 1:nrow(mixture)){
   with(mixture[i,],
