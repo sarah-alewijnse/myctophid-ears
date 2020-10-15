@@ -59,7 +59,7 @@ dev.off()
 
 color_scheme_set("darkgray")
 
-svg(file = "Outputs/02_Linear_Models_Among_Species/04_M_Oxygen_Consumption/Posterior.svg")
+svg(file = "Outputs/02_Linear_Models_Among_Species/04_M_Oxygen_Consumption/Posterior.svg", width = 7, height = 4)
 mcmc_intervals(post,
                pars = c("a", "b", "sigma"),
                prob = 0.5, prob_outer = 0.95) +
