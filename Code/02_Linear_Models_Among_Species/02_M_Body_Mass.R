@@ -1,4 +1,4 @@
-#### Bayesian Linear Models - Weight and Temp ####
+#### Bayesian Linear Models - Body Mass ####
 
 library(tidyverse)
 library(rethinking)
@@ -6,7 +6,7 @@ library(bayesplot)
 
 options(max.print=999999)
 
-myct <- read.csv("Myctophids_M_Temp.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 #### Overall Model with Weight and Temp ####
@@ -18,7 +18,7 @@ glimpse(myct_tidy)
 
 M_W_list <- list(
   M_obs = myct_tidy$mean_M,
-  M_sd = myct_tidy$sd_M,
+  M_se = myct_tidy$se_M,
   Weight = myct_tidy$log_Weight,
   Species = myct_tidy$sciname
 )
@@ -38,10 +38,12 @@ for(i in 1:length(M_W_list$Weight)){
 
 mod_list <- list(
   M_obs = M_W_list$M_obs,
-  M_sd = M_W_list$M_sd,
+  M_se = M_W_list$M_se,
   Weight = M_W_list$Weight_Z,
   Species = M_W_list$Species
 )
+
+mod_tab <- as.data.frame(mod_list)
 
 ## Model
 
@@ -54,7 +56,7 @@ model_M_W <- map2stan(
       b_W*Weight,
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
+    M_obs ~ dnorm(M_est, M_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -66,8 +68,8 @@ model_M_W <- map2stan(
   data = mod_list,
   start = list(M_est = mod_list$M_obs),
   WAIC = FALSE,
-  iter = 3000,
-  warmup = 1500)
+  iter = 10000,
+  warmup = 5000)
 
 ## Run diagnostics
 
@@ -81,46 +83,6 @@ precis(model_M_W, digits = 4, prob = 0.95, depth = 2)
 
 ## Save stanfit
 
-saveRDS(model_M_W, "Outputs/M_W/M_W_model.rds")
+saveRDS(model_M_W, "Outputs/02_Linear_Models_Among_Species/02_M_Body_Mass/M_W_model.rds")
 
-## Extract samples
 
-## Plot intervals
-
-post <- extract.samples(model_M_W)
-post <- as.data.frame(post)
-
-colnames(post)[109:118] <- c("a", "b_W", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
-
-## Plot pairs
-
-pairs(model_M_W, pars = c("a", "b_W", "sigma", "sigma_Species"))
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "b_W", "sigma_Species", "sigma"),
-               prob = 0.5, prob_outer = 0.95) +
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "b_W",  "sigma_Species", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-plot <- p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
-plot
