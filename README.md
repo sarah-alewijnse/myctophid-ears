@@ -15,7 +15,7 @@ The folder MixSIAR_Data includes tidied data on stable isotopes of the mixture (
 
 ## Analyses
 
-Analyses are divided into four sections.
+Analyses are divided into four sections plus miscillaneous.
 
 ### 01_Parameter_Calculations
 1. **01_DIC_Diet** calculates parameters for dissolved inorganic carbon (DIC) and myctophid diet.
@@ -29,7 +29,8 @@ Analyses are divided into four sections.
 ### 02_Linear_Models_Among_Species
 1. **01_M_Body_Mass_Temperature** is a linear model of C<sub>resp</sub> with body mass, temperature and species in RStan (equation 5).
 2. **02_M_Oxygen_Consumption** is a linear model of C<sub>resp</sub> with allometrically-derived estimates of oxygen consumption and species in RStan (equation 7).
-
+* "a" indicates the linear models themselves, and "b" is for the ouput (graphs and tables).
+	
 ### 03_Linear_Models_Within_Species
 1. **01_M_Body_Mass_Temperature** is linear models of C<sub>resp</sub> with body mass and temperature within species, in RStan (equation 6).
 
@@ -50,7 +51,7 @@ Analyses are divided into four sections.
 
 ## Outputs
 
-**01_Parameter_Calculations** gives outputs for all RJAGS models used to estimate C<sub>resp</sub>, temperature and allometrically-derived oxygen consumption.
+**01_Parameter_Calculations** gives outputs for all RJAGS models used to estimate C<sub>resp</sub>, temperature, and allometrically-derived oxygen consumption.
 Each folder includes:
 * **Diagnostics** are the Gelman-Rubin and Geweke Diagnostics.
 * **Posteriors** sampled posteriors for each parameter.

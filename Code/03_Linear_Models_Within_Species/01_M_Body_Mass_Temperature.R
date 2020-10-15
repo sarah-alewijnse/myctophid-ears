@@ -24,9 +24,9 @@ glimpse(myct_tidy) # Inspect data
 
 M_T_W_data <- data.frame(
   M_obs = myct_tidy$mean_M,
-  M_sd = myct_tidy$sd_M,
+  M_se = myct_tidy$se_M,
   Temp_obs = myct_tidy$mean_Temp,
-  Temp_sd = myct_tidy$sd_Temp,
+  Temp_se = myct_tidy$se_Temp,
   Weight = myct_tidy$log_Weight,
   Species = myct_tidy$sciname
 )
@@ -69,8 +69,8 @@ model_ELN <- map2stan(
       b_T*Temp_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Temp_Z ~ dnorm(Temp_est, Temp_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Temp_Z ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -96,61 +96,9 @@ sum(divergent)
 
 precis(model_ELN, digits = 4, prob = 0.95, depth = 2)
 
-# Check with data
-
-plot(ELN$Weight_Z, ELN$M_obs, pch = 16)
-abline(0.2146, 0.0015)
-
-plot(ELN$Temp_Z, ELN$M_obs, pch = 16)
-abline(0.2147, 0.0016)
-
 ## Save stanfit
 
 saveRDS(model_ELN, "Outputs/03_Linear_Models_Within_Species/ELN/M_T_W_model.rds")
-model_ELN <- readRDS("Outputs/03_Linear_Models_Within_Species/ELN/M_T_W_model.rds")
-
-## Extract samples
-
-## Plot intervals
-
-post <- extract.samples(model_ELN)
-post <- as.data.frame(post)
-
-# Name columns to match vairables
-
-colnames(post)[39:42] <- c("a", "b_W", "b_T", "sigma")
-
-## Plot pairs
-
-pairs(model_ELN, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "b_W", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
 
 #### ELC - Electrona carlsbergi ####
 
@@ -189,8 +137,8 @@ model_ELC <- map2stan(
       b_T*Temp_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Temp_Z ~ dnorm(Temp_est, Temp_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Temp_Z ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -216,61 +164,10 @@ sum(divergent)
 
 precis(model_ELC, digits = 4, prob = 0.95, depth = 2)
 
-# Check with data
-
-plot(ELC$Weight_Z, ELC$M_obs, pch = 16)
-abline(0.1687, -0.0034)
-
-plot(ELC$Temp_Z, ELC$M_obs, pch = 16)
-abline(0.1687, 0.0001)
-
 ## Save stanfit
 
 saveRDS(model_ELC, "Outputs/03_Linear_Models_Within_Species/ELC/M_T_W_model.rds")
-model_ELC <- readRDS("Outputs/03_Linear_Models_Within_Species/ELC/M_T_W_model.rds")
 
-## Extract samples
-
-## Plot intervals
-
-post <- extract.samples(model_ELC)
-post <- as.data.frame(post)
-
-# Name columns to match vairables
-
-colnames(post)[35:38] <- c("a", "b_W", "b_T", "sigma")
-
-## Plot pairs
-
-pairs(model_ELC, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "b_W", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
 
 #### GYR - Gymnoscopelus braueri ####
 
@@ -309,8 +206,8 @@ model_GYR <- map2stan(
       b_T*Temp_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Temp_Z ~ dnorm(Temp_est, Temp_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Temp_Z ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -336,60 +233,9 @@ sum(divergent)
 
 precis(model_GYR, digits = 4, prob = 0.95, depth = 2)
 
-# Check with data
-
-plot(GYR$Weight_Z, GYR$M_obs, pch = 16)
-abline(0.2073, -0.0051)
-
-plot(GYR$Temp_Z, GYR$M_obs, pch = 16)
-abline(0.2073, -0.0007)
-
 ## Save stanfit
 
 saveRDS(model_GYR, "Outputs/03_Linear_Models_Within_Species/GYR/M_T_W_model.rds")
-model_GYR <- readRDS("Outputs/03_Linear_Models_Within_Species/GYR/M_T_W_model.rds")
-
-## Extract samples
-
-post <- extract.samples(model_GYR)
-post <- as.data.frame(post)
-
-# Name columns to match vairables
-
-colnames(post)[41:44] <- c("a", "b_W", "b_T", "sigma")
-
-## Plot pairs
-
-pairs(model_GYR, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "b_W", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
-
 
 #### GYN - Gymnoscopelus nicholsi ####
 
@@ -428,8 +274,8 @@ model_GYN <- map2stan(
       b_T*Temp_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Temp_Z ~ dnorm(Temp_est, Temp_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Temp_Z ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -455,59 +301,9 @@ sum(divergent)
 
 precis(model_GYN, digits = 4, prob = 0.95, depth = 2)
 
-# Check with data
-
-plot(GYN$Weight_Z, GYN$M_obs, pch = 16)
-abline(0.1429, -0.0029)
-
-plot(GYN$Temp_Z, GYN$M_obs, pch = 16)
-abline(0.1429, -0.0005)
-
 ## Save stanfit
 
 saveRDS(model_GYN, "Outputs/03_Linear_Models_Within_Species/GYN/M_T_W_model.rds")
-model_GYN <- readRDS("Outputs/03_Linear_Models_Within_Species/GYN/M_T_W_model.rds")
-
-## Extract samples
-
-post <- extract.samples(model_GYN)
-post <- as.data.frame(post)
-
-# Name columns to match vairables
-
-colnames(post)[25:28] <- c("a", "b_W", "b_T", "sigma")
-
-## Plot pairs
-
-pairs(model_GYN, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "b_W", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
 
 #### KRA - Krefftichthys anderssoni ####
 
@@ -546,8 +342,8 @@ model_KRA <- map2stan(
       b_T*Temp_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Temp_Z ~ dnorm(Temp_est, Temp_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Temp_Z ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -573,59 +369,9 @@ sum(divergent)
 
 precis(model_KRA, digits = 4, prob = 0.95, depth = 2)
 
-# Check with data
-
-plot(KRA$Weight_Z, KRA$M_obs, pch = 16)
-abline(0.1908, 0.0015)
-
-plot(KRA$Temp_Z, KRA$M_obs, pch = 16)
-abline(0.1908, -0.0032)
-
 ## Save stanfit
 
 saveRDS(model_KRA, "Outputs/03_Linear_Models_Within_Species/KRA/M_T_W_model.rds")
-model_KRA <- readRDS("Outputs/03_Linear_Models_Within_Species/KRA/M_T_W_model.rds")
-
-## Extract samples
-
-post <- extract.samples(model_KRA)
-post <- as.data.frame(post)
-
-# Name columns to match vairables
-
-colnames(post)[41:44] <- c("a", "b_W", "b_T", "sigma")
-
-## Plot pairs
-
-pairs(model_KRA, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "b_W", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
 
 #### PRM - Protomyctophum bolini ####
 
@@ -664,8 +410,8 @@ model_PRM <- map2stan(
       b_T*Temp_est[i],
     
     # Data uncertainties
-    M_obs ~ dnorm(M_est, M_sd),
-    Temp_Z ~ dnorm(Temp_est, Temp_sd),
+    M_obs ~ dnorm(M_est, M_se),
+    Temp_Z ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
     a ~ dnorm(0, 1),
@@ -691,56 +437,8 @@ sum(divergent)
 
 precis(model_PRM, digits = 4, prob = 0.95, depth = 2)
 
-# Check with data
-
-plot(PRM$Weight_Z, PRM$M_obs, pch = 16)
-abline(0.1678, 0.0115)
-
-plot(PRM$Temp_Z, PRM$M_obs, pch = 16)
-abline(0.1678, -0.0064)
-
 ## Save stanfit
 
 saveRDS(model_PRM, "Outputs/03_Linear_Models_Within_Species/PRM/M_T_W_model.rds")
-model_PRM <- readRDS("Outputs/03_Linear_Models_Within_Species/PRM/M_T_W_model.rds")
 
-## Extract samples
 
-post <- extract.samples(model_PRM)
-post <- as.data.frame(post)
-
-# Name columns to match vairables
-
-colnames(post)[41:44] <- c("a", "b_W", "b_T", "sigma")
-
-## Plot pairs
-
-pairs(model_PRM, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
-
-## Plot intervals
-
-color_scheme_set("darkgray")
-
-mcmc_intervals(post,
-               pars = c("a", "b_W", "b_T", "sigma"),
-               prob = 0.5, prob_outer = 0.95) + # Thick lines = 50% probablity, thin lines = 95% probability
-  labs(x = "Posterior Predictions", y = "Parameters") +
-  theme(panel.background = element_blank(),
-        legend.position = "none",
-        strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 10, face = "italic"),
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text.x = element_text(colour = "black", face = "plain", size = 10),
-        axis.text.y = element_text(colour = "black", face = "plain", size = 10))
-
-## Plot trace
-
-p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
-                facet_args = list(nrow = 4, labeller = label_parsed))
-p + facet_text(size = 10) +
-  labs(x = "Number of Iterations", y = "Parameter Value") +
-  theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 10, family = "sans"),
-        panel.border = element_rect(colour = "black", fill = NA),
-        axis.text = element_text(colour = "black", size = 10, face = "plain"))
