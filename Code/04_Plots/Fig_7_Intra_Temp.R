@@ -6,7 +6,7 @@ library(gridExtra)
 ## Get data
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
-myct_tidy <- filter(myct_tidy, !is.na(mean_M)) # Remove those without C_resp
+myct_tidy <- filter(myct, !is.na(mean_M)) # Remove those without C_resp
 
 ## Subset to species
 
@@ -158,7 +158,8 @@ PRM_plot <- ggplot(PRM, aes(mean_Temp, mean_M)) +
 PRM_plot <- PRM_plot + labs(tag = "F")
 PRM_plot
 
-
+svg("Plots/02_Within_Species/02_Cresp_Temperature.svg", height = 10, width = 10)
 grid.arrange(ELN_plot, ELC_plot,
              GYR_plot, GYN_plot,
              KRA_plot, PRM_plot)
+dev.off()

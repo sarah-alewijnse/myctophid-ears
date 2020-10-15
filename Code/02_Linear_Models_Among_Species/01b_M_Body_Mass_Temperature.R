@@ -52,6 +52,8 @@ precis_adj[, 2:3] <- round(precis_adj[,2:3], digits = 3)
 
 precis_adj ### Use this for results
 
+write.csv(precis_adj, "Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/M_T_W_precis.csv", row.names = F)
+
 #### Graph Output ####
 
 ## Extract samples

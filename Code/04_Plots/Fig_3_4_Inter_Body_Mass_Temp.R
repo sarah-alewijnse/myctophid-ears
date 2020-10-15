@@ -31,7 +31,9 @@ plot1 <- ggplot(myct, aes(mean_Temp, mean_M, sciname)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
+svg("Plots/01_Among_Species/03_Cresp_Temperature.svg", height = 5, width = 8)
 plot1
+dev.off()
 
 #### Body mass ####
 
@@ -53,4 +55,6 @@ plot2 <- ggplot(myct_tidy, aes(ln_Weight, mean_M, sciname)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
+svg("Plots/01_Among_Species/02_Cresp_Body_Mass.svg", height = 5, width = 8)
 plot2
+dev.off()

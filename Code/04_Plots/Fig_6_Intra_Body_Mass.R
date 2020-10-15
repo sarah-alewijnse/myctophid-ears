@@ -145,12 +145,19 @@ PRM_col <- c("#CC79A7")
 
 # Get scaling relationship 
 
-load("LM_CI.Rdata")
+load("Code/04_Plots/LM_CI/LM_CI.Rdata")
 
-PRM_ribbon <- lm.ci(PRM$Weight_Z, a = 0.168,
-                    b = 0.012, a_up_ci = 0.178,
-                    a_low_ci = 0.158, b_up_ci = 0.022,
-                    b_low_ci = 0.0012)
+model_PRM <- readRDS("Outputs/03_Linear_Models_Within_Species/PRM/M_T_W_model.rds")
+
+#### Table Output ####
+
+table_PRM <- precis(model_PRM, digits = 4, prob = 0.95, depth = 2)
+table_PRM
+
+PRM_ribbon <- lm.ci(PRM$Weight_Z, a = table_PRM[41, 1],
+                    b = table_PRM[42, 1], a_up_ci = table_PRM[41, 4],
+                    a_low_ci = table_PRM[41, 3], b_up_ci = table_PRM[42, 4],
+                    b_low_ci = table_PRM[42, 3])
 
 # Set tick breaks
 
@@ -182,7 +189,8 @@ PRM_plot <- ggplot(PRM, aes(Weight_Z, mean_M)) +
 
 PRM_plot <- PRM_plot + labs(tag = "F")
 
+svg("Plots/02_Within_Species/01_Cresp_Body_Mass.svg", height = 10, width = 10)
 grid.arrange(ELN_plot, ELC_plot,
              GYR_plot, GYN_plot,
              KRA_plot, PRM_plot)
-
+dev.off()

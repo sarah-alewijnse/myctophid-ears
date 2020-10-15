@@ -43,7 +43,7 @@ a <- data.frame(label = c("A",
                           "D",
                           "E",
                           "F"),
-                M = c(0.144,
+                M = c(0.145,
                       0.171,
                       0.173,
                       0.193,
@@ -54,6 +54,7 @@ a <- data.frame(label = c("A",
 
 cbp1 <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#E69F00", "#0072B2")
 
+svg("Plots/01_Among_Species/01_Cresp_Density.svg", height = 9, width = 7)
 ggplot(post_M_spp, aes(x = M, fill = label))+
   geom_density()+
   facet_wrap(~label, ncol = 1, strip.position = "top") +
@@ -72,4 +73,4 @@ ggplot(post_M_spp, aes(x = M, fill = label))+
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))
-
+dev.off()

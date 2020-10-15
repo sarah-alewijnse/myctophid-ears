@@ -40,6 +40,8 @@ precis_tidy[, 2:3] <- round(precis_tidy[,2:3], digits = 3)
 
 precis_tidy ### Use this for results
 
+write.csv(precis_tidy, "Outputs/02_Linear_Models_Among_Species/02_M_Oxygen_Consumption/M_T_W_precis.csv", row.names = F)
+
 #### Graph Output ####
 
 ## Extract samples

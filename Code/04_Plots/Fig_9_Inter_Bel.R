@@ -9,6 +9,7 @@ glimpse(myct)
 
 cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 
+svg("Plots/01_Among_Species/04_Cresp_Oxygen_Consumption.svg", width = 10, height = 7)
 ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
@@ -28,3 +29,4 @@ ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
         legend.text = element_text(face = "italic"),
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
+dev.off()

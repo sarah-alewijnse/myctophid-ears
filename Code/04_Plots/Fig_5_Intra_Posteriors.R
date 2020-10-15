@@ -208,6 +208,8 @@ PRM_plot
 
 #### Full Plot ####
 
+svg("Plots/02_Within_Species/03_Combined_Posterior.svg", width = 12, height = 6)
 grid.arrange(ELN_plot, ELC_plot,
              GYR_plot, GYN_plot,
              KRA_plot, PRM_plot)
+dev.off()
