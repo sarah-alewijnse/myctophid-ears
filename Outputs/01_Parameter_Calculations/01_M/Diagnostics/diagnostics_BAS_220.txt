@@ -18,25 +18,25 @@ Out of 7 variables: 0 > 1.01
 The worst variables are:
 
             Point est. Upper C.I.
-p.fac1[1,1]   1.000562   1.003342
-p.global[1]   1.000562   1.003342
-p.fac1[1,2]   1.000562   1.003342
-p.global[2]   1.000562   1.003342
-deviance      1.000253   1.000419
-loglik        1.000253   1.000419
+deviance      1.001931   1.006197
+loglik        1.001931   1.006197
+p.global[1]   1.000662   1.001393
+p.fac1[1,1]   1.000662   1.001393
+p.fac1[1,2]   1.000662   1.001393
+p.global[2]   1.000662   1.001393
 ilr.fac1           NaN        NaN
 
 
 And here are the Gelman diagnostics for all variables:
 
             Point est. Upper C.I.
-deviance      1.000253   1.000419
+deviance      1.001931   1.006197
 ilr.fac1           NaN        NaN
-loglik        1.000253   1.000419
-p.fac1[1,1]   1.000562   1.003342
-p.fac1[1,2]   1.000562   1.003342
-p.global[1]   1.000562   1.003342
-p.global[2]   1.000562   1.003342
+loglik        1.001931   1.006197
+p.fac1[1,1]   1.000662   1.001393
+p.fac1[1,2]   1.000662   1.001393
+p.global[1]   1.000662   1.001393
+p.global[2]   1.000662   1.001393
 
 ################################################################################
 # Geweke Diagnostic
@@ -55,9 +55,9 @@ Geweke       0       0       0
 And here are the Geweke diagnostics for all variables:
 
             chain1 chain2 chain3
-deviance    -0.847 -0.239  0.380
-loglik       0.847  0.239 -0.380
-p.fac1[1,1] -1.695  1.014  0.414
-p.fac1[1,2]  1.695 -1.014 -0.414
-p.global[1] -1.695  1.014  0.414
-p.global[2]  1.695 -1.014 -0.414
+deviance    -1.378 -0.878  0.283
+loglik       1.378  0.878 -0.283
+p.fac1[1,1] -0.302 -1.347 -0.281
+p.fac1[1,2]  0.302  1.347  0.281
+p.global[1] -0.302 -1.347 -0.281
+p.global[2]  0.302  1.347  0.281
