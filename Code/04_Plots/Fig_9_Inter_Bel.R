@@ -22,7 +22,7 @@ ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
   ylab(expression("C" ["resp"])) +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank
-        text = element_text(size = 15, family = "sans"),
+        text = element_text(size = 20, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         legend.title = element_blank(),
         legend.key=element_blank(),

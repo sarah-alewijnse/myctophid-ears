@@ -10,6 +10,7 @@ k <- 0.41
 Lo <- 163.80
 to <- 0.081
 
+e <- exp(1)
 a <- Lo / (Lo - GYN$Length_SL)
 
 GYN$Est_Age <- (1/k) * log(a, base = e) + to
@@ -30,16 +31,16 @@ unique(GYN$Station)
 
 # Plot by year (proxy for location)
 
-ggplot(data = GYN, aes(x = as.factor(Year.x), y = mean_M)) +
+ggplot(data = GYN_tidy, aes(x = as.factor(Year.x), y = mean_M)) +
   geom_boxplot()
 
 # Get means
 
-S_Ork <- filter(GYN, Year.x == "2016")
+S_Ork <- filter(GYN_tidy, Year.x == "2016")
 mean(S_Ork$mean_M)
 sd(S_Ork$mean_M)
 
-Other <- filter(GYN, Year.x == "2008")
+Other <- filter(GYN_tidy, Year.x == "2008")
 mean(Other$mean_M)
 sd(Other$mean_M)
 

@@ -68,7 +68,7 @@ mcmc_intervals(post,
                pars = c("sigma", "b_S", "a"),
                prob = 0.5, prob_outer = 0.95) +
   labs(x = "Posterior Predictions", y = "Parameters") +
-  scale_y_discrete(labels = c("sigma", expression("b" ["S_Orkney"]), "a")) +
+  scale_y_discrete(labels = c("sigma", expression("b" ["Location"]), "a")) +
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),

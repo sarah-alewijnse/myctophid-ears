@@ -43,21 +43,26 @@ a <- data.frame(label = c("A",
                           "D",
                           "E",
                           "F"),
-                M = c(0.145,
-                      0.171,
+                M = c(0.146,
+                      0.170,
                       0.173,
-                      0.193,
+                      0.192,
                       0.201,
                       0.212))
 
 ## Plot
+
+spp_labs <- c("Gymnoscopelus nicholsi", "Protomyctophum bolini",
+              "Electrona carlsbergi", "Krefftichthys anderssoni",
+              "Gymnoscopelus braueri", "Electrona antarctica")
+names(spp_labs) <- c("A", "B", "C", "D", "E", "F")
 
 cbp1 <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#E69F00", "#0072B2")
 
 svg("Plots/01_Among_Species/01_Cresp_Density.svg", height = 9, width = 7)
 ggplot(post_M_spp, aes(x = M, fill = label))+
   geom_density()+
-  facet_wrap(~label, ncol = 1, strip.position = "top") +
+  facet_wrap(~label, ncol = 1, strip.position = "top", labeller = labeller(label = spp_labs)) +
   scale_fill_manual(name = "label", values = cbp1) +
   scale_colour_manual(name = "label", values = cbp1) +
   scale_y_continuous(limits = c(0, 27), expand = c(0, 0))+
@@ -68,7 +73,7 @@ ggplot(post_M_spp, aes(x = M, fill = label))+
   theme(panel.background = element_blank(),
         legend.position = "none",
         strip.background = element_rect(fill = "white"),
-        strip.text.x = element_text(size = 15),
+        strip.text.x = element_text(size = 15, face = "italic"),
         text = element_text(size = 15, family = "sans"),
         panel.border = element_rect(colour = "black", fill = NA),
         axis.text.x = element_text(colour = "black"),
