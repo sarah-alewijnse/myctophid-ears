@@ -38,13 +38,15 @@ mg_kg_max <- aggregate(Bel_2020, by = list(Bel_2020$Species), FUN = max)
 oxygen_consumption <- data.frame(Taxa = mg_kg_means$Group.1,
                                  mg_kg_means = mg_kg_means$mg_kg_h,
                                  mg_kg_sd = mg_kg_sd$mg_kg_h,
+                                 mg_kg_min = mg_kg_min$mg_kg_h,
+                                 mg_kg_max = mg_kg_max$mg_kg_h,
                                  C_resp_mean = mg_kg_means$C_resp,
                                  C_resp_sd = mg_kg_sd$C_resp,
                                  C_resp_min = mg_kg_min$C_resp,
                                  C_resp_max = mg_kg_max$C_resp)
 
-oxygen_consumption[,c(2:7)] <- round(oxygen_consumption[,c(2:7)], digits = 2)
-oxygen_consumption[,c(4:7)] <- oxygen_consumption[,c(4:7)]/100
-oxygen_consumption[,c(4:7)] <- round(oxygen_consumption[,c(4:7)], digits = 3)
+oxygen_consumption[,c(2:5)] <- round(oxygen_consumption[,c(2:5)], digits = 2)
+oxygen_consumption[,c(6:9)] <- oxygen_consumption[,c(6:9)]/100
+oxygen_consumption[,c(6:9)] <- round(oxygen_consumption[,c(6:9)], digits = 3)
 
-write.csv(oxygen_consumption, "Outputs/04_Misc/03_Bel_2020_Data_Conversion/Bel_2020_Conversion.csv")
+write.csv(oxygen_consumption, "Outputs/04_Misc/03_Bel_2020_Data_Conversion/Bel_2020_Conversion.csv", row.names = F)

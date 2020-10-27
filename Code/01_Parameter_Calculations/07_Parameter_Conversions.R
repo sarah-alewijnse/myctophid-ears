@@ -12,6 +12,18 @@ myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 
 M_oto <- select(myct, sciname, Weight.x, mean_M, Dir_mean_Metabol)
 
+# Get ranges
+
+M_oto_min <- aggregate(M_oto, by = list(M_oto$sciname), FUN = min, na.rm = TRUE)
+M_oto_max <- aggregate(M_oto, by = list(M_oto$sciname), FUN = max, na.rm = TRUE)
+
+ranges <- data.frame(Species = M_oto_min$sciname,
+                     C_resp_min = M_oto_min$mean_M,
+                     C_resp_max = M_oto_max$mean_M)
+ranges[,c(2:3)] <- round(ranges[,c(2:3)], digits = 3)
+
+write.csv(ranges, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_C_resp_Range.csv", row.names = F)
+
 #### Convert M Values to Oxygen Consumption (mg/kg/h) ####
 
 # Create function (from equation 4)
