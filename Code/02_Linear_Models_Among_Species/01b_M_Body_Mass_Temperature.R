@@ -18,13 +18,13 @@ table
 ## Get outputs
 
 means <- data.frame()
-for(i in 217:227){
+for(i in 201:211){
   m <- table[i, 1]
   means <- rbind(means, m)
 }
 
 sds <- data.frame()
-for(i in 217:227){
+for(i in 201:211){
   m <- table[i, 2]
   sds <- rbind(sds, m)
 }
@@ -61,7 +61,7 @@ write.csv(precis_adj, "Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Tem
 post <- extract.samples(model_M_T_W)
 post <- as.data.frame(post)
 
-colnames(post)[217:227] <- c("a", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
+colnames(post)[201:211] <- c("a", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
 
 ## Plot pairs
 

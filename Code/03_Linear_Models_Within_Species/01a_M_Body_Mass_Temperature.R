@@ -15,8 +15,8 @@ glimpse(myct) # Inspect data
 
 # Tidy data
 
-myct_tidy <- filter(myct, Weight_SD == "0") # Exclude those with uncertain weights
-myct_tidy <- filter(myct, !is.na(mean_M)) # Exclude those without an M_oto
+myct_tidy <- filter(myct, !is.na(Weight.x)) # Exclude those with uncertain weights
+myct_tidy <- filter(myct_tidy, !is.na(mean_M)) # Exclude those without an M_oto
 myct_tidy$log_Weight <- log(myct_tidy$Weight.x) # Natural log weights
 glimpse(myct_tidy) # Inspect data
 

@@ -25,13 +25,13 @@ table_ELN
 ## Get outputs
 
 means <- data.frame()
-for(i in 39:42){
+for(i in 37:40){
   m <- table_ELN[i, 1]
   means <- rbind(means, m)
 }
 
 sds <- data.frame()
-for(i in 39:42){
+for(i in 37:40){
   m <- table_ELN[i, 2]
   sds <- rbind(sds, m)
 }
@@ -54,7 +54,7 @@ post <- as.data.frame(post)
 
 # Name columns to match vairables
 
-colnames(post)[39:42] <- c("a", "b_W", "b_T", "sigma")
+colnames(post)[37:40] <- c("a", "b_W", "b_T", "sigma")
 
 ## Plot pairs
 
@@ -106,13 +106,13 @@ table_ELC
 ## Get outputs
 
 means <- data.frame()
-for(i in 35:38){
+for(i in 21:24){
   m <- table_ELC[i, 1]
   means <- rbind(means, m)
 }
 
 sds <- data.frame()
-for(i in 35:38){
+for(i in 21:24){
   m <- table_ELC[i, 2]
   sds <- rbind(sds, m)
 }
@@ -134,13 +134,13 @@ table_ELC
 ## Get outputs
 
 means <- data.frame()
-for(i in 35:38){
+for(i in 21:24){
   m <- table_ELC[i, 1]
   means <- rbind(means, m)
 }
 
 sds <- data.frame()
-for(i in 35:38){
+for(i in 21:24){
   m <- table_ELC[i, 2]
   sds <- rbind(sds, m)
 }
@@ -161,7 +161,7 @@ post <- as.data.frame(post)
 
 # Name columns to match vairables
 
-colnames(post)[35:38] <- c("a", "b_W", "b_T", "sigma")
+colnames(post)[21:24] <- c("a", "b_W", "b_T", "sigma")
 
 ## Plot pairs
 

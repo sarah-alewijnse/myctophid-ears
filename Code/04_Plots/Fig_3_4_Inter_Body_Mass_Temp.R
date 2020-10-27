@@ -4,7 +4,7 @@ library(tidyverse)
 library(gridExtra)
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
-myct_tidy <- filter(myct, Weight_SD == "0")
+myct_tidy <- filter(myct, !is.na(Weight.x))
 myct_tidy <- filter(myct_tidy, !is.na(mean_M))
 myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 
@@ -13,7 +13,7 @@ myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 
 cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
 
-plot1 <- ggplot(myct, aes(mean_Temp, mean_M, sciname)) +
+plot1 <- ggplot(myct_tidy, aes(mean_Temp, mean_M, sciname)) +
   scale_fill_manual(values = cbPalette) +
   scale_colour_manual(values = cbPalette) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species

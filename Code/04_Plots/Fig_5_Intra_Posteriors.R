@@ -15,7 +15,7 @@ post_ELN <- as.data.frame(post_ELN)
 
 # Name columns to match vairables
 
-colnames(post_ELN)[39:42] <- c("a", "b_W", "b_T", "sigma")
+colnames(post_ELN)[37:40] <- c("a", "b_W", "b_T", "sigma")
 
 ## Plot intervals
 
@@ -35,7 +35,7 @@ ELN_plot <- mcmc_intervals(post_ELN,
         axis.text.x = element_text(colour = "black", face = "plain", size = 15),
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
-ELN_plot <- ELN_plot + labs(tag = "A")
+ELN_plot <- ELN_plot + labs(tag = "F")
 ELN_plot
 
 #### ELC ####
@@ -49,7 +49,7 @@ post_ELC <- as.data.frame(post_ELC)
 
 # Name columns to match vairables
 
-colnames(post_ELC)[35:38] <- c("a", "b_W", "b_T", "sigma")
+colnames(post_ELC)[21:24] <- c("a", "b_W", "b_T", "sigma")
 
 ## Plot intervals
 
@@ -67,7 +67,7 @@ ELC_plot <- mcmc_intervals(post_ELC,
         axis.text.x = element_text(colour = "black", face = "plain", size = 15),
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
-ELC_plot <- ELC_plot + labs(tag = "B")
+ELC_plot <- ELC_plot + labs(tag = "C")
 ELC_plot
 
 #### GYR ####
@@ -101,7 +101,7 @@ GYR_plot <- mcmc_intervals(post_GYR,
         axis.text.x = element_text(colour = "black", face = "plain", size = 15),
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
-GYR_plot <- GYR_plot + labs(tag = "C")
+GYR_plot <- GYR_plot + labs(tag = "E")
 GYR_plot
 
 #### GYN ####
@@ -135,7 +135,7 @@ GYN_plot <- mcmc_intervals(post_GYN,
         axis.text.x = element_text(colour = "black", face = "plain", size = 15),
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
-GYN_plot <- GYN_plot + labs(tag = "D")
+GYN_plot <- GYN_plot + labs(tag = "A")
 GYN_plot
 
 #### KRA ####
@@ -169,7 +169,7 @@ KRA_plot <- mcmc_intervals(post_KRA,
         axis.text.x = element_text(colour = "black", face = "plain", size = 15),
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
-KRA_plot <- KRA_plot + labs(tag = "E")
+KRA_plot <- KRA_plot + labs(tag = "D")
 KRA_plot
 
 #### PRM ####
@@ -203,13 +203,13 @@ PRM_plot <- mcmc_intervals(post_PRM,
         axis.text.x = element_text(colour = "black", face = "plain", size = 15),
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 
-PRM_plot <- PRM_plot + labs(tag = "F")
+PRM_plot <- PRM_plot + labs(tag = "B")
 PRM_plot
 
 #### Full Plot ####
 
 svg("Plots/02_Within_Species/03_Combined_Posterior.svg", width = 12, height = 6)
-grid.arrange(ELN_plot, ELC_plot,
-             GYR_plot, GYN_plot,
-             KRA_plot, PRM_plot)
+grid.arrange(GYN_plot, PRM_plot,
+             ELC_plot, KRA_plot,
+             GYR_plot, ELN_plot)
 dev.off()

@@ -6,7 +6,7 @@ library(gridExtra)
 ## Get data
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
-myct_tidy <- filter(myct, Weight_SD == "0") # Remove those without body mass
+myct_tidy <- filter(myct, !is.na(Weight.x)) # Remove those without body mass
 myct_tidy <- filter(myct_tidy, !is.na(mean_M)) # Remove those without C_resp
 myct_tidy$ln_Weight <- log(myct_tidy$Weight.x) # Convert weight to log weight
 
@@ -38,7 +38,7 @@ ELN_plot <- ggplot(ELN, aes(ln_Weight, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-ELN_plot <- ELN_plot + labs(tag = "A")
+ELN_plot <- ELN_plot + labs(tag = "F")
 ELN_plot
 
 #### ELC ####
@@ -62,18 +62,53 @@ ELC_plot <- ggplot(ELC, aes(ln_Weight, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-ELC_plot <- ELC_plot + labs(tag = "B")
+ELC_plot <- ELC_plot + labs(tag = "C")
 
 #### GYR ####
 
 GYR_col <- c("#E69F00")
 
-GYR_plot <- ggplot(GYR, aes(ln_Weight, mean_M)) +
+# Convert weight to z-score
+
+GYR_weight_mean <- mean(GYR$ln_Weight) # Get species mean of weight
+GYR_weight_sd <- sd(GYR$ln_Weight) # Get species standard deviation of weight
+for(i in 1:length(GYR$ln_Weight)){ # Loop to get z-scores
+  GYR$Weight_Z[i] <- (GYR$ln_Weight[i] - GYR_weight_mean) / GYR_weight_sd
+}
+
+# Get scaling relationship 
+
+load("Code/04_Plots/LM_CI/LM_CI.Rdata")
+
+model_GYR <- readRDS("Outputs/03_Linear_Models_Within_Species/GYR/M_T_W_model.rds")
+
+#### Table Output ####
+
+table_GYR <- precis(model_GYR, digits = 4, prob = 0.95, depth = 2)
+table_GYR
+
+GYR_ribbon <- lm.ci(GYR$Weight_Z, a = table_GYR[41, 1],
+                    b = table_GYR[42, 1], a_up_ci = table_GYR[41, 4],
+                    a_low_ci = table_GYR[41, 3], b_up_ci = table_GYR[42, 4],
+                    b_low_ci = table_GYR[42, 3])
+
+# Set tick breaks
+
+z_1 <- (1.5 - mean(GYR$ln_Weight)) / sd(GYR$ln_Weight)
+z_2 <- (2 - mean(GYR$ln_Weight)) / sd(GYR$ln_Weight)
+z_3 <- (2.5 - mean(GYR$ln_Weight)) / sd(GYR$ln_Weight)
+
+GYR_plot <- ggplot(GYR, aes(Weight_Z, mean_M)) +
   scale_fill_manual(values = GYR_col) +
   scale_colour_manual(values = GYR_col) +
+  scale_x_continuous(breaks = c(z_1, z_2, z_3),
+                     labels = c(1.5, 2, 2.5)) +
+  geom_polygon(data = GYR_ribbon, aes(x_ribbon, y_ribbon), alpha = 0.3) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
+  geom_segment(aes(x = min(Weight_Z), xend = max(Weight_Z), 
+                   y = table_GYR[41, 1] + table_GYR[42, 1]* min(Weight_Z), yend = table_GYR[41, 1] + table_GYR[42, 1]* max(Weight_Z)), lwd = 1) +
   # Customise the theme
-  scale_shape_manual(values = c(23)) +
+  scale_shape_manual(values = c(21)) +
   xlab("ln(Body Mass) (g)") +
   ylab(expression("C" ["resp"])) +
   # Add error-bars using sd
@@ -85,7 +120,8 @@ GYR_plot <- ggplot(GYR, aes(ln_Weight, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-GYR_plot <- GYR_plot + labs(tag = "C")
+GYR_plot <- GYR_plot + labs(tag = "E")
+GYR_plot
 
 #### GYN ####
 
@@ -107,7 +143,7 @@ GYN_plot <- ggplot(GYN, aes(ln_Weight, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-GYN_plot <- GYN_plot + labs(tag = "D")
+GYN_plot <- GYN_plot + labs(tag = "A")
 
 #### KRA ####
 
@@ -129,51 +165,16 @@ KRA_plot <- ggplot(KRA, aes(ln_Weight, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-KRA_plot <- KRA_plot + labs(tag = "E")
+KRA_plot <- KRA_plot + labs(tag = "D")
 
 #### PRM ####
 
-# Convert weight to z-score
-
-PRM_weight_mean <- mean(PRM$ln_Weight) # Get species mean of weight
-PRM_weight_sd <- sd(PRM$ln_Weight) # Get species standard deviation of weight
-for(i in 1:length(PRM$ln_Weight)){ # Loop to get z-scores
-  PRM$Weight_Z[i] <- (PRM$ln_Weight[i] - PRM_weight_mean) / PRM_weight_sd
-}
-
 PRM_col <- c("#CC79A7")
 
-# Get scaling relationship 
-
-load("Code/04_Plots/LM_CI/LM_CI.Rdata")
-
-model_PRM <- readRDS("Outputs/03_Linear_Models_Within_Species/PRM/M_T_W_model.rds")
-
-#### Table Output ####
-
-table_PRM <- precis(model_PRM, digits = 4, prob = 0.95, depth = 2)
-table_PRM
-
-PRM_ribbon <- lm.ci(PRM$Weight_Z, a = table_PRM[41, 1],
-                    b = table_PRM[42, 1], a_up_ci = table_PRM[41, 4],
-                    a_low_ci = table_PRM[41, 3], b_up_ci = table_PRM[42, 4],
-                    b_low_ci = table_PRM[42, 3])
-
-# Set tick breaks
-
-z_1 <- (-0.5 - mean(PRM$ln_Weight)) / sd(PRM$ln_Weight)
-z_2 <- (0 - mean(PRM$ln_Weight)) / sd(PRM$ln_Weight)
-z_3 <- (0.5 - mean(PRM$ln_Weight)) / sd(PRM$ln_Weight)
-
-PRM_plot <- ggplot(PRM, aes(Weight_Z, mean_M)) +
+PRM_plot <- ggplot(PRM, aes(Weight.x, mean_M)) +
   scale_fill_manual(values = PRM_col) +
   scale_colour_manual(values = PRM_col) +
-  scale_x_continuous(breaks = c(z_1, z_2, z_3),
-                     labels = c(-0.5, 0, 0.5)) +
-  geom_polygon(data = PRM_ribbon, aes(x_ribbon, y_ribbon), alpha = 0.3) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
-  geom_segment(aes(x = min(Weight_Z), xend = max(Weight_Z), 
-                   y = 0.168 + 0.012* min(Weight_Z), yend = 0.168 + 0.012* max(Weight_Z)), lwd = 1) +
   # Customise the theme
   scale_shape_manual(values = c(21)) +
   xlab("ln(Body Mass) (g)") +
@@ -187,10 +188,11 @@ PRM_plot <- ggplot(PRM, aes(Weight_Z, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-PRM_plot <- PRM_plot + labs(tag = "F")
+PRM_plot <- PRM_plot + labs(tag = "B")
+PRM_plot
 
 svg("Plots/02_Within_Species/01_Cresp_Body_Mass.svg", height = 10, width = 10)
-grid.arrange(ELN_plot, ELC_plot,
-             GYR_plot, GYN_plot,
-             KRA_plot, PRM_plot)
+grid.arrange(GYN_plot, PRM_plot,
+             ELC_plot, KRA_plot,
+             GYR_plot, ELN_plot)
 dev.off()

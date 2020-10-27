@@ -11,8 +11,8 @@ glimpse(myct)
 
 #### Overall Model with Weight and Temp ####
 
-myct_tidy <- filter(myct, Weight_SD == "0")
-myct_tidy <- filter(myct, !is.na(mean_M))
+myct_tidy <- filter(myct, !is.na(Weight.x))
+myct_tidy <- filter(myct_tidy, !is.na(mean_M))
 myct_tidy$log_Weight <- log(myct_tidy$Weight.x)
 glimpse(myct_tidy)
 
