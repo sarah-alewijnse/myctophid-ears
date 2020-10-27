@@ -26,10 +26,12 @@ C_resp <- function(mg_kg){
 
 Bel_2020$C_resp <- C_resp(Bel_2020$mg_kg_h)
 
-# Get means and SDs
+# Get means, SDs and range
 
 mg_kg_means <- aggregate(Bel_2020, by = list(Bel_2020$Species), FUN = mean)
 mg_kg_sd <- aggregate(Bel_2020, by = list(Bel_2020$Species), FUN = sd)
+mg_kg_min <- aggregate(Bel_2020, by = list(Bel_2020$Species), FUN = min)
+mg_kg_max <- aggregate(Bel_2020, by = list(Bel_2020$Species), FUN = max)
 
 # Tidy
 
@@ -37,8 +39,12 @@ oxygen_consumption <- data.frame(Taxa = mg_kg_means$Group.1,
                                  mg_kg_means = mg_kg_means$mg_kg_h,
                                  mg_kg_sd = mg_kg_sd$mg_kg_h,
                                  C_resp_mean = mg_kg_means$C_resp,
-                                 C_resp_sd = mg_kg_sd$C_resp)
+                                 C_resp_sd = mg_kg_sd$C_resp,
+                                 C_resp_min = mg_kg_min$C_resp,
+                                 C_resp_max = mg_kg_max$C_resp)
 
-oxygen_consumption[,c(2:5)] <- round(oxygen_consumption[,c(2:5)], digits = 2)
+oxygen_consumption[,c(2:7)] <- round(oxygen_consumption[,c(2:7)], digits = 2)
+oxygen_consumption[,c(4:7)] <- oxygen_consumption[,c(4:7)]/100
+oxygen_consumption[,c(4:7)] <- round(oxygen_consumption[,c(4:7)], digits = 3)
 
 write.csv(oxygen_consumption, "Outputs/04_Misc/03_Bel_2020_Data_Conversion/Bel_2020_Conversion.csv")

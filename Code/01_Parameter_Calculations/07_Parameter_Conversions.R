@@ -36,6 +36,18 @@ M_means$mg_kg <-  round(M_means$mg_kg, 2)
 
 write.csv(M_means, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Otolith_Derived.csv")
 
+# Convert all mean C_resp to oxygen consumption to get ranges
+
+C_resp_conv <- as.data.frame(mg_kg(myct$mean_M * 100))
+C_resp_conv$Species <- myct$sciname
+colnames(C_resp_conv) <- c("mg_kg", "Species")
+
+C_resp_conv_min <- aggregate(C_resp_conv, by = list(C_resp_conv$Species), FUN = min)
+C_resp_conv_max <- aggregate(C_resp_conv, by = list(C_resp_conv$Species), FUN = max)
+
+write.csv(C_resp_conv_min, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Otolith_Derived_Min.csv", row.names = F)
+write.csv(C_resp_conv_max, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Otolith_Derived_Max.csv", row.names = F)
+
 #### Convert ul/mg/h to mg/k/h ####
 
 # Create function
@@ -53,6 +65,19 @@ Bel_means <- aggregate(M_oto[,4], list(M_oto$sciname), mean, na.rm = TRUE)
 # Convert to mg_kg
 
 Bel_means$mg_kg <- ul_mg(Bel_means$x)
+
+# Convert all Belcher estimates to mg/kg/h
+
+Bel_conv <- as.data.frame(ul_mg(myct$Dir_mean_Metabol))
+Bel_conv$Species <- myct$sciname
+Bel_conv <- na.omit(Bel_conv)
+colnames(Bel_conv) <- c("mg_kg", "Species")
+
+Bel_conv_min <- aggregate(Bel_conv, by = list(Bel_conv$Species), FUN = min)
+Bel_conv_max <- aggregate(Bel_conv, by = list(Bel_conv$Species), FUN = max)
+
+write.csv(Bel_conv_min, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Equation_Derived_mg_kg_min.csv", row.names = F)
+write.csv(Bel_conv_max, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Equation_Derived_mg_kg_max.csv", row.names = F)
 
 #### Convert Oxygen Consumption (mg/kg/h) to C_resp ####
 
@@ -73,3 +98,15 @@ Bel_means$C_resp <- round(Bel_means$C_resp, 3)
 Bel_means$mg_kg <- round(Bel_means$mg_kg, 2)
 
 write.csv(Bel_means, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Equation_Derived.csv")
+
+# Convert all Belcher estimates to C_resp
+
+Bel_C_resp <- as.data.frame(C_resp(Bel_conv$mg_kg))
+Bel_C_resp$Species <- Bel_conv$Species
+colnames(Bel_C_resp) <- c("C_resp", "Species")
+
+Bel_C_resp_min <- aggregate(Bel_C_resp, by = list(Bel_C_resp$Species), FUN = min)
+Bel_C_resp_max <- aggregate(Bel_C_resp, by = list(Bel_C_resp$Species), FUN = max)
+
+write.csv(Bel_C_resp_min, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Equation_Derived_C_resp_min.csv", row.names = F)
+write.csv(Bel_C_resp_max, "Outputs/01_Parameter_Calculations/04_Conversions/This_Study_Equation_Derived_C_resp_max.csv", row.names = F)
