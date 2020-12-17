@@ -18,8 +18,8 @@ ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +
   geom_point(aes(fill = sciname, shape = sciname), size = 4) + # Colour points according to species
   # Customise the theme
   scale_shape_manual(values = c(21, 22, 23, 24, 25, 21)) +
-  xlab(expression(paste("Oxygen Consumption (", mu, "l O" ["2"], " mg" ^"-1", " h" ^"-1", " )"))) +
-  ylab(expression("C" ["resp"])) +
+  xlab(expression(paste("Allometrically-Derived Oxygen Consumption (", mu, "l O" ["2"], " mg" ^"-1", " h" ^"-1", " )"))) +
+  ylab(expression("Otolith-Derived C" ["resp"])) +
   # Add error-bars using sd
   theme(panel.background = element_blank(), # Keep the background blank
         text = element_text(size = 20, family = "sans"),
