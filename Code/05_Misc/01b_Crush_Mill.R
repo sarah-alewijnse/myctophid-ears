@@ -1,8 +1,12 @@
 #### Crush/Mill Model Outputs ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
 
@@ -53,13 +57,13 @@ post <- as.data.frame(post)
 
 colnames(post)[21:23] <- c("a", "b_C", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg("Outputs/04_Misc/02_Supplementary_Crush_Mill/PRM_Pairs.svg")
 pairs(model_PRM_crush, pars = c("a", "b_C", "sigma"))
 dev.off()
 
-## Plot intervals
+# Plot intervals
 
 color_scheme_set("darkgray")
 
@@ -79,7 +83,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg("Outputs/04_Misc/02_Supplementary_Crush_Mill/PRM_Traceplots.svg")
 p <- mcmc_trace(post, pars = c("a", "b_C", "sigma"),
@@ -97,12 +101,12 @@ dev.off()
 
 model_all_crush <- readRDS("Outputs/04_Misc/02_Supplementary_Crush_Mill/All_Crush_model.rds")
 
-## Get Precis table
+# Get Precis table
 
 table <- precis(model_all_crush, digits = 4, prob = 0.95, depth = 2)
 table
 
-## Get outputs
+# Get outputs
 
 means <- data.frame()
 for(i in 109:118){
@@ -116,7 +120,7 @@ for(i in 109:118){
   sds <- rbind(sds, m)
 }
 
-## Add variable names
+# Add variable names
 
 precis_tidy <- cbind(means, sds)
 var_names <- c("a", "b_C", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
@@ -138,13 +142,13 @@ post <- as.data.frame(post)
 
 colnames(post)[109:118] <- c("a", "b_C", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg("Outputs/04_Misc/02_Supplementary_Crush_Mill/All_Crush_Pairs.svg")
 pairs(model_all_crush, pars = c("a", "b_C", "sigma_Species", "sigma"))
 dev.off()
 
-## Plot intervals
+# Plot intervals
 
 color_scheme_set("darkgray")
 
@@ -164,7 +168,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg("Outputs/04_Misc/02_Supplementary_Crush_Mill/All_Crush_Traceplots.svg")
 p <- mcmc_trace(post, pars = c("a", "b_C", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma"),

@@ -1,17 +1,26 @@
 ### GYN Age Estimate ###
 
+# Load tidyverse
+
 library(tidyverse)
 
-GYN <- read.csv("Data/GYN_with_Length.csv")
+# Load and check data
 
-# South Shetland Parameters - Linkowski 1985
+myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
+glimpse(myct)
+
+# Subset GYN
+
+GYN <- filter(myct, Label == "GYN")
+
+# South Shetland VBGF Parameters - Linkowski 1985
 
 k <- 0.41
 Lo <- 163.80
 to <- 0.081
 
 e <- exp(1)
-a <- Lo / (Lo - GYN$Length_SL)
+a <- Lo / (Lo - GYN$SL)
 
 GYN$Est_Age <- (1/k) * log(a, base = e) + to
 
@@ -22,49 +31,47 @@ sd(GYN$Est_Age, na.rm = TRUE)
 
 # Length
 
-min(GYN$Length_SL, na.rm = TRUE)
-max(GYN$Length_SL, na.rm = TRUE)
-mean(GYN$Length_SL, na.rm = TRUE)
-sd(GYN$Length_SL, na.rm = TRUE)
+min(GYN$SL, na.rm = TRUE)
+max(GYN$SL, na.rm = TRUE)
+mean(GYN$SL, na.rm = TRUE)
+sd(GYN$SL, na.rm = TRUE)
 
 unique(GYN$Station)
 
 # Plot by year (proxy for location)
 
-ggplot(data = GYN_tidy, aes(x = as.factor(Year.x), y = mean_M)) +
+ggplot(data = GYN, aes(x = as.factor(Year.x), y = mean_M)) +
   geom_boxplot()
 
 # Get means
 
-S_Ork <- filter(GYN_tidy, Year.x == "2016")
+S_Ork <- filter(GYN, Year.x == "2016")
 mean(S_Ork$mean_M)
 sd(S_Ork$mean_M)
 
-Other <- filter(GYN_tidy, Year.x == "2008")
+Other <- filter(GYN, Year.x == "2008")
 mean(Other$mean_M)
 sd(Other$mean_M)
 
 #### Model by Location ####
 
+# Load required packages
+
 library(rethinking)
 library(bayesplot)
 
-options(max.print=999999)
+# View entire printout
 
-myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
-glimpse(myct)
+options(max.print=999999)
 
 #### Within GYN ####
 
-GYN_tidy <- filter(myct, Label == "GYN")
-glimpse(GYN_tidy)
-
-GYN_tidy$South_Ork <- ifelse(GYN_tidy$Year.x == "2016", 1, 0)
+GYN$South_Ork <- ifelse(GYN_tidy$Year.x == "2016", 1, 0)
 
 mod_list <- list(
-  M_obs = GYN_tidy$mean_M,
-  M_se = GYN_tidy$se_M,
-  South_Ork = GYN_tidy$South_Ork
+  M_obs = GYN$mean_M,
+  M_se = GYN$se_M,
+  South_Ork = GYN$South_Ork
 )
 
 # Model
@@ -103,4 +110,4 @@ precis(model_GYN_South_Ork, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_GYN_South_Ork, "Outputs/04_Misc/06_GYN_Location/GYN_South_Ork_model.rds")
+saveRDS(model_GYN_South_Ork, "Outputs/04_Misc/04_GYN_Location/GYN_South_Ork_model.rds")

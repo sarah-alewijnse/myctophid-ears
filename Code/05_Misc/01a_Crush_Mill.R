@@ -1,18 +1,28 @@
 #### Bayesian Linear Models - Crushed vs. Milled Comparison ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
 
-myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
+# Load and check data
+
+myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
 glimpse(myct)
 
 #### Within PRM ####
 
+# Subset to just PRM
+
 PRM_tidy <- filter(myct, Label == "PRM")
 glimpse(PRM_tidy)
+
+# Tidy into list
 
 mod_list <- list(
   M_obs = PRM_tidy$mean_M,

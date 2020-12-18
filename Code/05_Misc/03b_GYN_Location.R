@@ -1,14 +1,18 @@
 #### GYN Year Model Outputs ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
 
 #### GYN Only ####
 
-model_GYN_loc <- readRDS("Outputs/04_Misc/06_GYN_Location/GYN_South_Ork_model.rds")
+model_GYN_loc <- readRDS("Outputs/04_Misc/04_GYN_Location/GYN_South_Ork_model.rds")
 
 #### Table Outputs ####
 
@@ -55,7 +59,7 @@ colnames(post)[13:15] <- c("a", "b_S", "sigma")
 
 ## Plot pairs
 
-svg("Outputs/04_Misc/06_GYN_Location/GYN_Pairs.svg")
+svg("Outputs/04_Misc/04_GYN_Location/GYN_Pairs.svg")
 pairs(model_GYN_loc, pars = c("a", "b_S", "sigma"))
 dev.off()
 
@@ -63,7 +67,7 @@ dev.off()
 
 color_scheme_set("darkgray")
 
-svg("Outputs/04_Misc/06_GYN_Location/GYN_Posterior.svg", width = 7, height = 3)
+svg("Outputs/04_Misc/04_GYN_Location/GYN_Posterior.svg", width = 7, height = 3)
 mcmc_intervals(post,
                pars = c("sigma", "b_S", "a"),
                prob = 0.5, prob_outer = 0.95) +
@@ -81,7 +85,7 @@ dev.off()
 
 ## Plot trace
 
-svg("Outputs/04_Misc/06_GYN_Location/GYN_Traceplots.svg")
+svg("Outputs/04_Misc/04_GYN_Location/GYN_Traceplots.svg")
 p <- mcmc_trace(post, pars = c("a", "b_S", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
 plot <- p + facet_text(size = 10) +

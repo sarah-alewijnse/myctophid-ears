@@ -1,10 +1,16 @@
 #### Bayesian Linear Models - PRM Latitude ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
+
+# Load and check data
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
