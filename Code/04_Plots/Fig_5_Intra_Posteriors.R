@@ -1,5 +1,9 @@
 #### Combined Intraspecific Posterior Plot ####
 
+# Figure 5
+
+# Load required packages
+
 library(tidyverse)
 library(bayesplot)
 library(gridExtra)
@@ -207,6 +211,8 @@ PRM_plot <- PRM_plot + labs(tag = "B")
 PRM_plot
 
 #### Full Plot ####
+
+# Saves as SVG
 
 svg("Plots/02_Within_Species/03_Combined_Posterior.svg", width = 12, height = 6)
 grid.arrange(GYN_plot, PRM_plot,

@@ -1,5 +1,9 @@
 ### Plot Intraspecific Body Mass ###
 
+# Figure 6
+
+# Load required packages
+
 library(tidyverse)
 library(gridExtra)
 

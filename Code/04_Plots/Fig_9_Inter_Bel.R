@@ -1,13 +1,19 @@
 #### Graphs - Belcher RMR Estimates ####
 
+# Figure 9
+
+# Load required packages
+
 library(tidyverse)
 
-options(max.print=999999)
+options(max.print=999999) # Print out whole table
+
+# Load and check data
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
-cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7")
+cbPalette <- c("#0072B2", "#56B4E9", "#E69F00", "#D55E00", "#009E73", "#CC79A7") # Colourblind friendly palette
 
 svg("Plots/01_Among_Species/04_Cresp_Oxygen_Consumption.svg", width = 10, height = 7)
 ggplot(myct, aes(mean_Metabol, mean_M, sciname)) +

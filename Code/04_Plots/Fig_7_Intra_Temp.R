@@ -1,5 +1,9 @@
 ### Plot Intraspecific Temperature ###
 
+# Figure 7
+
+# Load required packages
+
 library(tidyverse)
 library(gridExtra)
 
@@ -38,7 +42,7 @@ ELN_plot <- ggplot(ELN, aes(mean_Temp, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-ELN_plot <- ELN_plot + labs(tag = "A")
+ELN_plot <- ELN_plot + labs(tag = "F")
 ELN_plot 
 
 #### ELC ####
@@ -62,7 +66,7 @@ ELC_plot <- ggplot(ELC, aes(mean_Temp, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-ELC_plot <- ELC_plot + labs (tag = "B")
+ELC_plot <- ELC_plot + labs (tag = "C")
 ELC_plot
 
 #### GYR ####
@@ -85,7 +89,7 @@ GYR_plot <- ggplot(GYR, aes(mean_Temp, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-GYR_plot <- GYR_plot + labs(tag = "C")
+GYR_plot <- GYR_plot + labs(tag = "E")
 GYR_plot
 
 #### GYN ####
@@ -108,7 +112,7 @@ GYN_plot <- ggplot(GYN, aes(mean_Temp, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-GYN_plot <- GYN_plot + labs(tag = "D")
+GYN_plot <- GYN_plot + labs(tag = "A")
 GYN_plot
 
 #### KRA ####
@@ -133,7 +137,7 @@ KRA_plot <- ggplot(KRA, aes(mean_Temp, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-KRA_plot <- KRA_plot + labs(tag = "E")
+KRA_plot <- KRA_plot + labs(tag = "D")
 KRA_plot
 
 #### PRM ####
@@ -155,11 +159,13 @@ PRM_plot <- ggplot(PRM, aes(mean_Temp, mean_M)) +
         axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
-PRM_plot <- PRM_plot + labs(tag = "F")
+PRM_plot <- PRM_plot + labs(tag = "B")
 PRM_plot
 
+# Saves as SVG
+
 svg("Plots/02_Within_Species/02_Cresp_Temperature.svg", height = 10, width = 10)
-grid.arrange(ELN_plot, ELC_plot,
-             GYR_plot, GYN_plot,
-             KRA_plot, PRM_plot)
+grid.arrange(GYN_plot, PRM_plot,
+             ELC_plot, KRA_plot,
+             GYR_plot, ELN_plot)
 dev.off()

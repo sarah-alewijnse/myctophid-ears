@@ -1,5 +1,7 @@
 #### Species Density Plot - M ####
 
+# Figure 2
+
 # Load tidyverse
 
 library(tidyverse)
@@ -50,14 +52,14 @@ a <- data.frame(label = c("A",
                       0.201,
                       0.214))
 
-## Plot
+# Plot (autosaves as SVG)
 
 spp_labs <- c("Gymnoscopelus nicholsi", "Protomyctophum bolini",
               "Electrona carlsbergi", "Krefftichthys anderssoni",
               "Gymnoscopelus braueri", "Electrona antarctica")
 names(spp_labs) <- c("A", "B", "C", "D", "E", "F")
 
-cbp1 <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#E69F00", "#0072B2")
+cbp1 <- c("#D55E00", "#CC79A7", "#56B4E9", "#009E73", "#E69F00", "#0072B2") # Colourblind friendly palette
 
 svg("Plots/01_Among_Species/01_Cresp_Density.svg", height = 9, width = 7)
 ggplot(post_M_spp, aes(x = M, fill = label))+
