@@ -1,7 +1,7 @@
-"C_resp_oto","mg_kg_oto","Species","mg_kg_allo","C_resp_allo","diff_mg_kg","diff_mg_kg_percent"
-0.212,369.64,"Electrona antarctica",254.76,0.175,114.88,31.08
-0.173,248.57,"Electrona carlsbergi",279.16,0.185,30.59,12.31
-0.201,329.17,"Gymnoscopelus braueri",196.79,0.15,132.38,40.22
-0.145,187.72,"Gymnoscopelus nicholsi",182.48,0.142,5.24000000000001,2.79
-0.193,303.37,"Krefftichthys anderssoni",401.8,0.22,98.43,32.45
-0.171,243.69,"Protomyctophum bolini",399.45,0.219,155.76,63.92
+"Species","mg_kg_abs","mg_kg_percent"
+"Electrona antarctica",122.94,32.54
+"Electrona carlsbergi",33.04,13.42
+"Gymnoscopelus braueri",132.3,40.19
+"Gymnoscopelus nicholsi",11.95,6.11
+"Krefftichthys anderssoni",101.47,33.79
+"Protomyctophum bolini",156.18,64.73

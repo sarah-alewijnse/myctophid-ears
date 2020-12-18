@@ -5,31 +5,36 @@
 # Load required packages
 
 library(tidyverse)
-library(rjags)
-library(coda)
+library(rjags) # Gibbs sampler
+library(coda) # Summarises MCMC outputs
 
-# Load in data
+# Read in data file
 
 myct <- read.csv("Data/Myctophids_Master.csv")
 
-# Get difference between d18O_oto and d18O_water
+# Calculate difference between d18O_oto and d18O_water
 
 myct$dif <- myct$d18O - myct$D18O_vals
 
-# Create histogram of priors
+# Create histogram of priors (based on Scotia Sea temperatures)
 
 hist(rnorm(1000, 2, 3))
 
 #### Create temperature function ####
 
+# Enables you to loop the temperature function over the whole dataset
+
 Temp <- function(Num){
 myct_1 <- dplyr::filter(myct, MyNumber == Num)
 
-# Set data
+# Set priors/data
 
 iso_list <- list(
-  iso = myct_1$dif,
+  iso = myct_1$dif, # Difference between d18O_oto and d18O_water
   sigma = 1/(0.33^2),
+  
+  # Parameters from Hoie et al. 2004
+  
   a_obs = 3.90,
   a_var = 1/(0.24^2),
   b_obs = -0.20,
@@ -41,7 +46,7 @@ iso_list <- list(
 
 inits <- list(Temp = 0.0)
 
-# Write JAGS model
+# Write the JAGS model
 
 cat("model
     {
@@ -59,13 +64,15 @@ cat("model
 
 jags_mod <- jags.model(file = "Outputs/04_Misc/01_JAGS_Model_Text_Files/Temp_Jags.txt", data = iso_list, inits = inits, n.chains = 3, n.adapt = 50000)
 
-# Outputs
+# Get outputs for temperature, a and b
+
 output <- coda.samples(jags_mod,
                        c("Temp", "a_est", "b_est"),
                        n.iter = 100000,
                        thin = 50)
 
 # Get summary and traceplots
+
 sum <- summary(output)
 print(sum)
 
@@ -76,6 +83,7 @@ plot(output)
 dev.off()
 
 # Get Gelman-Rubin diagnostic
+
 gel <- gelman.diag(output, confidence = 0.95)
 gel <- gel$psrf
 gelman <- as.data.frame(gel[, 1])
@@ -83,10 +91,12 @@ print(gelman)
 capture.output(gelman, file = "Gelmen_Temp.txt")
 
 # Get effective sample size
+
 samp_size <- as.data.frame(effectiveSize(output))
 print(samp_size)
 
 # Get Geweke diagnostic
+
 geweke <- coda::geweke.diag(output)
 geweke.all <- data.frame(matrix(NA, nrow = 3, ncol = 3))
 colstring <- rep(NA, 3)
@@ -109,9 +119,11 @@ rownames(geweke_fail) <- "Geweke"
 print(geweke_fail)
 
 # Output diagnostics
+
 capture.output(c(gelman, samp_size, geweke_fail), file = paste("Diagnostics_", Num, ".txt", sep = ""))
 
 # Save and output postiors
+
 post_1 <- as.data.frame(output[[1]])
 post_2 <- as.data.frame(output[[2]])
 post_3 <- as.data.frame(output[[3]])
@@ -121,11 +133,15 @@ post_full <- rbind(post_1, post_2, post_3)
 write.csv(post_full, paste("Outputs/01_Parameter_Calculations/02_Temperature/Post_Temp_", Num, ".csv", sep = ""))
 }
 
-# Test
+# Test with a single individual
+
+Temp("BAS_220")
+
+# Loop over whole dataset
 
 for(i in 1:nrow(myct)){
   with(myct[i,],
        Temp(MyNumber))
 }
 
-Temp("BAS_220")
+

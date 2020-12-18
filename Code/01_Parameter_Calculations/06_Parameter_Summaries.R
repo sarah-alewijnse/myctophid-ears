@@ -10,7 +10,7 @@ library(tidyverse)
 
 se <- function(x) sd(x)/sqrt(length(x))
 
-#### M ####
+#### C_resp (M) ####
 
 # Load file
 

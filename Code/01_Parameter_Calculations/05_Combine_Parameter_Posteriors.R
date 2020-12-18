@@ -5,9 +5,9 @@
 # Load packages
 
 library(tidyverse)
-library(MixSIAR)
+library(MixSIAR) # Gibbs sampler
 
-#### M_oto (C_resp) ####
+#### C_resp ####
 
 # Set working directory
 

@@ -5,16 +5,16 @@
 # Load packages
 
 library(tidyverse)
-library(rjags)
-library(coda)
+library(rjags) # Gibbs sampler
+library(coda) # Summarises MCMC outputs
 
-#Load in data
+# Load in data file
 
-myct <- read.csv("Data/Myctophids_M_Temp.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
 
-# Remove those with inaccurate body mass data
+# Remove those with missing body mass data
 
-myct_tidy <- filter(myct, Weight_SD == "0")
+myct_tidy <- myct[!is.na(myct$Weight.x),]
 
 # Log body masses
 
@@ -25,7 +25,7 @@ myct_tidy$ln_Weight <- log(myct_tidy$Weight.x)
 Bel <- function(Num){
   myct_1 <- dplyr::filter(myct_tidy, MyNumber == Num)
   
-  ## Try in JAGS
+  # Set priors/data
   
   param_list <- list(
     param_1 = -1.315,
@@ -43,6 +43,8 @@ Bel <- function(Num){
   
   inits <- list(temp_est = 0.0)
   
+  # Write the JAGS model
+  
   cat("model
       {
       for (i in 1:N){
@@ -56,7 +58,11 @@ Bel <- function(Num){
       tau <- sigma
       }", file="Outputs/04_Misc/01_JAGS_Model_Text_Files/Belcher_JAGS.txt")
 
+  # Run JAGS model
+  
   jags_mod <- jags.model(file = "Outputs/04_Misc/01_JAGS_Model_Text_Files/Belcher_JAGS.txt", data = param_list, inits = inits, n.chains = 3, n.adapt = 50000)
+  
+  # Get outputs for temperature and equation parameters
   
   output <- coda.samples(jags_mod,
                          c("Metabol", "param_1_est", "param_2_est", "param_3_est", "temp_est"),
@@ -68,7 +74,7 @@ Bel <- function(Num){
                                n.iter = 100000,
                                thin = 50)
   
-  ## Summary and traceplots
+  # Get parameter summaries and traceplots
   
   sum <- summary(output)
   print(sum)
@@ -79,7 +85,7 @@ Bel <- function(Num){
   plot(output_graph)
   dev.off()
   
-  ## Diagnostics
+  # Get diagnostics
   
   gel <- gelman.diag(output, confidence = 0.95)
   gel <- gel$psrf
@@ -124,9 +130,11 @@ Bel <- function(Num){
   write.csv(post_full, paste("Outputs/01_Parameter_Calculations/03_Oxygen_Consumption/Posteriors/Post_", Num, ".csv", sep = ""))
 }
 
-# Test
+# Test with a single individual
 
 Bel("BAS_220")
+
+# Loop over data
 
 for(i in 1:nrow(myct_tidy)){
   with(myct_tidy[i,],

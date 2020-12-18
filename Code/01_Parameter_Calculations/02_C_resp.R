@@ -1,13 +1,13 @@
-#### M_oto ####
+#### C_resp ####
 
-# Estimates M_oto (C_resp) using MixSIAR 
+# Estimates C_resp (M_oto) from otolith d13C using MixSIAR 
 
 # Load packages
 
 library(tidyverse)
-library(MixSIAR)
+library(MixSIAR) # Bayesian mixing model for stable isotopes
 
-#### Edit MIXSIAR Functions ####
+#### Edit MIXSIAR functions to allow for Looping ####
 
 # Edit load_mix_data function
 
@@ -410,15 +410,17 @@ load_discr_data_mod <- function (filename, mix)
   return(list(mu = discr_mu, sig2 = discr_sig2))
 }
 
-#### Calculate M_oto ####
+#### Calculate C_resp ####
 
-# Load in data
+# Load in otolith (mixture) d13C
 
 mixture <- read.csv("Data/MixSIAR_Data/myct_mix.csv")
 
-#### Create M_oto function ####
+#### Create C_resp function ####
 
-M_Value <- function(label, number){
+# Create function to allow the mixing model to be looped over the data
+
+C_resp <- function(label, number){
   
 # Partition mixture data
   
@@ -434,43 +436,52 @@ mix <- load_mix_data_mod(mix_1,
                        cont_effects = NULL)
 
 # Partition source data
+
 source_csv <- read.csv("Data/MixSIAR_Data/myct_source.csv")
 source_csv$n <- 10000 # Set n to an arbitrary high number
 source_19 <- filter(source_csv, MyNumber == label)
 
 # Load source data
+
 source <- load_source_data_mod(source_19,
                            source_factors = NULL,
                            conc_dep = FALSE,
                            data_type = "means",
                            mix)
 
-# Load discrimination factgor data
+# Load discrimination factor data
+
 disc <- read.csv("Data/MixSIAR_Data/myct_discrimination.csv")
 
 # Partition discrimination factor data
+
 discr <- load_discr_data_mod(disc, mix)
 
 # Plot
+
 plot_data(filename = "isospace_plot", plot_save_pdf = FALSE, plot_save_png = FALSE, mix,source,discr)
 
 # Write JAGS model
+
 model_filename <- "Outputs/04_Misc/01_JAGS_Model_Text_Files/M_MixSIAR_model.txt"
 resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 # Run JAGS model
+
 test_mod <- run_model(run = "normal", mix, source, discr, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 # Get posterior
+
 R2jags::attach.jags(test_mod)
 post_M <- p.fac1[,1,2]
 post_M <- as.data.frame(post_M)
 write.csv(post_M, paste("Outputs/01_Parameter_Calculations/01_M/Posteriors/post_M_", number, ".csv"))
 
-# Output
+# Set output options
+
 output_options <- list(summary_save = TRUE,
                        summary_name = paste("sum_stat_", number, sep = ""),
                        sup_post = TRUE,
@@ -496,11 +507,13 @@ output_JAGS(test_mod, mix, source, output_options)
 
 }
 
-# Test
+# Test on a single individual
 
-M_Value("BAS_88", "BAS_88")
+C_resp("BAS_88", "BAS_88")
+
+# Loop over whole dataset (outputs save automatically but may need tidying)
   
 for(i in 1:nrow(mixture)){
   with(mixture[i,],
-       M_Value(MyNumber, MyNumber))
+       C_resp(MyNumber, MyNumber))
 }
