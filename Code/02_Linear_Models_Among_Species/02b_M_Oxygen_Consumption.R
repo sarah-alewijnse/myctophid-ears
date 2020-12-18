@@ -1,8 +1,12 @@
 #### Belcher Model Outputs ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
 
@@ -36,28 +40,32 @@ var_names <- c("a", "b", "sigma")
 precis_tidy <- cbind(var_names, precis_tidy)
 colnames(precis_tidy) <- c("var_names", "mean", "stan_dev")
 
+# Round
+
 precis_tidy[, 2:3] <- round(precis_tidy[,2:3], digits = 3)
 
 precis_tidy ### Use this for results
 
-write.csv(precis_tidy, "Outputs/02_Linear_Models_Among_Species/02_M_Oxygen_Consumption/M_T_W_precis.csv", row.names = F)
+# Write as CSV file
+
+write.csv(precis_tidy, "Outputs/02_Linear_Models_Among_Species/02_M_Oxygen_Consumption/M_Belcher_precis.csv", row.names = F)
 
 #### Graph Output ####
 
-## Extract samples
+# Extract samples
 
 post <- extract.samples(model_M_Metabol)
 post <- as.data.frame(post)
 
 colnames(post)[201:203] <- c("a", "b", "sigma")
 
-## Plot pairs
+# Plot pairs and autosave as SVG
 
 svg(file = "Outputs/02_Linear_Models_Among_Species/02_M_Oxygen_Consumption/Pairs.svg")
 pairs(model_M_Metabol, pars = c("a", "b", "sigma"))
 dev.off()
 
-## Plot intervals
+# Plot intervals and autosave as SVG
 
 color_scheme_set("darkgray")
 
@@ -76,7 +84,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 15))  
 dev.off()
 
-## Traceplot
+# Traceplot and autosave as SVG
 
 svg(file = "Outputs/02_Linear_Models_Among_Species/02_M_Oxygen_Consumption/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b", "sigma"),

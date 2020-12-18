@@ -1,8 +1,12 @@
 #### Body Mass Temperature Model Outputs ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
 
@@ -10,12 +14,12 @@ options(max.print=999999)
 
 model_M_T_W <- readRDS("Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/M_T_W_model.rds")
 
-## Get Precis table
+# Get Precis table
 
 table <- precis(model_M_T_W, digits = 4, prob = 0.95, depth = 2)
 table
 
-## Get outputs
+# Get outputs
 
 means <- data.frame()
 for(i in 201:211){
@@ -29,14 +33,14 @@ for(i in 201:211){
   sds <- rbind(sds, m)
 }
 
-## Add variable names
+# Add variable names
 
 precis_tidy <- cbind(means, sds)
 var_names <- c("a", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
 precis_tidy <- cbind(var_names, precis_tidy)
 colnames(precis_tidy) <- c("var_names", "mean", "stan_dev")
 
-## Get calculations
+# Calculate species means
 
 adj_means <- data.frame()
 for(i in 4:9){
@@ -50,26 +54,28 @@ precis_adj <- precis_tidy
 precis_adj[c(4:9), 2] <- adj_means
 precis_adj[, 2:3] <- round(precis_adj[,2:3], digits = 3)
 
-precis_adj ### Use this for results
+precis_adj ## Use this for results
+
+# Write into CSV
 
 write.csv(precis_adj, "Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/M_T_W_precis.csv", row.names = F)
 
 #### Graph Output ####
 
-## Extract samples
+# Extract samples
 
 post <- extract.samples(model_M_T_W)
 post <- as.data.frame(post)
 
 colnames(post)[201:211] <- c("a", "b_W", "b_T", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma")
 
-## Plot pairs
+# Plot pairs (with autosave to SVG)
 
 svg(file = "Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/Pairs.svg")
 pairs(model_M_T_W, pars = c("a", "b_W", "b_T", "sigma", "sigma_Species"), cex.labels = 1)
 dev.off()
 
-## Plot intervals
+## Plot intervals (with autosave to SVG)
 
 color_scheme_set("darkgray")
 

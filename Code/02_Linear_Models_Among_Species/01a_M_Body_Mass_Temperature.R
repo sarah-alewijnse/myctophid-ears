@@ -1,20 +1,30 @@
 #### Bayesian Linear Models - Weight and Temp ####
 
+# Load required packages
+
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
+
+# Print out all results
 
 options(max.print=999999)
+
+# Load and check data
 
 myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 #### Overall Model with Weight and Temp ####
 
-myct_tidy <- filter(myct, !is.na(Weight.x))
-myct_tidy <- filter(myct_tidy, !is.na(mean_M))
-myct_tidy$log_Weight <- log(myct_tidy$Weight.x)
-glimpse(myct_tidy)
+# Tidy data ready for model input
+
+myct_tidy <- filter(myct, !is.na(Weight.x)) # Remove those without weights
+myct_tidy <- filter(myct_tidy, !is.na(mean_M)) # Remove those without C_resp
+myct_tidy$log_Weight <- log(myct_tidy$Weight.x) # Log weights
+glimpse(myct_tidy) # Check
+
+# Put into tidy list
 
 M_T_W_list <- list(
   M_obs = myct_tidy$mean_M,
@@ -62,16 +72,19 @@ model_M_T_W <- map2stan(
   alist(
     M_est ~ dnorm(mu , sigma),
     
-    # Linear model
+    # Linear model (equation 6)
+    
     mu <- a + a_Var[Species] +
       b_W*Weight +
       b_T*Temp_est[i],
     
     # Data uncertainties
+    
     M_obs ~ dnorm(M_est, M_se),
     Temp_obs ~ dnorm(Temp_est, Temp_se),
     
     # Parameters
+    
     a ~ dnorm(0, 1),
     b_W ~ dnorm(0, 1),
     b_T ~ dnorm(0, 1),
@@ -99,6 +112,6 @@ sum(divergent)
 
 precis(model_M_T_W, digits = 4, prob = 0.95, depth = 2)
 
-## Save stanfit
+## Save stanfit as RDS
 
 saveRDS(model_M_T_W, "Outputs/02_Linear_Models_Among_Species/01_M_Body_Mass_Temperature/M_T_W_model.rds")
