@@ -3,10 +3,12 @@
 # Load required packages
 
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
 
-options(max.print=999999) # Enables viewing of whole output
+# Print out all results
+
+options(max.print=999999)
 
 # Load data
 

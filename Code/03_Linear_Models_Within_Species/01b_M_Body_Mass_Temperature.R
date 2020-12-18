@@ -3,10 +3,10 @@
 # Load required packages
 
 library(tidyverse)
-library(rethinking)
-library(bayesplot)
+library(rethinking) # Used to interface with rstan
+library(bayesplot) # Gives nice plots
 
-options(max.print=999999) # Enables viewing of whole output
+# Print out all results
 
 # Load data
 
@@ -22,7 +22,7 @@ model_ELN <- readRDS("Outputs/03_Linear_Models_Within_Species/ELN/M_T_W_model.rd
 table_ELN <- precis(model_ELN, digits = 4, prob = 0.95, depth = 2)
 table_ELN
 
-## Get outputs
+# Get outputs
 
 means <- data.frame()
 for(i in 37:40){
@@ -42,12 +42,17 @@ precis_tidy_ELN <- cbind(var_names, precis_tidy_ELN)
 colnames(precis_tidy_ELN) <- c("var_names", "mean", "stan_dev")
 precis_tidy_ELN[, 2:3] <- round(precis_tidy_ELN[,2:3], digits = 3)
 
+# Use this for results
+
 precis_tidy_ELN
+
+# Write into csv
+
 write.csv(precis_tidy_ELN, "Outputs/03_Linear_Models_Within_Species/ELN/M_T_W_precis.csv", row.names = F)
 
 #### Graph Outputs ####
 
-## Extract samples
+# Extract samples
 
 post <- extract.samples(model_ELN)
 post <- as.data.frame(post)
@@ -56,13 +61,13 @@ post <- as.data.frame(post)
 
 colnames(post)[37:40] <- c("a", "b_W", "b_T", "sigma")
 
-## Plot pairs
+# Plot pairs and autosave as SVG
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/ELN/Pairs.svg")
 pairs(model_ELN, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
 dev.off()
 
-## Plot intervals
+# Plot intervals and autosave as SVG
 
 color_scheme_set("darkgray")
 
@@ -81,7 +86,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 10))
 dev.off()
 
-## Plot trace
+# Plot trace and autosave as SVG
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/ELN/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
@@ -123,38 +128,15 @@ precis_tidy_ELC <- cbind(var_names, precis_tidy_ELC)
 colnames(precis_tidy_ELC) <- c("var_names", "mean", "stan_dev")
 precis_tidy_ELC[, 2:3] <- round(precis_tidy_ELC[,2:3], digits = 3)
 
-precis_tidy_ELC
-write.csv(precis_tidy_ELC, "Outputs/03_Linear_Models_Within_Species/ELC/M_T_W_precis.csv", row.names = F)
-
-#### Table Output ####
-
-table_ELC <- precis(model_ELC, digits = 4, prob = 0.95, depth = 2)
-table_ELC
-
-## Get outputs
-
-means <- data.frame()
-for(i in 21:24){
-  m <- table_ELC[i, 1]
-  means <- rbind(means, m)
-}
-
-sds <- data.frame()
-for(i in 21:24){
-  m <- table_ELC[i, 2]
-  sds <- rbind(sds, m)
-}
-
-precis_tidy_ELC <- cbind(means, sds)
-var_names <- c("a", "b_W", "b_T", "sigma")
-precis_tidy_ELC <- cbind(var_names, precis_tidy_ELC)
-colnames(precis_tidy_ELC) <- c("var_names", "mean", "stan_dev")
-precis_tidy_ELC[, 2:3] <- round(precis_tidy_ELC[,2:3], digits = 3)
+# Use this for data
 
 precis_tidy_ELC
+
+# Write into CSV
+
 write.csv(precis_tidy_ELC, "Outputs/03_Linear_Models_Within_Species/ELC/M_T_W_precis.csv", row.names = F)
 
-## Extract samples
+# Extract samples
 
 post <- extract.samples(model_ELC)
 post <- as.data.frame(post)
@@ -163,7 +145,7 @@ post <- as.data.frame(post)
 
 colnames(post)[21:24] <- c("a", "b_W", "b_T", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/ELC/Pairs.svg")
 pairs(model_ELC, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
@@ -188,7 +170,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 10))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/ELC/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
@@ -230,10 +212,15 @@ precis_tidy_GYR <- cbind(var_names, precis_tidy_GYR)
 colnames(precis_tidy_GYR) <- c("var_names", "mean", "stan_dev")
 precis_tidy_GYR[, 2:3] <- round(precis_tidy_GYR[,2:3], digits = 3)
 
+# Use this for results
+
 precis_tidy_GYR
+
+# Write into CSV
+
 write.csv(precis_tidy_GYR, "Outputs/03_Linear_Models_Within_Species/GYR/M_T_W_precis.csv", row.names = F)
 
-## Extract samples
+# Extract samples
 
 post <- extract.samples(model_GYR)
 post <- as.data.frame(post)
@@ -242,13 +229,13 @@ post <- as.data.frame(post)
 
 colnames(post)[41:44] <- c("a", "b_W", "b_T", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/GYR/Pairs.svg")
 pairs(model_GYR, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
 dev.off()
 
-## Plot intervals
+# Plot intervals
 
 color_scheme_set("darkgray")
 
@@ -267,7 +254,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 10))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/GYR/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
@@ -309,7 +296,12 @@ precis_tidy_GYN <- cbind(var_names, precis_tidy_GYN)
 colnames(precis_tidy_GYN) <- c("var_names", "mean", "stan_dev")
 precis_tidy_GYN[, 2:3] <- round(precis_tidy_GYN[,2:3], digits = 3)
 
+# Use this for results
+
 precis_tidy_GYN
+
+# Write as CSV
+
 write.csv(precis_tidy_GYN, "Outputs/03_Linear_Models_Within_Species/GYN/M_T_W_precis.csv", row.names = F)
 
 ## Extract samples
@@ -321,13 +313,13 @@ post <- as.data.frame(post)
 
 colnames(post)[25:28] <- c("a", "b_W", "b_T", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/GYN/Pairs.svg")
 pairs(model_GYN, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
 dev.off()
 
-## Plot intervals
+# Plot intervals
 
 color_scheme_set("darkgray")
 
@@ -346,7 +338,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 10))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/GYN/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
@@ -388,10 +380,15 @@ precis_tidy_KRA <- cbind(var_names, precis_tidy_KRA)
 colnames(precis_tidy_KRA) <- c("var_names", "mean", "stan_dev")
 precis_tidy_KRA[, 2:3] <- round(precis_tidy_KRA[,2:3], digits = 3)
 
+# Use for results
+
 precis_tidy_KRA
+
+# Write into CSV file
+
 write.csv(precis_tidy_KRA, "Outputs/03_Linear_Models_Within_Species/KRA/M_T_W_precis.csv", row.names = F)
 
-## Extract samples
+# Extract samples
 
 post <- extract.samples(model_KRA)
 post <- as.data.frame(post)
@@ -400,13 +397,13 @@ post <- as.data.frame(post)
 
 colnames(post)[41:44] <- c("a", "b_W", "b_T", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/KRA/Pairs.svg")
 pairs(model_KRA, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
 dev.off()
 
-## Plot intervals
+# Plot intervals
 
 color_scheme_set("darkgray")
 
@@ -425,7 +422,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 10))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/KRA/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
@@ -481,13 +478,13 @@ post <- as.data.frame(post)
 
 colnames(post)[41:44] <- c("a", "b_W", "b_T", "sigma")
 
-## Plot pairs
+# Plot pairs
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/PRM/Pairs.svg")
 pairs(model_PRM, pars = c("a", "b_W", "b_T", "sigma")) # Check for autocorrelation
 dev.off()
 
-## Plot intervals
+# Plot intervals
 
 color_scheme_set("darkgray")
 
@@ -506,7 +503,7 @@ mcmc_intervals(post,
         axis.text.y = element_text(colour = "black", face = "plain", size = 10))
 dev.off()
 
-## Plot trace
+# Plot trace
 
 svg(file = "Outputs/03_Linear_Models_Within_Species/PRM/Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_W", "b_T", "sigma"),
