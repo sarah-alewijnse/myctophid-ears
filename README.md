@@ -83,3 +83,54 @@ Saved .rds files from model outputs are ommitted as they are too large to upload
 1. **01_Cresp_Body_Mass** are scatterplots of C<sub>resp</sub> with body mass within species (Figure 6).
 2. **02_Cresp_Temperature** are scatterplots of C<sub>resp</sub> with temperature within species (Figure 7).
 3. **03_Combined_Posterior** are posterior plots for intraspecific models of C<sub>resp</sub> with body mass and temperature (Figure 5).
+
+## Session Information
+
+R version 4.0.0 (2020-04-24)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows >= 8 x64 (build 9200)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United Kingdom.1252 
+[2] LC_CTYPE=English_United Kingdom.1252   
+[3] LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.1252    
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] gridExtra_2.3      bayesplot_1.7.1    rethinking_2.01   
+ [4] dagitty_0.2-2      rstan_2.19.3       StanHeaders_2.19.2
+ [7] rjags_4-10         coda_0.19-3        MixSIAR_3.1.11    
+[10] truncnorm_1.0-8    forcats_0.5.0      stringr_1.4.0     
+[13] dplyr_0.8.5        purrr_0.3.4        readr_1.4.0       
+[16] tidyr_1.0.3        tibble_3.0.1       ggplot2_3.3.0     
+[19] tidyverse_1.3.0   
+
+loaded via a namespace (and not attached):
+ [1] httr_1.4.1         jsonlite_1.6.1     modelr_0.1.7      
+ [4] assertthat_0.2.1   stats4_4.0.0       cellranger_1.1.0  
+ [7] yaml_2.2.1         pillar_1.4.4       backports_1.1.6   
+[10] lattice_0.20-41    glue_1.4.1         rvest_0.3.5       
+[13] colorspace_1.4-1   plyr_1.8.6         pkgconfig_2.0.3   
+[16] broom_0.5.6        haven_2.2.0        mvtnorm_1.1-0     
+[19] scales_1.1.1       processx_3.4.2     generics_0.0.2    
+[22] ellipsis_0.3.1     withr_2.2.0        cli_2.0.2         
+[25] magrittr_1.5       crayon_1.3.4       readxl_1.3.1      
+[28] ps_1.3.3           fs_1.4.1           fansi_0.4.1       
+[31] nlme_3.1-147       MASS_7.3-53        xml2_1.3.2        
+[34] pkgbuild_1.0.8     tools_4.0.0        loo_2.2.0         
+[37] prettyunits_1.1.1  hms_0.5.3          lifecycle_0.2.0   
+[40] matrixStats_0.56.0 V8_3.0.2           munsell_0.5.0     
+[43] reprex_0.3.0       callr_3.4.3        compiler_4.0.0    
+[46] rlang_0.4.6        grid_4.0.0         ggridges_0.5.2    
+[49] rstudioapi_0.11    boot_1.3-24        gtable_0.3.0      
+[52] inline_0.3.15      DBI_1.1.0          curl_4.3          
+[55] R6_2.4.1           lubridate_1.7.9    shape_1.4.4       
+[58] stringi_1.4.6      Rcpp_1.0.4.6       vctrs_0.3.0       
+[61] dbplyr_1.4.3       tidyselect_1.1.0  
