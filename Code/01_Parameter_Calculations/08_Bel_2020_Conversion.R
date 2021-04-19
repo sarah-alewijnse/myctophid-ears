@@ -15,7 +15,7 @@ Bel_2020 <- read.csv("Archive/Belcher_2020_Data/Belcher_SupplementaryData_COMICS
 
 ul_mg <- function(ul){
   b <- ul * 1e6
-  mg <- (b * 0.0014) / 24 # Density of oxygen (mg/m^3) at 1 bar and 21 C
+  mg <- (b * 0.0014) / 24 # Density of oxygen (mg/m^3) at 1 bar and 2 C
   print(mg)
 }
 
