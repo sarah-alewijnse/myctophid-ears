@@ -124,6 +124,68 @@ for(i in 1:nrow(myct)){
   diet_values <- rbind(diet_values, ms)
 }
 
-whole <- cbind(whole, diet_values) # Join with individual ID and DIC (will need to rearrange in Excel to fit into MixSIAR format) 
+whole <- cbind(whole, diet_values) # Join with individual ID and DIC (will need to rearrange in Excel to fit into MixSIAR format)
 
-write.csv(whole, "Data/MixSIAR_Data/myct_source.csv", row.names = F) # Write into CSV file
+#### Water d18O ####
+
+# Create function for calculating d18O of seawater
+
+calc_water <- function(reps, # Number of repetitions in sample
+                       sal, # Salinity
+                       a, a_sd, # Parameter a (mean and stan dev)
+                       b, b_sd){ # Parameter b (mean and stan dev)
+  
+  # Calculate distributions with set.seeds to ensure reproducibility
+  
+  # a distribution
+  
+  set.seed(a)
+  dist_a <- rnorm(reps, a, a_sd)
+  
+  # b distribution
+  
+  set.seed(b)
+  dist_b <- rnorm(reps, b, b_sd)
+  
+  # Calculate d18O_SW
+  
+  dist_water <- dist_a + dist_b*sal
+  
+  # Get distribution (mean and stan dev)
+  
+  d18O_SW <- mean(dist_water)
+  sd_d18O_SW <- sd(dist_water)
+  result <- data.frame(d18O_SW, sd_d18O_SW)
+  return(result)
+}
+
+# Loop over dataset to calculate diet 
+
+water_values <- data.frame() # Empty data frame for storage
+
+JCR <- read.csv("Data/JCR_Station_Dat.csv")
+
+for(i in 1:nrow(JCR)){
+  ms <- with(JCR[i,],
+             calc_water(10000, Salinity,
+                       -8.45, 0.478,
+                       0.24, 0.014 # Trophic enrichment factor from DeNiro & Epstein 1978
+             )) 
+  water_values <- rbind(water_values, ms)
+}
+
+whole <- cbind(JCR, water_values) # Join with individual ID and DIC (will need to rearrange in Excel to fit into MixSIAR format)
+
+#### Combine with myctophid data ####
+
+write.csv(whole, "Data/JCR_Station_Dat.csv", row.names = F) # Write into CSV file
+
+myct <- read.csv("Data/Myctophids_Master.csv")
+
+JCR_d18O <- select(JCR, Station, d18O_SW, sd_d18O_SW)
+
+myct_d18O <- left_join(myct, JCR_d18O, by = "Station")
+
+# Write into file
+
+write.csv(myct_d18O, "Data/Myctophids_Master.csv", row.names = F)
