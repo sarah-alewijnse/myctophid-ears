@@ -3,9 +3,7 @@
 .RData
 .Ruserdata
 /Archive/
-/Outputs/01_Parameter_Calculations/01_M/
-/Outputs/Temperature/
-/Outputs/Belcher/
+/Outputs/01_Parameter_Calculations/
 /Data/Raw_Isotopes
 # LaTeX #
 *.aux
