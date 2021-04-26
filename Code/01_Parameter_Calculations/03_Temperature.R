@@ -14,11 +14,7 @@ myct <- read.csv("Data/Myctophids_Master.csv")
 
 # Calculate difference between d18O_oto and d18O_water
 
-myct$dif <- myct$d18O - myct$D18O_vals
-
-# Create histogram of priors (based on Scotia Sea temperatures)
-
-hist(rnorm(1000, 2, 3))
+myct$dif <- myct$d18O - myct$d18O_SW
 
 #### Create temperature function ####
 
@@ -31,7 +27,7 @@ myct_1 <- dplyr::filter(myct, MyNumber == Num)
 
 iso_list <- list(
   iso = myct_1$dif, # Difference between d18O_oto and d18O_water
-  sigma = 1/(0.33^2),
+  sigma = 1/(myct_1$sd_d18O_SW^2),
   
   # Parameters from Hoie et al. 2004
   
@@ -135,11 +131,11 @@ write.csv(post_full, paste("Outputs/01_Parameter_Calculations/02_Temperature/Pos
 
 # Test with a single individual
 
-Temp("BAS_220")
+Temp("BAS_221")
 
 # Loop over whole dataset
 
-for(i in 1:nrow(myct)){
+#for(i in 1:nrow(myct)){
   with(myct[i,],
        Temp(MyNumber))
 }

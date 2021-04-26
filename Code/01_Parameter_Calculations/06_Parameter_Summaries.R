@@ -68,7 +68,19 @@ Temp_se <- select(Temp_se, MyNumber, se_Temp)
 Temp <- left_join(Temp_means, Temp_sd, by = "MyNumber") %>%
   left_join(., Temp_se, by = "MyNumber")
 
+# Write into file
+
+outputs <- left_join(M, Temp, by = "MyNumber")
+
+myct <- read.csv("Data/Myctophids_Master.csv")
+
+all <- left_join(myct, outputs, by = "MyNumber")
+
+write.csv(all, "Data/Myctophids_M_Temp.csv", row.names = FALSE)
+
 #### Oxygen Consumption - Belcher et al. 2019 ####
+
+#### You will need temperature first to calculate O2 consumption ####
 
 # Load
 
