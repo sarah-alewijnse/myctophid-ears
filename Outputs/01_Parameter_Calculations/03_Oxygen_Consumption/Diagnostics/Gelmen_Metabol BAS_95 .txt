@@ -1,6 +1,0 @@
-             gel[, 1]
-Metabol     0.9999177
-param_1_est 1.0005177
-param_2_est 1.0007348
-param_3_est 1.0005273
-temp_est    1.0021094
