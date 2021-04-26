@@ -10,7 +10,7 @@ library(coda) # Summarises MCMC outputs
 
 # Load in data file
 
-myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
+myct <- read.csv("Data/Myctophids_M_Temp.csv")
 
 # Remove those with missing body mass data
 
@@ -132,7 +132,7 @@ Bel <- function(Num){
 
 # Test with a single individual
 
-Bel("BAS_220")
+Bel("BAS_221")
 
 # Loop over data
 
