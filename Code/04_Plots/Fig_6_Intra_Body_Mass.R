@@ -67,6 +67,7 @@ ELC_plot <- ggplot(ELC, aes(ln_Weight, mean_M)) +
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
 ELC_plot <- ELC_plot + labs(tag = "C")
+ELC_plot
 
 #### GYR ####
 
@@ -148,6 +149,7 @@ GYN_plot <- ggplot(GYN, aes(ln_Weight, mean_M)) +
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
 GYN_plot <- GYN_plot + labs(tag = "A")
+GYN_plot
 
 #### KRA ####
 
@@ -170,6 +172,7 @@ KRA_plot <- ggplot(KRA, aes(ln_Weight, mean_M)) +
         axis.text.y = element_text(colour = "black"))  # Print the minor gridlines
 
 KRA_plot <- KRA_plot + labs(tag = "D")
+KRA_plot
 
 #### PRM ####
 
