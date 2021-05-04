@@ -4,7 +4,7 @@ library(tidyverse)
 
 # Read in data
 
-myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 
 #### ELN ####
 
