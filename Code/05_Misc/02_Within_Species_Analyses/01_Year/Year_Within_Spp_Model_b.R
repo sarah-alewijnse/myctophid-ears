@@ -447,7 +447,7 @@ dev.off()
 
 #### PRM Only ####
 
-model_PRM_year <- readRDS("Outputs/04_Misc/05_Year/PRM_Year_model.rds")
+model_PRM_year <- readRDS("Outputs/04_Misc/02_Within_Spp/01_Year/PRM/PRM_Year_model.rds")
 
 #### Table Outputs ####
 
