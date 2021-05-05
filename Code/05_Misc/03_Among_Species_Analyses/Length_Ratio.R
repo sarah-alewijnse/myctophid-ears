@@ -26,9 +26,12 @@ str(myct_SL)
 
 myct_SL$Ratio <- myct_SL$SL / as.numeric(myct_SL$max_SL)
 
-# Quick plot
+# Quick plot + lm
 
 plot(myct_SL$Ratio, myct_SL$mean_M)
+lm_q <- lmer(mean_M ~ Ratio + (1|sciname), data = myct_SL)
+summary(lm_q)
+
 
 ##### Bayesian Linear Model - Ratio only ####
 

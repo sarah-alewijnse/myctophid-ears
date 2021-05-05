@@ -6,7 +6,7 @@ library(tidyverse)
 
 # Load and check data
 
-myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 #### GYN ####
