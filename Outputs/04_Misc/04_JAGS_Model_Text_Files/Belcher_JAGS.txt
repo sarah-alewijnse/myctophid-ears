@@ -1,0 +1,12 @@
+model
+      {
+      for (i in 1:N){
+      mu[i] <- param_1_est + param_2_est * weight + param_3_est * temp_est
+      Metabol[i] ~ dnorm(mu[i], tau)
+      }
+      param_1_est ~ dnorm(param_1, param_1_var)
+      param_2_est ~ dnorm(param_2, param_2_var)
+      param_3_est ~ dnorm(param_3, param_3_var)
+      temp_est ~ dnorm(temp, temp_var)
+      tau <- sigma
+      }
