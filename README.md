@@ -10,6 +10,7 @@ The main data sheets can be found in the Data folder:
 * **Myctophids_Master.csv** contains the tidied otolith, muscle and water stable isotope data, and metadata for each individual myctophid.
 * **Myctophids_M_Temp_Length_Maturity.csv** is as above, but includes estimates of otolith derived C<sub>resp</sub> and temperature, as well as standard length (mm) and maturity stage.
 * **Myctophids_M_Temp_Bel.csv** is as above, but includes estimates of oxygen derived from allometric equations in Belcher et al. 2019.
+* **JCR_Station_Dat.csv** gives the station data for the cruises on which the specimens were collected.
 
 The folder MixSIAR_Data includes tidied data on stable isotopes of the mixture (otolith) and source (DIC and muscle) and discrimination factors.
 
@@ -87,51 +88,32 @@ Saved .rds files from model outputs are ommitted as they are too large to upload
 
 ## Session Information
 
-R version 4.0.0 (2020-04-24)
+R version 4.0.5 (2021-03-31)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows >= 8 x64 (build 9200)
 
 Matrix products: default
 
 locale:
-[1] LC_COLLATE=English_United Kingdom.1252 
-[2] LC_CTYPE=English_United Kingdom.1252   
-[3] LC_MONETARY=English_United Kingdom.1252
-[4] LC_NUMERIC=C                           
-[5] LC_TIME=English_United Kingdom.1252    
+[1] LC_COLLATE=English_United Kingdom.1252  LC_CTYPE=English_United Kingdom.1252    LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                            LC_TIME=English_United Kingdom.1252    
 
 attached base packages:
-[1] parallel  stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gridExtra_2.3      bayesplot_1.7.1    rethinking_2.01   
- [4] dagitty_0.2-2      rstan_2.19.3       StanHeaders_2.19.2
- [7] rjags_4-10         coda_0.19-3        MixSIAR_3.1.11    
-[10] truncnorm_1.0-8    forcats_0.5.0      stringr_1.4.0     
-[13] dplyr_0.8.5        purrr_0.3.4        readr_1.4.0       
-[16] tidyr_1.0.3        tibble_3.0.1       ggplot2_3.3.0     
-[19] tidyverse_1.3.0   
+ [1] truncnorm_1.0-8      MixSIAR_3.1.12       gridExtra_2.3        rjags_4-10           coda_0.19-4          bayesplot_1.8.0      rethinking_2.01     
+ [8] dagitty_0.3-1        rstan_2.21.2         StanHeaders_2.21.0-7 forcats_0.5.1        stringr_1.4.0        dplyr_1.0.5          purrr_0.3.4         
+[15] readr_1.4.0          tidyr_1.1.3          tibble_3.1.0         ggplot2_3.3.3        tidyverse_1.3.1     
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.1         jsonlite_1.6.1     modelr_0.1.7      
- [4] assertthat_0.2.1   stats4_4.0.0       cellranger_1.1.0  
- [7] yaml_2.2.1         pillar_1.4.4       backports_1.1.6   
-[10] lattice_0.20-41    glue_1.4.1         rvest_0.3.5       
-[13] colorspace_1.4-1   plyr_1.8.6         pkgconfig_2.0.3   
-[16] broom_0.5.6        haven_2.2.0        mvtnorm_1.1-0     
-[19] scales_1.1.1       processx_3.4.2     generics_0.0.2    
-[22] ellipsis_0.3.1     withr_2.2.0        cli_2.0.2         
-[25] magrittr_1.5       crayon_1.3.4       readxl_1.3.1      
-[28] ps_1.3.3           fs_1.4.1           fansi_0.4.1       
-[31] nlme_3.1-147       MASS_7.3-53        xml2_1.3.2        
-[34] pkgbuild_1.0.8     tools_4.0.0        loo_2.2.0         
-[37] prettyunits_1.1.1  hms_0.5.3          lifecycle_0.2.0   
-[40] matrixStats_0.56.0 V8_3.0.2           munsell_0.5.0     
-[43] reprex_0.3.0       callr_3.4.3        compiler_4.0.0    
-[46] rlang_0.4.6        grid_4.0.0         ggridges_0.5.2    
-[49] rstudioapi_0.11    boot_1.3-24        gtable_0.3.0      
-[52] inline_0.3.15      DBI_1.1.0          curl_4.3          
-[55] R6_2.4.1           lubridate_1.7.9    shape_1.4.4       
-[58] stringi_1.4.6      Rcpp_1.0.4.6       vctrs_0.3.0       
-[61] dbplyr_1.4.3       tidyselect_1.1.0  
+ [1] httr_1.4.2         jsonlite_1.7.2     modelr_0.1.8       RcppParallel_5.1.2 assertthat_0.2.1   stats4_4.0.5       cellranger_1.1.0  
+ [8] yaml_2.2.1         pillar_1.6.0       backports_1.2.1    lattice_0.20-41    glue_1.4.2         digest_0.6.27      rvest_1.0.0       
+[15] colorspace_2.0-0   plyr_1.8.6         pkgconfig_2.0.3    broom_0.7.6        haven_2.4.0        mvtnorm_1.1-1      scales_1.1.1      
+[22] processx_3.5.1     farver_2.1.0       generics_0.1.0     ellipsis_0.3.1     withr_2.4.2        cli_2.4.0          magrittr_2.0.1    
+[29] crayon_1.4.1       readxl_1.3.1       ps_1.6.0           fs_1.5.0           fansi_0.4.2        MASS_7.3-53.1      xml2_1.3.2        
+[36] pkgbuild_1.2.0     tools_4.0.5        loo_2.4.1          prettyunits_1.1.1  hms_1.0.0          lifecycle_1.0.0    matrixStats_0.58.0
+[43] V8_3.4.0           munsell_0.5.0      reprex_2.0.0       callr_3.7.0        compiler_4.0.5     rlang_0.4.10       grid_4.0.5        
+[50] ggridges_0.5.3     rstudioapi_0.13    labeling_0.4.2     boot_1.3-27        gtable_0.3.0       codetools_0.2-18   inline_0.3.17     
+[57] DBI_1.1.1          curl_4.3           reshape2_1.4.4     R6_2.5.0           lubridate_1.7.10   utf8_1.2.1         shape_1.4.5       
+[64] stringi_1.4.6      Rcpp_1.0.6         vctrs_0.3.7        dbplyr_2.1.1       tidyselect_1.1.0  
