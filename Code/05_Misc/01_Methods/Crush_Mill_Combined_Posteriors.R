@@ -13,7 +13,7 @@ options(max.print=999999)
 
 ## Cresp
 
-model_PRM_Cresp <- readRDS("Outputs/04_Misc/01_Methods/Crush_Mill/C_resp/PRM_Crush_model.rds")
+model_PRM_Cresp <- readRDS("Outputs/04_Misc/01_Methods/C_resp/PRM_Crush_model.rds")
 
 # Extract samples
 
@@ -43,7 +43,7 @@ PRM_Cresp
 
 ## Temperature
 
-model_PRM_Temp <- readRDS("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Crush_model.rds")
+model_PRM_Temp <- readRDS("Outputs/04_Misc/01_Methods/Temp/PRM_Crush_model.rds")
 
 # Extract samples
 
@@ -73,7 +73,7 @@ PRM_Temp
 
 grid.arrange(PRM_Cresp, PRM_Temp)
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/PRM_Posteriors.svg", width = 7, height = 6)
+svg("Outputs/04_Misc/01_Methods/PRM_Posteriors.svg", width = 7, height = 6)
 grid.arrange(PRM_Cresp, PRM_Temp)
 dev.off()
 
@@ -81,7 +81,7 @@ dev.off()
 
 ## Cresp
 
-model_All_Cresp <- readRDS("Outputs/04_Misc/01_Methods/Crush_Mill/C_resp/All_Crush_model.rds")
+model_All_Cresp <- readRDS("Outputs/04_Misc/01_Methods/C_resp/All_Crush_model.rds")
 
 # Extract samples
 
@@ -114,7 +114,7 @@ All_Cresp
 
 ## Cresp
 
-model_All_Temp <- readRDS("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_model.rds")
+model_All_Temp <- readRDS("Outputs/04_Misc/01_Methods/Temp/All_Crush_model.rds")
 
 # Extract samples
 
@@ -147,6 +147,6 @@ All_Temp
 
 grid.arrange(All_Cresp, All_Temp, ncol = 2)
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/All_Posteriors.svg", width = 12, height = 6)
+svg("Outputs/04_Misc/01_Methods/All_Posteriors.svg", width = 12, height = 6)
 grid.arrange(All_Cresp, All_Temp, ncol = 2)
 dev.off()

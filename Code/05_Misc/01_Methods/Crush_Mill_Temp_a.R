@@ -67,7 +67,7 @@ precis(model_PRM_crush, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_PRM_crush, "Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Crush_model.rds")
+saveRDS(model_PRM_crush, "Outputs/04_Misc/01_Methods/Temp/PRM_Crush_model.rds")
 
 #### All with Species ####
 
@@ -121,5 +121,5 @@ precis(model_all_crush, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_all_crush, "Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_model.rds")
+saveRDS(model_all_crush, "Outputs/04_Misc/01_Methods/Temp/All_Crush_model.rds")
 

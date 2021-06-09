@@ -12,7 +12,7 @@ options(max.print=999999)
 
 #### PRM Only ####
 
-model_PRM_lat <- readRDS("Outputs/04_Misc/02_Within_Spp/02_PRM_Lat/PRM_Lat_musc_model.rds")
+model_PRM_lat <- readRDS("Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/PRM_Lat_musc_model.rds")
 
 #### Table Outputs ####
 
@@ -46,7 +46,7 @@ precis_tidy[, 2:3] <- round(precis_tidy[,2:3], digits = 3)
 
 precis_tidy ### Use this for results
 
-write.csv(precis_tidy, "Outputs/04_Misc/02_Within_Spp/02_PRM_Lat/PRM_Lat_musc_precis.csv", row.names = F)
+write.csv(precis_tidy, "Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/PRM_Lat_musc_precis.csv", row.names = F)
 
 #### Graph Outputs ####
 
@@ -59,7 +59,7 @@ colnames(post)[21:23] <- c("a", "b_L", "sigma")
 
 ## Plot pairs
 
-svg("Outputs/04_Misc/02_Within_Spp/02_PRM_Lat/PRM_musc_Pairs.svg")
+svg("Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/PRM_musc_Pairs.svg")
 pairs(model_PRM_lat, pars = c("a", "b_L", "sigma"))
 dev.off()
 
@@ -67,7 +67,7 @@ dev.off()
 
 color_scheme_set("darkgray")
 
-svg("Outputs/04_Misc/02_Within_Spp/02_PRM_Lat/PRM_musc_Posterior.svg", width = 7, height = 3)
+svg("Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/PRM_musc_Posterior.svg", width = 7, height = 3)
 mcmc_intervals(post,
                pars = c("sigma", "b_L", "a"),
                prob = 0.5, prob_outer = 0.95) +
@@ -85,7 +85,7 @@ dev.off()
 
 ## Plot trace
 
-svg("Outputs/04_Misc/02_Within_Spp/02_PRM_Lat/PRM_musc_Traceplot.svg")
+svg("Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/PRM_musc_Traceplot.svg")
 p <- mcmc_trace(post, pars = c("a", "b_L", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
 plot <- p + facet_text(size = 10) +

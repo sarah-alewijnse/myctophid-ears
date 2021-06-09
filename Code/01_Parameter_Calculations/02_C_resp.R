@@ -463,7 +463,7 @@ plot_data(filename = "isospace_plot", plot_save_pdf = FALSE, plot_save_png = FAL
 
 # Write JAGS model
 
-model_filename <- "Outputs/04_Misc/01_JAGS_Model_Text_Files/M_MixSIAR_model.txt"
+model_filename <- "Outputs/04_Misc/04_JAGS_Model_Text_Files/M_MixSIAR_model.txt"
 resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)

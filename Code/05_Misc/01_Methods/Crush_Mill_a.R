@@ -12,7 +12,7 @@ options(max.print=999999)
 
 # Load and check data
 
-myct <- read.csv("Data/Myctophids_M_Temp_Length_Maturity.csv")
+myct <- read.csv("Data/Myctophids_M_Temp_Bel.csv")
 glimpse(myct)
 
 #### Within PRM ####
@@ -66,7 +66,7 @@ precis(model_PRM_crush, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_PRM_crush, "Outputs/04_Misc/02_Supplementary_Crush_Mill/PRM_Crush_model.rds")
+saveRDS(model_PRM_crush, "Outputs/04_Misc/01_Methods/C_resp/PRM_Crush_model.rds")
 
 #### All with Species ####
 
@@ -119,6 +119,6 @@ precis(model_all_crush, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_all_crush, "Outputs/04_Misc/02_Supplementary_Crush_Mill/All_Crush_model.rds")
+saveRDS(model_all_crush, "Outputs/01_Methods/C_resp/All_Crush_model.rds")
 
 

@@ -12,7 +12,7 @@ options(max.print=999999)
 
 #### GYN Only ####
 
-model_GYN_loc <- readRDS("Outputs/04_Misc/04_GYN_Location/GYN_South_Ork_model.rds")
+model_GYN_loc <- readRDS("Outputs/04_Misc/03_Within_Spp/03_GYN_Loc/GYN_South_Ork_model.rds")
 
 #### Table Outputs ####
 
@@ -46,7 +46,7 @@ precis_tidy[, 2:3] <- round(precis_tidy[,2:3], digits = 3)
 
 precis_tidy ### Use this for results
 
-write.csv(precis_tidy, "Outputs/04_Misc/06_GYN_Location/GYN_South_Ork_precis.csv", row.names = F)
+write.csv(precis_tidy, "Outputs/04_Misc/03_Within_Spp/03_GYN_Loc/GYN_South_Ork_precis.csv", row.names = F)
 
 #### Graph Outputs ####
 
@@ -59,7 +59,7 @@ colnames(post)[13:15] <- c("a", "b_S", "sigma")
 
 ## Plot pairs
 
-svg("Outputs/04_Misc/04_GYN_Location/GYN_Pairs.svg")
+svg("Outputs/04_Misc/03_Within_Spp/03_GYN_Loc/GYN_Pairs.svg")
 pairs(model_GYN_loc, pars = c("a", "b_S", "sigma"))
 dev.off()
 
@@ -67,7 +67,7 @@ dev.off()
 
 color_scheme_set("darkgray")
 
-svg("Outputs/04_Misc/04_GYN_Location/GYN_Posterior.svg", width = 7, height = 3)
+svg("Outputs/04_Misc/03_Within_Spp/03_GYN_Loc/GYN_Posterior.svg", width = 7, height = 3)
 mcmc_intervals(post,
                pars = c("sigma", "b_S", "a"),
                prob = 0.5, prob_outer = 0.95) +
@@ -85,7 +85,7 @@ dev.off()
 
 ## Plot trace
 
-svg("Outputs/04_Misc/04_GYN_Location/GYN_Traceplots.svg")
+svg("Outputs/04_Misc/03_Within_Spp/03_GYN_Loc/GYN_Traceplots.svg")
 p <- mcmc_trace(post, pars = c("a", "b_S", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
 plot <- p + facet_text(size = 10) +

@@ -12,7 +12,7 @@ options(max.print=999999)
 
 #### PRM Only ####
 
-model_PRM_crush <- readRDS("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Crush_model.rds")
+model_PRM_crush <- readRDS("Outputs/04_Misc/01_Methods/Temp/PRM_Crush_model.rds")
 
 #### Table Outputs ####
 
@@ -46,7 +46,7 @@ precis_tidy[, 2:3] <- round(precis_tidy[,2:3], digits = 3)
 
 precis_tidy ### Use this for results
 
-write.csv(precis_tidy, "Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Crush_precis.csv", row.names = F)
+write.csv(precis_tidy, "Outputs/04_Misc/01_Methods/Temp/PRM_Crush_precis.csv", row.names = F)
 
 #### Graph Outputs ####
 
@@ -59,7 +59,7 @@ colnames(post)[21:23] <- c("a", "b_C", "sigma")
 
 # Plot pairs
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Pairs.svg")
+svg("Outputs/04_Misc/01_Methods/Temp/PRM_Pairs.svg")
 pairs(model_PRM_crush, pars = c("a", "b_C", "sigma"))
 dev.off()
 
@@ -67,7 +67,7 @@ dev.off()
 
 color_scheme_set("darkgray")
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Posteriors.svg", width = 10, height = 5)
+svg("Outputs/04_Misc/01_Methods/Temp/PRM_Posteriors.svg", width = 10, height = 5)
 mcmc_intervals(post,
                pars = c("sigma", "b_C", "a"),
                prob = 0.5, prob_outer = 0.95) +
@@ -85,7 +85,7 @@ dev.off()
 
 # Plot trace
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/PRM_Traceplots.svg")
+svg("Outputs/04_Misc/01_Methods/Temp/PRM_Traceplots.svg")
 p <- mcmc_trace(post, pars = c("a", "b_C", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
 plot <- p + facet_text(size = 10) +
@@ -99,7 +99,7 @@ dev.off()
 
 #### All With Species ####
 
-model_all_crush <- readRDS("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_model.rds")
+model_all_crush <- readRDS("Outputs/04_Misc/01_Methods/Temp/All_Crush_model.rds")
 
 # Get Precis table
 
@@ -131,7 +131,7 @@ precis_tidy[, 2:3] <- round(precis_tidy[,2:3], digits = 3)
 
 precis_tidy ### Use this for results
 
-write.csv(precis_tidy, "Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_precis.csv", row.names = F)
+write.csv(precis_tidy, "Outputs/04_Misc/01_Methods/Temp/All_Crush_precis.csv", row.names = F)
 
 #### Graph Outputs ####
 
@@ -144,7 +144,7 @@ colnames(post)[109:118] <- c("a", "b_C", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", 
 
 # Plot pairs
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_Pairs.svg")
+svg("Outputs/04_Misc/01_Methods/Temp/All_Crush_Pairs.svg")
 pairs(model_all_crush, pars = c("a", "b_C", "sigma_Species", "sigma"))
 dev.off()
 
@@ -152,7 +152,7 @@ dev.off()
 
 color_scheme_set("darkgray")
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_Posteriors.svg")
+svg("Outputs/04_Misc/01_Methods/Temp/All_Crush_Posteriors.svg")
 mcmc_intervals(post,
                pars = c("sigma", "sigma_Species", "a_Var_GYN", "a_Var_PRM", "a_Var_ELC", "a_Var_KRA", "a_Var_GYR",  "a_Var_ELN", "b_C", "a"),
                prob = 0.5, prob_outer = 0.95) +
@@ -170,7 +170,7 @@ dev.off()
 
 # Plot trace
 
-svg("Outputs/04_Misc/01_Methods/Crush_Mill/Temp/All_Crush_Traceplots.svg")
+svg("Outputs/04_Misc/01_Methods/Temp/All_Crush_Traceplots.svg")
 p <- mcmc_trace(post, pars = c("a", "b_C", "a_Var_ELN", "a_Var_ELC", "a_Var_GYR", "a_Var_GYN", "a_Var_KRA", "a_Var_PRM", "sigma_Species", "sigma"),
                 facet_args = list(nrow = 4, labeller = label_parsed))
 plot <- p + facet_text(size = 10) +

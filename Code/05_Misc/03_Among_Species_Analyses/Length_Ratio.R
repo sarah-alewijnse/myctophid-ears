@@ -1,4 +1,4 @@
-#### Size Analysis ####
+#### Length Ratio Analysis ####
 
 library(tidyverse)
 
@@ -25,12 +25,6 @@ str(myct_SL)
 # Get ratio
 
 myct_SL$Ratio <- myct_SL$SL / as.numeric(myct_SL$max_SL)
-
-# Quick plot + lm
-
-plot(myct_SL$Ratio, myct_SL$mean_M)
-lm_q <- lmer(mean_M ~ Ratio + (1|sciname), data = myct_SL)
-summary(lm_q)
 
 
 ##### Bayesian Linear Model - Ratio only ####

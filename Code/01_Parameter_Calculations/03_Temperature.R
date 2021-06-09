@@ -58,7 +58,7 @@ cat("model
 
 # Run JAGS model
 
-jags_mod <- jags.model(file = "Outputs/04_Misc/01_JAGS_Model_Text_Files/Temp_Jags.txt", data = iso_list, inits = inits, n.chains = 3, n.adapt = 50000)
+jags_mod <- jags.model(file = "Outputs/04_Misc/04_JAGS_Model_Text_Files/Temp_Jags.txt", data = iso_list, inits = inits, n.chains = 3, n.adapt = 50000)
 
 # Get outputs for temperature, a and b
 
@@ -135,7 +135,7 @@ Temp("BAS_221")
 
 # Loop over whole dataset
 
-#for(i in 1:nrow(myct)){
+for(i in 1:nrow(myct)){
   with(myct[i,],
        Temp(MyNumber))
 }

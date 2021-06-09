@@ -71,7 +71,7 @@ precis(model_PRM_lat, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_PRM_lat, "Outputs/04_Misc/07_PRM_Lat/PRM_Lat_model.rds")
+saveRDS(model_PRM_lat, "Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/PRM_Lat_model.rds")
 
 #### All with Species ####
 
@@ -133,4 +133,4 @@ precis(model_all_lat, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_all_lat, "Outputs/04_Misc/07_PRM_Lat/All_Lat_model.rds")
+saveRDS(model_all_lat, "Outputs/04_Misc/03_Within_Spp/02_PRM_Lat/All_Lat_model.rds")

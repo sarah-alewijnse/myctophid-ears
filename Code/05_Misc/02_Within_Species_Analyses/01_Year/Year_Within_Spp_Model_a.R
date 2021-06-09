@@ -75,7 +75,7 @@ precis(model_ELN_year, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_ELN_year, "Outputs/04_Misc/05_Year/ELN_Year_model.rds")
+saveRDS(model_ELN_year, "Outputs/04_Misc/03_Within_Spp/01_Year/ELN_Year_model.rds")
 
 #### Within ELC ####
 
@@ -131,7 +131,7 @@ precis(model_ELC_year, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_ELC_year, "Outputs/04_Misc/05_Year/ELC_Year_model.rds")
+saveRDS(model_ELC_year, "Outputs/04_Misc/03_Within_Spp/01_Year/ELC_Year_model.rds")
 
 
 #### Within GYR ####
@@ -188,7 +188,7 @@ precis(model_GYR_year, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_GYR_year, "Outputs/04_Misc/05_Year/GYR_Year_model.rds")
+saveRDS(model_GYR_year, "Outputs/04_Misc/03_Within_Spp/01_Year/GYR_Year_model.rds")
 
 #### Within GYN ####
 
@@ -244,7 +244,7 @@ precis(model_GYN_year, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_GYN_year, "Outputs/04_Misc/05_Year/GYN_Year_model.rds")
+saveRDS(model_GYN_year, "Outputs/04_Misc/03_Within_Spp/01_Year/GYN_Year_model.rds")
 
 #### Within KRA ####
 
@@ -300,7 +300,7 @@ precis(model_KRA_year, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_KRA_year, "Outputs/04_Misc/05_Year/KRA_Year_model.rds")
+saveRDS(model_KRA_year, "Outputs/04_Misc/03_Within_Spp/01_Year/KRA_Year_model.rds")
 
 #### Within PRM ####
 
@@ -356,6 +356,6 @@ precis(model_PRM_year, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_PRM_year, "Outputs/04_Misc/05_Year/PRM_Year_model.rds")
+saveRDS(model_PRM_year, "Outputs/04_Misc/03_Within_Spp/01_Year/PRM_Year_model.rds")
 
 

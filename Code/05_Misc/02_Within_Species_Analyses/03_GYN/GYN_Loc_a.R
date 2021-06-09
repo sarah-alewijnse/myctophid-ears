@@ -66,7 +66,7 @@ options(max.print=999999)
 
 #### Within GYN ####
 
-GYN$South_Ork <- ifelse(GYN_tidy$Year.x == "2016", 1, 0)
+GYN$South_Ork <- ifelse(GYN$Year.x == "2016", 1, 0)
 
 mod_list <- list(
   M_obs = GYN$mean_M,
@@ -110,4 +110,4 @@ precis(model_GYN_South_Ork, digits = 4, prob = 0.95, depth = 2)
 
 # Save model
 
-saveRDS(model_GYN_South_Ork, "Outputs/04_Misc/04_GYN_Location/GYN_South_Ork_model.rds")
+saveRDS(model_GYN_South_Ork, "Outputs/04_Misc/03_Within_Spp/03_GYN_Loc/GYN_South_Ork_model.rds")

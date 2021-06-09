@@ -60,7 +60,7 @@ Bel <- function(Num){
 
   # Run JAGS model
   
-  jags_mod <- jags.model(file = "Outputs/04_Misc/01_JAGS_Model_Text_Files/Belcher_JAGS.txt", data = param_list, inits = inits, n.chains = 3, n.adapt = 50000)
+  jags_mod <- jags.model(file = "Outputs/04_Misc/04_JAGS_Model_Text_Files/Belcher_JAGS.txt", data = param_list, inits = inits, n.chains = 3, n.adapt = 50000)
   
   # Get outputs for temperature and equation parameters
   
