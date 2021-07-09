@@ -1,4 +1,4 @@
-#### Diet d13C Mean and SD ####
+#### Diet d13C Mean and Range ####
 
 library(tidyverse)
 
@@ -22,11 +22,13 @@ myct_diet <- left_join(diet, spp, by = "MyNumber")
 
 mean_diet <- aggregate(myct_diet, FUN = mean, by = list(myct_diet$Label))
 
-sd_diet <- aggregate(myct_diet, FUN = sd, by = list(myct_diet$Label))
+min_diet <- aggregate(myct_diet, FUN = min, by = list(myct_diet$Label))
+max_diet <- aggregate(myct_diet, FUN = max, by = list(myct_diet$Label))
 
 diet_avgs <- data.frame(Species = mean_diet$Group.1,
                         mean_diet = mean_diet$Meand13C,
-                        sd_diet = sd_diet$Meand13C)
+                        min_diet = min_diet$Meand13C,
+                        max_diet = max_diet$Meand13C)
 diet_avgs
 
 write.csv(diet_avgs, "Data/MixSIAR_Data/Diet_Averages.csv", row.names = F)
